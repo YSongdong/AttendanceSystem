@@ -1,0 +1,16 @@
+platform :ios, '9.0'
+target 'AttendanceSystem' do
+   pod 'AFNetworking', '~> 3.1.0'
+   pod 'MBProgressHUD'
+   pod 'SDWebImage', '~> 4.0'
+   pod 'Masonry'
+   pod 'SVProgressHUD'
+   pod 'REFrostedViewController', '~> 2.4.8'
+   pod 'YYKit'
+   pod 'AMap3DMap'
+   pod 'AMapLocation'
+   pod 'AMapSearch'
+   pod 'JTCalendar', '~> 2.0'
+end
+
+

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="107" id="KGk-i7-Jjw" customClass="LeaveInDestinAddressCell">
+            <rect key="frame" x="0.0" y="0.0" width="327" height="107"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="327" height="106.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zWF-tO-QfA">
+                        <rect key="frame" x="0.0" y="9" width="327" height="97.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="外出的目的地点" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mb6-k6-J54">
+                                <rect key="frame" x="12" y="22" width="114.5" height="19.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" red="0.15686274510000001" green="0.15686274510000001" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="打卡覆盖半径：1km内" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q2R-Dn-IDC">
+                                <rect key="frame" x="138.5" y="23.5" width="140.5" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.59607843140000005" green="0.59607843140000005" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OFH-Ur-iet">
+                                <rect key="frame" x="102.5" y="58.5" width="123" height="33"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="123" id="E9H-uf-64r"/>
+                                    <constraint firstAttribute="height" constant="33" id="bkl-u9-0wp"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <state key="normal" title="  设置外出地点位置" image="ico_dw01">
+                                    <color key="titleColor" red="0.2156862745" green="0.71372549019999998" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rtg-Ef-wiQ">
+                                <rect key="frame" x="12" y="61" width="74" height="15"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="74" id="Fyn-5d-XeB"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <state key="normal" title=" 考勤地点：" image="wc_ico_dw02">
+                                    <color key="titleColor" red="0.396078431372549" green="0.396078431372549" blue="0.396078431372549" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GfK-Ov-QN0">
+                                <rect key="frame" x="255" y="55" width="60" height="27"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="6Eg-v0-0wv"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <state key="normal" title="重新定位&gt;">
+                                    <color key="titleColor" red="0.2156862745" green="0.71372549019999998" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AtM-ee-PdB">
+                                <rect key="frame" x="86" y="68.5" width="157" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.39607843139999999" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="OFH-Ur-iet" firstAttribute="top" secondItem="q2R-Dn-IDC" secondAttribute="bottom" constant="18" id="0Cs-I8-SaH"/>
+                            <constraint firstItem="AtM-ee-PdB" firstAttribute="centerY" secondItem="Rtg-Ef-wiQ" secondAttribute="centerY" id="36P-y9-Dm7"/>
+                            <constraint firstItem="Rtg-Ef-wiQ" firstAttribute="top" secondItem="Mb6-k6-J54" secondAttribute="bottom" constant="19.5" id="6VK-xq-a6S"/>
+                            <constraint firstItem="Mb6-k6-J54" firstAttribute="top" secondItem="zWF-tO-QfA" secondAttribute="top" constant="22" id="8ld-oX-zT4"/>
+                            <constraint firstItem="q2R-Dn-IDC" firstAttribute="leading" secondItem="Mb6-k6-J54" secondAttribute="trailing" constant="12" id="9gL-c0-Bej"/>
+                            <constraint firstItem="Rtg-Ef-wiQ" firstAttribute="leading" secondItem="Mb6-k6-J54" secondAttribute="leading" id="MDw-Ef-mou"/>
+                            <constraint firstItem="Mb6-k6-J54" firstAttribute="leading" secondItem="zWF-tO-QfA" secondAttribute="leading" constant="12" id="MrX-UT-uqd"/>
+                            <constraint firstItem="GfK-Ov-QN0" firstAttribute="leading" secondItem="AtM-ee-PdB" secondAttribute="trailing" constant="12" id="Nzw-T9-NQY"/>
+                            <constraint firstItem="GfK-Ov-QN0" firstAttribute="centerY" secondItem="Rtg-Ef-wiQ" secondAttribute="centerY" id="SBm-TH-BUm"/>
+                            <constraint firstAttribute="trailing" secondItem="GfK-Ov-QN0" secondAttribute="trailing" constant="12" id="SJK-7k-bDs"/>
+                            <constraint firstItem="AtM-ee-PdB" firstAttribute="leading" secondItem="Rtg-Ef-wiQ" secondAttribute="trailing" id="cU2-VI-PUu"/>
+                            <constraint firstItem="OFH-Ur-iet" firstAttribute="centerX" secondItem="zWF-tO-QfA" secondAttribute="centerX" id="f3z-0g-0hl"/>
+                            <constraint firstItem="q2R-Dn-IDC" firstAttribute="centerY" secondItem="Mb6-k6-J54" secondAttribute="centerY" id="tYB-tM-Ucl"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
+                <constraints>
+                    <constraint firstItem="zWF-tO-QfA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="6Jf-qE-Oyy"/>
+                    <constraint firstItem="zWF-tO-QfA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="9" id="6L8-yv-Zba"/>
+                    <constraint firstAttribute="trailing" secondItem="zWF-tO-QfA" secondAttribute="trailing" id="JgI-Ki-8Wm"/>
+                    <constraint firstAttribute="bottom" secondItem="zWF-tO-QfA" secondAttribute="bottom" id="V4R-qG-kHZ"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="againSelectAddressBtn" destination="GfK-Ov-QN0" id="8iO-g1-PNa"/>
+                <outlet property="selectSettingAddressBtn" destination="OFH-Ur-iet" id="bx6-Lz-aeQ"/>
+                <outlet property="showAddressBtn" destination="Rtg-Ef-wiQ" id="2Vz-zc-P1Q"/>
+                <outlet property="showAddressLab" destination="AtM-ee-PdB" id="fcv-Md-ANv"/>
+            </connections>
+            <point key="canvasLocation" x="37.5" y="152.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="ico_dw01" width="9" height="12"/>
+        <image name="wc_ico_dw02" width="9" height="12"/>
+    </resources>
+</document>
