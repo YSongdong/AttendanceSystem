@@ -12,6 +12,8 @@
 
 @property (nonatomic,strong) UILabel *showLab;
 
+@property (nonatomic,strong)  UIButton *trueBtn;
+
 @property (nonatomic,copy) void(^trueBlock)(void);
 
 @end

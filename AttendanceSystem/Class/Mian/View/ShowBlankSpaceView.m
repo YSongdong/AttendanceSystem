@@ -40,7 +40,6 @@
         make.centerX.equalTo(imageV.mas_centerX);
     }];
     
-    
 }
 
 

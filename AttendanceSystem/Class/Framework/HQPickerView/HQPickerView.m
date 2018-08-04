@@ -26,8 +26,7 @@
 @property (nonatomic, strong) UIView* line;
 @property (nonatomic, strong) NSMutableArray *array;
 @property (nonatomic, copy) NSString *selectedStr;
-//显示lab
-@property (nonatomic,strong) UILabel *timeLab;
+
 
 @end
 
@@ -89,7 +88,7 @@
         //显示timelab
         self.timeLab = [[UILabel alloc]init];
         [self.bgView addSubview:self.timeLab];
-        self.timeLab.text = @"日期选择";
+        self.timeLab.text = @"类型选择";
         self.timeLab.font = Font(18);
         self.timeLab.textColor = [UIColor colorCommonGreenColor];
         [self.timeLab mas_makeConstraints:^(MASConstraintMaker *make) {

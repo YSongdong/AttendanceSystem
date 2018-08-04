@@ -15,7 +15,8 @@
 @end
 
 @interface HQPickerView : UIView
-
+//显示lab
+@property (nonatomic,strong) UILabel *timeLab;
 @property (nonatomic, strong) NSArray *customArr;
 @property (nonatomic, weak) id <HQPickerViewDelegate> delegate;
 

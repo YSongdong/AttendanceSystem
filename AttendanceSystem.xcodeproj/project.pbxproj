@@ -860,7 +860,6 @@
 		1556A39820F49CBF00F64523 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				155900B5211317D000244956 /* RecordStayChenkDetail */,
 				1509AF07211084D300D45EE3 /* RecordApproveDetail */,
 				1509AEEB210FFD6300D45EE3 /* RecordSelectMap */,
 				1501895B210F2C55005673FF /* ApprovalRecordSift */,
@@ -925,13 +924,6 @@
 				1556A3A820F49FB400F64523 /* LeftUserController.m */,
 			);
 			path = Mine;
-			sourceTree = "<group>";
-		};
-		155900B5211317D000244956 /* RecordStayChenkDetail */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = RecordStayChenkDetail;
 			sourceTree = "<group>";
 		};
 		155CEC1720F9A26E00066FDD /* user */ = {

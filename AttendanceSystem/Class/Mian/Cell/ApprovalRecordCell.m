@@ -33,7 +33,9 @@
     self.coverImageV.layer.masksToBounds = YES;
     
 }
-
+-(void)setReasonTypeStr:(NSString *)reasonTypeStr{
+    _reasonTypeStr = reasonTypeStr;
+}
 -(void)setCellType:(RecordCellType)cellType{
     _cellType = cellType;
 }
@@ -42,17 +44,14 @@
     _dict = dict;
     self.cellReasonLab.hidden=  NO;
     
-    //头像
-    [UIImageView sd_setImageView:self.coverImageV WithURL:[SDUserInfo obtainWithPhoto]];
-   
     //申请状态
     NSString *statusStr = [NSString stringWithFormat:@"%@",dict[@"status"]];
     
-    if ([statusStr isEqualToString:@"2"]) {
+    if ([statusStr isEqualToString:@"3"]) {
         //不通过
         self.chenkStatuLab.text = @"审核未通过";
         self.chenkStatuLab.textColor = [UIColor colorWithHexString:@"#f75354"];
-    }else if ([statusStr isEqualToString:@"3"]){
+    }else if ([statusStr isEqualToString:@"2"]){
         //通过
         self.chenkStatuLab.text = @"审核通过";
         self.chenkStatuLab.textColor = [UIColor colorCommonGreenColor];
@@ -82,22 +81,30 @@
     
     if (_cellType == RecordCellOutType) {
         //外出
-        //开始时间
-        NSArray *arr = dict[@"startTime"];
-        NSString *startTimeStr;
-        if (arr.count > 0) {
-            startTimeStr = arr[0];
+        NSString *startTimeStr ;
+        if ([self.reasonTypeStr isEqualToString:@"2"]) {
+            startTimeStr =dict[@"startTime"];
+            //外出原因
+            self.cellReasonLab.text =[NSString stringWithFormat:@"外出事由: %@",dict[@"outGo"]];
+            
+        }else{
+            NSArray *timeArr =dict[@"startTime"];
+            startTimeStr = timeArr[0];
+            
+            //外出原因
+            self.cellReasonLab.text =[NSString stringWithFormat:@"外出事由: %@",dict[@"info"]];
         }
         //开始时间
-        self.endTimeLab.text =[NSString stringWithFormat:@"开始时间: %@",startTimeStr];
-
+        self.beginTimeLab.text =[NSString stringWithFormat:@"开始时间: %@",startTimeStr];
         //结束时间
         self.endTimeLab.text =[NSString stringWithFormat:@"结束时间: %@",dict[@"endTime"]];
-        //外出原因
-        self.cellReasonLab.text =[NSString stringWithFormat:@"外出事由: %@",dict[@"outGo"]];
+
+        NSDictionary *userDict = dict[@"userInfo"];
+        //头像
+        [UIImageView sd_setImageView:self.coverImageV WithURL:userDict[@"photo"]];
         
         //发起申请者
-        self.showNameLab.text = [NSString stringWithFormat:@"%@的外出申请",[SDUserInfo obtainWithRealName]];
+        self.showNameLab.text = [NSString stringWithFormat:@"%@的外出申请",userDict[@"realName"]];
         
     }else if (_cellType == RecordCellLeaveType){
          //请假
@@ -120,41 +127,54 @@
             type = @"其他";
         }
         self.beginTimeLab.text =[NSString stringWithFormat:@"请假类型: %@",type];
-        NSArray *arr = dict[@"startTime"];
-        NSString *startTimeStr;
-        if (arr.count > 0) {
-            startTimeStr = arr[0];
+        
+        NSString *startTimeStr ;
+        if ([self.reasonTypeStr isEqualToString:@"2"]) {
+            startTimeStr =dict[@"startTime"];
+           
+        }else{
+            NSArray *timeArr =dict[@"startTime"];
+            startTimeStr = timeArr[0];
         }
         //开始时间
         self.endTimeLab.text =[NSString stringWithFormat:@"开始时间: %@",startTimeStr];
         //结束时间
         self.cellReasonLab.text =[NSString stringWithFormat:@"结束时间: %@",dict[@"endTime"]];
+        
+        NSDictionary *userDict = dict[@"userInfo"];
+        //头像
+        [UIImageView sd_setImageView:self.coverImageV WithURL:userDict[@"photo"]];
+
         //发起申请者
-        self.showNameLab.text = [NSString stringWithFormat:@"%@的请假申请",[SDUserInfo obtainWithRealName]];
+        self.showNameLab.text = [NSString stringWithFormat:@"%@的请假申请",userDict[@"realName"]];
         
     }else if (_cellType == RecordCellCardType){
         //补卡
-        //补卡班次
-        NSArray *arr = dict[@"startTime"];
-        NSMutableString *startTimeStr = [NSMutableString string];
-        for (int i=0; i< arr.count; i++) {
-            NSString *str = arr[i];
-            [startTimeStr appendString:str];
-            if (i != arr.count-1) {
-               [startTimeStr appendString:@","];
-            }
+        if ([self.reasonTypeStr isEqualToString:@"2"]) {
+            //补卡班次
+            self.beginTimeLab.text =[NSString stringWithFormat:@"补卡班次: %@,%@",dict[@"cardTime"],dict[@"replacementTime"]];
+            //缺卡原因
+            self.endTimeLab.text =[NSString stringWithFormat:@"缺卡原因: %@",dict[@"reason"]];
+        }else{
+            NSArray *timeArr = dict[@"startTime"];
+            //补卡班次
+            self.beginTimeLab.text =[NSString stringWithFormat:@"补卡班次: %@,%@,%@",timeArr[0],timeArr[1],timeArr[2]];
+            
+            //缺卡原因
+            self.endTimeLab.text =[NSString stringWithFormat:@"缺卡原因: %@",dict[@"info"]];
         }
-        self.beginTimeLab.text =[NSString stringWithFormat:@"补卡班次: %@",startTimeStr];
-        //开始时间
-        self.endTimeLab.text =[NSString stringWithFormat:@"缺卡原因: %@",dict[@"endTime"]];
+        
         //结束时间
         self.cellReasonLab.hidden=  YES;
         
+        NSDictionary *userDict = dict[@"userInfo"];
+        
+        //头像
+        [UIImageView sd_setImageView:self.coverImageV WithURL:userDict[@"photo"]];
+        
         //发起申请者
-        self.showNameLab.text = [NSString stringWithFormat:@"%@的补卡申请",[SDUserInfo obtainWithRealName]];
+        self.showNameLab.text = [NSString stringWithFormat:@"%@的补卡申请",userDict[@"realName"]];
     }
-    
-
 }
 
 

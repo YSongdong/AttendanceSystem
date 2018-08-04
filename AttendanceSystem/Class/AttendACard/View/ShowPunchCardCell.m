@@ -231,7 +231,6 @@
         make.left.equalTo(weakSelf.applyCardBtn.mas_right).offset(22);
         make.centerY.equalTo(weakSelf.applyCardBtn.mas_centerY);
     }];
-    
 }
 -(void)setDict:(NSDictionary *)dict{
    
@@ -369,7 +368,7 @@
                     }];
                     [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
                 }
-            
+    
             }
 
         }else if ([textStr rangeOfString:@"补卡"].location !=NSNotFound){
@@ -441,7 +440,11 @@
             [self.normalStatusBtn setTitle:textStr forState:UIControlStateNormal];
             [self.normalStatusBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
             self.normalStatusBtn.titleLabel.font = Font(12);
-            [self.normalStatusBtn setBackgroundImage:[UIImage imageNamed:@"ico_yc"] forState:UIControlStateNormal];
+            if ([textStr isEqualToString:@"正常"]) {
+                [self.normalStatusBtn setBackgroundImage:[UIImage imageNamed:@"ico_zc"] forState:UIControlStateNormal];
+            }else{
+               [self.normalStatusBtn setBackgroundImage:[UIImage imageNamed:@"ico_yc"] forState:UIControlStateNormal];
+            }
             [self.normalStatusBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.left.equalTo(weakSelf.showCardTimeLab.mas_right).offset(7);
                 make.centerY.equalTo(weakSelf.showCardTimeLab.mas_centerY);
@@ -497,7 +500,6 @@
                     self.identTestStatuLab.text= @"已通过";
                     self.identTestStatuLab.textColor = [UIColor colorCommonGreenColor];
                 }
-                
             }
             if ([markArr containsObject:@"外勤"]) {
                 self.fieldWorkBtn.hidden = NO;
@@ -531,7 +533,21 @@
                     make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(22);
                     make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
                 }];
-                [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+                
+                NSString *lackCardStr =[NSString stringWithFormat:@"%@",dict[@"lackCard"]];
+                if ([lackCardStr isEqualToString:@"2"]) {
+                    NSDictionary *lackCardDict = dict[@"lackCardData"];
+                    if ([lackCardDict[@"isDoSure"]integerValue] == 1) {
+                        [self.applyCardBtn setTitle:@"补卡 审核中>" forState:UIControlStateNormal];
+                        [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+                        [self.applyCardBtn addTarget:self action:@selector(lackCardBuCardChenkConcet:) forControlEvents:UIControlEventTouchUpInside];
+                    }
+                }else{
+                    [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
+                    [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+                    
+                    [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+                }
                 
                 //备注
                 NSString *remarkStr =dict[@"remark"];
@@ -552,14 +568,30 @@
                         make.left.equalTo(testImageV.mas_left);
                         make.top.equalTo(testImageV.mas_bottom).offset(13);
                     }];
+                    
                      [self.markBtn addTarget:self action:@selector(nomalLookMark:) forControlEvents:UIControlEventTouchUpInside];
                 }
+                
                 //申请补卡
                 [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(testImageV.mas_left);
                     make.top.equalTo(testImageV.mas_bottom).offset(13);
-                }];
-                [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+                 }];
+                
+                NSString *lackCardStr =[NSString stringWithFormat:@"%@",dict[@"lackCard"]];
+                if ([lackCardStr isEqualToString:@"2"]) {
+                    NSDictionary *lackCardDict = dict[@"lackCardData"];
+                    if ([lackCardDict[@"isDoSure"]integerValue] == 1) {
+                        [self.applyCardBtn setTitle:@"补卡 审核中>" forState:UIControlStateNormal];
+                        [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+                        [self.applyCardBtn addTarget:self action:@selector(lackCardBuCardChenkConcet:) forControlEvents:UIControlEventTouchUpInside];
+                    }
+                }else{
+                    [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
+                    [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+
+                    [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+                }
                 //备注
                 NSString *remarkStr =dict[@"remark"];
                 //照片
@@ -625,7 +657,6 @@
                 [self.applyCardBtn addTarget:self action:@selector(askForLeave:) forControlEvents:UIControlEventTouchUpInside];
             }
         }
-
     }
  
 }

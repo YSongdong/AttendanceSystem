@@ -34,8 +34,8 @@
     [self addSubview:samilView];
     samilView.backgroundColor = [UIColor colorWithHexString:@"#e9e9e9"];
     [samilView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf).offset(75);
-        make.right.equalTo(weakSelf).offset(-75);
+        make.left.equalTo(weakSelf).offset(65);
+        make.right.equalTo(weakSelf).offset(-65);
         make.height.equalTo(@165);
         make.centerX.equalTo(weakSelf.mas_centerX);
         make.centerY.equalTo(weakSelf.mas_centerY);
@@ -96,19 +96,19 @@
     }];
     [cancelBtn addTarget:self action:@selector(cancelBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIButton *trueBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [samilView addSubview:trueBtn];
-    [trueBtn setTitle:@"确认撤销" forState:UIControlStateNormal];
-    [trueBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-    trueBtn.titleLabel.font = Font(16);
-    trueBtn.backgroundColor = [UIColor colorTextWhiteColor];
-    [trueBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.trueBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [samilView addSubview:self.trueBtn];
+    [self.trueBtn setTitle:@"确认撤销" forState:UIControlStateNormal];
+    [self.trueBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+    self.trueBtn.titleLabel.font = Font(16);
+    self.trueBtn.backgroundColor = [UIColor colorTextWhiteColor];
+    [self.trueBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(cancelBtn.mas_right).offset(1);
         make.right.equalTo(samilView);
         make.width.height.equalTo(cancelBtn);
         make.centerY.equalTo(cancelBtn.mas_centerY);
     }];
-    [trueBtn addTarget:self action:@selector(tureBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.trueBtn addTarget:self action:@selector(tureBtnAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)selectdTap{

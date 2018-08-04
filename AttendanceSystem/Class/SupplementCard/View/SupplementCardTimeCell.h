@@ -14,9 +14,11 @@
 @property (weak, nonatomic) IBOutlet UIView *selectCardTimeView;
 //显示
 @property (weak, nonatomic) IBOutlet UILabel *showCardTimeLab;
+//补卡时间
+@property (weak, nonatomic) IBOutlet UILabel *showSupplenCardTimeLab;
 //开始时间
 @property (nonatomic,copy) void(^cardTimeBlock)(void);
 //更新时间UI
--(void) updateTimeType:(NSString *)timeType andTimeStr:(NSString *)timeStr;
+-(void) updateTimeType:(NSDictionary *)dict;
 
 @end

@@ -28,8 +28,8 @@
                                 <color key="textColor" red="0.15686274510000001" green="0.15686274510000001" blue="0.15686274510000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2018.03.30" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pyL-sh-vSl">
-                                <rect key="frame" x="213" y="21" width="73" height="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请选择" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pyL-sh-vSl">
+                                <rect key="frame" x="243" y="21" width="43" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.59607843140000005" green="0.59607843140000005" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -69,6 +69,7 @@
             <connections>
                 <outlet property="selectCardTimeView" destination="FUN-Yh-fV4" id="fBQ-vP-HHb"/>
                 <outlet property="showCardTimeLab" destination="pyL-sh-vSl" id="syH-oM-y0P"/>
+                <outlet property="showSupplenCardTimeLab" destination="8Xe-6E-mia" id="wfp-fq-Tch"/>
             </connections>
             <point key="canvasLocation" x="86" y="176.5"/>
         </tableViewCell>

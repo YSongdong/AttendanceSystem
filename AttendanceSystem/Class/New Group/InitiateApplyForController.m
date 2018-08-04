@@ -11,6 +11,7 @@
 
 #import "RecordHeaderSearchView.h"
 #import "RecordApproveDetaController.h"
+#import "ShowBlankSpaceView.h"
 
 #import "ApprovalRecordCell.h"
 #define APPROVALRECORD_CELL @"ApprovalRecordCell"
@@ -23,6 +24,9 @@ ApprovalRecordSiftControllerDelegate
 >
 //搜索view
 @property (nonatomic,strong)RecordHeaderSearchView *headerSearchView;
+//空白页
+@property (nonatomic,strong)ShowBlankSpaceView *showBlankSpaceView;
+
 
 @property (nonatomic,strong) UITableView *recordTableView;
 @property (nonatomic,strong) NSMutableArray *dataArr;
@@ -46,6 +50,10 @@ ApprovalRecordSiftControllerDelegate
     self.statuStr = @"0";
     [self createNavi];
     [self createSearchView];
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.dataArr removeAllObjects];
     [self requestApprovalList];
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -56,6 +64,7 @@ ApprovalRecordSiftControllerDelegate
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     NSDictionary *dict =self.dataArr[indexPath.row];
     NSString *typeStr =[NSString stringWithFormat:@"%@",dict[@"type"]];
+    cell.reasonTypeStr = @"1";
     if ([typeStr isEqualToString:@"1"]) {
          cell.cellType = RecordCellLeaveType;
     }else if ([typeStr isEqualToString:@"2"]){
@@ -67,39 +76,72 @@ ApprovalRecordSiftControllerDelegate
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 135;
+    NSDictionary *dict =self.dataArr[indexPath.row];
+    NSString *typeStr =[NSString stringWithFormat:@"%@",dict[@"type"]];
+    if ([typeStr isEqualToString:@"3"]){
+        return 115;
+    }else{
+        return 135;
+    }
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    //取消键盘效应
+    [self.headerSearchView.searchTextField resignFirstResponder];
+    
     ApprovalRecordCell *cell = [self.recordTableView cellForRowAtIndexPath:indexPath];
     NSDictionary *dict = self.dataArr[indexPath.row];
     NSString *typeStr = [NSString stringWithFormat:@"%@",dict[@"type"]];
     RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
     detaVC.titleStr = cell.showNameLab.text;
+    detaVC.recordIdStr = dict[@"id"];
+    NSString *statusStr  =[NSString stringWithFormat:@"%@",dict[@"status"]];
+    if ([statusStr isEqualToString:@"1"]) {
+        //审核中
+        detaVC.chenkStatusStr = @"1";
+    }else{
+        //其他
+        detaVC.chenkStatusStr = @"2";
+    }
     if ([typeStr isEqualToString:@"2"]) {
         //外出
         detaVC.detaType = RecordApproveGoOutDetaType;
         detaVC.typeStr = @"2";
-        detaVC.recordIdStr = dict[@"id"];
+        
     }else if ([typeStr isEqualToString:@"1"]){
         //请假
         detaVC.detaType = RecordApproveLeaveDetaType;
         detaVC.typeStr = @"1";
-        detaVC.recordIdStr = dict[@"id"];
+    }else if ([typeStr isEqualToString:@"3"]) {
+        //补卡
+        detaVC.detaType = recordApproveCardDetaType;
+        detaVC.typeStr = @"3";
     }
     [self.navigationController pushViewController:detaVC animated:YES];
 }
-
 #pragma mark ----ApprovalRecordSiftControllerDelegate---
 - (void)selectSiftArr:(NSArray *)arr{
-    
-    
+    NSMutableString *mutablStr = [NSMutableString string];
+    for (int i=0; i<arr.count; i++) {
+        NSDictionary *dict = arr[i];
+        if (i== 0) {
+            self.statuStr = dict[@"status"];
+            [mutablStr appendString:dict[@"content"]];
+        }else{
+            self.typeStr = dict[@"type"];
+            [mutablStr appendString:dict[@"content"]];
+        }
+    }
+    self.headerSearchView.searchTextField.text = mutablStr.copy;
 }
 -(void) createSearchView{
     __weak typeof(self) weakSelf = self;
     self.headerSearchView = [[RecordHeaderSearchView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, 60)];
     [self.view addSubview:self.headerSearchView];
     self.headerSearchView.searchBlock = ^(NSString *searchStr) {
+        weakSelf.statuStr =@"0";
+        weakSelf.typeStr = @"0";
         weakSelf.likeTitleStr = searchStr;
+        [weakSelf.dataArr removeAllObjects];
         [weakSelf requestApprovalList];
     };
     
@@ -112,6 +154,10 @@ ApprovalRecordSiftControllerDelegate
     self.recordTableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     
     [self.recordTableView registerNib:[UINib nibWithNibName:APPROVALRECORD_CELL bundle:nil] forCellReuseIdentifier:APPROVALRECORD_CELL];
+    
+    //空白页
+    self.showBlankSpaceView = [[ShowBlankSpaceView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH-KSNaviTopHeight-60)];
+    [self.recordTableView addSubview:self.showBlankSpaceView];
 }
 
 //设置navi
@@ -125,6 +171,9 @@ ApprovalRecordSiftControllerDelegate
     //右边
     [self.customNavBar wr_setRightButtonWithImage:[UIImage imageNamed:@"wcjl_ico_sx"]];
     self.customNavBar.onClickRightButton = ^{
+        
+        [weakSelf.headerSearchView.searchTextField resignFirstResponder];
+        
         ApprovalRecordSiftController *siftVC = [[ApprovalRecordSiftController alloc]init];
         siftVC.siftType = RecordApplyForSiftType;
         siftVC.delegate = weakSelf;
@@ -138,7 +187,6 @@ ApprovalRecordSiftControllerDelegate
     }
     return  _dataArr;
 }
-
 #pragma mark ----数据相关-----
 //申请页审批流程
 -(void)requestApprovalList{
@@ -157,9 +205,14 @@ ApprovalRecordSiftControllerDelegate
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
-        
         if ([showdata isKindOfClass:[NSArray class]])  {
             [self.dataArr addObjectsFromArray:showdata];
+            
+            if (self.dataArr.count > 0) {
+                self.showBlankSpaceView.hidden = YES;
+            }else{
+                self.showBlankSpaceView.hidden = NO;
+            }
             [self.recordTableView reloadData];
         }
         

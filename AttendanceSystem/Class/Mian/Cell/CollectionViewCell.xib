@@ -87,6 +87,7 @@
             <connections>
                 <outlet property="coverImageV" destination="ent-bQ-5z2" id="mqi-9p-4Pe"/>
                 <outlet property="nameLab" destination="YgN-6d-CVB" id="82u-T1-QYZ"/>
+                <outlet property="rightImagV" destination="UYg-EG-Ncb" id="Yb2-N9-KL5"/>
                 <outlet property="samilBgView" destination="vLS-a2-eyQ" id="JtH-mf-X5D"/>
                 <outlet property="showLevelLab" destination="tCY-PA-Jyd" id="eve-zV-HqY"/>
             </connections>

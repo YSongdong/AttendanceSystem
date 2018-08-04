@@ -12,7 +12,8 @@
 
 typedef  enum{
     RecordApproveSiftType = 0, //审批
-    RecordApplyForSiftType   //申请
+    RecordApplyForSiftType,   //申请
+    RecordTypeSiftType   //
 }RecordSiftType;
 
 // 代理传值方法

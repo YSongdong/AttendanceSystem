@@ -107,6 +107,10 @@ AMapSearchDelegate
     [self.searchTableView reloadData];
 }
 #pragma mark ---地图Delegate-----
+- (void)mapView:(MAMapView *)mapView didChangeUserTrackingMode:(MAUserTrackingMode)mode animated:(BOOL)animated
+{
+    self.mapView.showsUserLocation = NO;
+}
 - (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation{
     MAPinAnnotationView *annotationView = [[MAPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"MapSample"];
     annotationView.canShowCallout = YES;
@@ -126,15 +130,7 @@ AMapSearchDelegate
     }
     self.userLocation = location;
     
-    //获取到定位信息，更新annotation
-    if (self.pointAnnotaiton == nil)
-    {
-        self.pointAnnotaiton = [[MAPointAnnotation alloc] init];
-        [self.pointAnnotaiton setCoordinate:location.coordinate];
-        [self.mapView addAnnotation:self.pointAnnotaiton];
-    }
-    [self.pointAnnotaiton setCoordinate:location.coordinate];
-    
+    [self.mapView addAnnotation:_pointAnnotaiton];
 }
 #pragma mark  -----点击事件------
 -(void)tap:(UITapGestureRecognizer *) sender{
@@ -147,6 +143,7 @@ AMapSearchDelegate
 }
 //重新定位
 -(void)selectPresentAction:(UIButton *)sender{
+    self.mapView.showsUserLocation = YES;
     if(self.mapView.userLocation.updating && self.mapView.userLocation.location) {
         [self.mapView setCenterCoordinate:self.mapView.userLocation.location.coordinate animated:YES];
     }
@@ -163,6 +160,8 @@ AMapSearchDelegate
     return 62;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.mapView.showsUserLocation = NO;
+    [self.mapView removeAnnotation:_pointAnnotaiton];
     
     if (self.selectIndexPtah == nil) {
         NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:self.dataArr[indexPath.row]];
@@ -171,9 +170,12 @@ AMapSearchDelegate
         [self.searchTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationNone];
         self.selectIndexPtah = indexPath;
         
-        //重新定位
+    
+        //重新标点
         NSDictionary *dict = self.dataArr[indexPath.row];
         CLLocation *location = dict[@"location"];
+        [self.mapView addAnnotation:_pointAnnotaiton];
+        [self.mapView setCenterCoordinate:location.coordinate];
         [self.pointAnnotaiton setCoordinate:location.coordinate];
         return ;
     }
@@ -192,11 +194,13 @@ AMapSearchDelegate
     [self.searchTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationNone];
     self.selectIndexPtah = indexPath;
     
+   
     //重新定位
     NSDictionary *dict = self.dataArr[indexPath.row];
     CLLocation *location = dict[@"location"];
+    [self.mapView addAnnotation:_pointAnnotaiton];
+    [self.mapView setCenterCoordinate:location.coordinate];
     [self.pointAnnotaiton setCoordinate:location.coordinate];
-    
 }
 
 -(void) createSearchView{
@@ -261,9 +265,9 @@ AMapSearchDelegate
     //设置显示大小
     [self.mapView setZoomLevel:17.1 animated:NO];
     self.mapView.distanceFilter = 10.f;
-//    ///如果您需要进入地图就显示定位小蓝点，则需要下面两行代码
-    self.mapView.showsUserLocation = YES;
-    self.mapView.userTrackingMode = MAUserTrackingModeFollow;
+    ///如果您需要进入地图就显示定位小蓝点，则需要下面两行代码
+//    self.mapView.showsUserLocation = YES;
+//    self.mapView.userTrackingMode = MAUserTrackingModeFollow;
     //关闭指南针
     self.mapView.showsCompass = NO;
     ///把地图添加至view
@@ -307,15 +311,23 @@ AMapSearchDelegate
     //开始持续定位
     [self.locationManager startUpdatingLocation];
 }
+-(MAPointAnnotation *)pointAnnotaiton{
+    if (!_pointAnnotaiton) {
+        _pointAnnotaiton  =[[MAPointAnnotation alloc]init];
+    }
+    return _pointAnnotaiton;
+}
 //创建Navi
 -(void) createNavi{
     self.customNavBar.title = @"地图选点";
     [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
     __weak typeof(self) weakSelf = self;
     self.customNavBar.onClickLeftButton = ^{
-        NSDictionary *dict = weakSelf.dataArr[weakSelf.selectIndexPtah.row];
-        if ([weakSelf.delegate respondsToSelector:@selector(selectAddressDict:)]) {
-            [weakSelf.delegate selectAddressDict:dict];
+        if (weakSelf.selectIndexPtah != nil) {
+            NSDictionary *dict = weakSelf.dataArr[weakSelf.selectIndexPtah.row];
+            if ([weakSelf.delegate respondsToSelector:@selector(selectAddressDict:)]) {
+                [weakSelf.delegate selectAddressDict:dict];
+            }
         }
         [weakSelf.navigationController popViewControllerAnimated:YES];
     };

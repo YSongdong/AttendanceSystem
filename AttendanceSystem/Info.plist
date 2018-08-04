@@ -2,16 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>考勤系统获取位置权限</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>考勤系统获取位置数据</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>考勤系统更新信息</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>qqmap</string>
+		<string>comgooglemaps</string>
+		<string>iosamap</string>
+		<string>baidumap</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>考勤系统</string>
+	<string>员工考勤系统</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -35,6 +36,12 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>考勤系统想访问您的相机</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>考勤系统获取位置权限</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>考勤系统获取位置数据</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>考勤系统更新信息</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>考勤系统想访问您的相册</string>
 	<key>UILaunchStoryboardName</key>

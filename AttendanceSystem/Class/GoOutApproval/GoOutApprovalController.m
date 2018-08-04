@@ -346,6 +346,7 @@ UIImagePickerControllerDelegate
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
     ApprovalSelectPhotoCell *cell = [self.leaveTableView cellForRowAtIndexPath:indexPath];
+    [cell.imageArr removeLastObject];
     [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_ATTAPPAPPADDOUTGO_URL params:self.dataDcit.copy andData:cell.imageArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
@@ -359,6 +360,9 @@ UIImagePickerControllerDelegate
                 RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
                 detaVC.detaType = RecordApproveGoOutDetaType;
                 detaVC.typeStr = @"2";
+                //审核中
+                detaVC.chenkStatusStr = @"1";
+                detaVC.titleStr = [NSString stringWithFormat:@"%@外出申请",[SDUserInfo obtainWithRealName]];
                 detaVC.recordIdStr = showdata[@"id"];
                 [weakSelf.navigationController pushViewController:detaVC animated:YES];
             });

@@ -13,6 +13,8 @@
 
 #import "RecordHeaderSearchView.h"
 
+#import "ShowBlankSpaceView.h"
+
 #import "ApprovalRecordCell.h"
 #define APPROVALRECORD_CELL @"ApprovalRecordCell"
 
@@ -24,6 +26,8 @@ ApprovalRecordSiftControllerDelegate
 >
 //搜索view
 @property (nonatomic,strong)RecordHeaderSearchView *headerSearchView;
+//空白页
+@property (nonatomic,strong)ShowBlankSpaceView *showBlankSpaceView;
 
 @property (nonatomic,strong) UITableView *recordTableView;
 @property (nonatomic,strong) NSMutableArray *dataArr;
@@ -40,11 +44,14 @@ ApprovalRecordSiftControllerDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.page =1;
+    self.likeTitleStr = @"";
+    self.statuStr = @"0";
     [self createNavi];
     [self createSearchView];
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self.dataArr removeAllObjects];
     [self requestLoadData];
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -53,21 +60,52 @@ ApprovalRecordSiftControllerDelegate
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     ApprovalRecordCell *cell = [tableView dequeueReusableCellWithIdentifier:APPROVALRECORD_CELL forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    if (self.recordType == 0) {
+    cell.reasonTypeStr = @"2";
+    if (self.recordType == ApporvalRecordOutType) {
          cell.cellType = RecordCellOutType;
-    }else if (self.recordType == 1){
+    }else if (self.recordType == ApporvalRecordLeaveType){
          cell.cellType = RecordCellLeaveType;
-    }else{
+    }else if (self.recordType == ApporvalRecordCardType){
         cell.cellType = RecordCellCardType;
     }
     cell.dict = self.dataArr[indexPath.row];
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 135;
+    if (self.recordType == ApporvalRecordCardType) {
+         return 115;
+    }else{
+         return 135;
+    }
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    //取消键盘效应
+    [self.headerSearchView.searchTextField resignFirstResponder];
+    
+    NSDictionary *dict = self.dataArr[indexPath.row];
     RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
+    detaVC.recordIdStr = dict[@"id"];
+    NSString *statusStr  =[NSString stringWithFormat:@"%@",dict[@"status"]];
+    if ([statusStr isEqualToString:@"1"]) {
+        //审核中
+        detaVC.chenkStatusStr = @"1";
+    }else{
+        //其他
+        detaVC.chenkStatusStr = @"2";
+    }
+    if (self.recordType == ApporvalRecordOutType) {
+        detaVC.detaType = RecordApproveGoOutDetaType;
+        detaVC.typeStr = @"2";
+        detaVC.titleStr = [NSString stringWithFormat:@"%@外出申请",[SDUserInfo obtainWithRealName]];
+    }else if (self.recordType == ApporvalRecordLeaveType){
+        detaVC.detaType = RecordApproveLeaveDetaType;
+        detaVC.titleStr = [NSString stringWithFormat:@"%@请假申请",[SDUserInfo obtainWithRealName]];
+        detaVC.typeStr = @"1";
+    }else if (self.recordType == ApporvalRecordCardType){
+        detaVC.detaType = recordApproveCardDetaType;
+        detaVC.titleStr = [NSString stringWithFormat:@"%@补卡申请",[SDUserInfo obtainWithRealName]];
+        detaVC.typeStr = @"3";
+    }
     [self.navigationController pushViewController:detaVC animated:YES];
 }
 -(void) createSearchView{
@@ -89,6 +127,10 @@ ApprovalRecordSiftControllerDelegate
     self.recordTableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     
     [self.recordTableView registerNib:[UINib nibWithNibName:APPROVALRECORD_CELL bundle:nil] forCellReuseIdentifier:APPROVALRECORD_CELL];
+
+    //空白页
+    self.showBlankSpaceView = [[ShowBlankSpaceView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH-KSNaviTopHeight-60)];
+    [self.recordTableView addSubview:self.showBlankSpaceView];
 }
 
 //设置navi
@@ -103,6 +145,8 @@ ApprovalRecordSiftControllerDelegate
     //右边
     [self.customNavBar wr_setRightButtonWithImage:[UIImage imageNamed:@"wcjl_ico_sx"]];
     self.customNavBar.onClickRightButton = ^{
+         [weakSelf.headerSearchView.searchTextField resignFirstResponder];
+        
         ApprovalRecordSiftController *siftVC = [[ApprovalRecordSiftController alloc]init];
         siftVC.siftType = RecordApproveSiftType;
         siftVC.delegate = weakSelf;
@@ -111,13 +155,12 @@ ApprovalRecordSiftControllerDelegate
 }
 #pragma mark -------ApprovalRecordSiftControllerDelegate----
 - (void)selectSiftArr:(NSArray *)arr{
+    //移除数据源
+    [self.dataArr removeAllObjects];
     if (arr.count == 1) {
         NSDictionary *dict = arr[0];
         self.statuStr = dict[@"status"];
         self.headerSearchView.searchTextField.text = dict[@"content"];
-        //移除数据源
-        [self.dataArr removeAllObjects];
-        [self requestLoadData];
     }
 }
 -(void)setRecordType:(ApporvalRecordType)recordType{
@@ -137,44 +180,40 @@ ApprovalRecordSiftControllerDelegate
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     NSString *url;
+    
+    param[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
+    param[@"token"] = [SDTool getNewToken];
+    param[@"offset"] = [NSString stringWithFormat:@"%ld",(long)self.page];
+    param[@"unitId"] = [SDUserInfo obtainWithUniId];
+    param[@"userId"] = [SDUserInfo obtainWithUserId];
+    param[@"likeTitle"] = self.likeTitleStr;
+    param[@"status"] = self.statuStr;
     if (_recordType == ApporvalRecordOutType) {
         url = HTTP_ATTAPPOUTGOOUTLIST_URL;
-        param[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
-        param[@"token"] = [SDTool getNewToken];
-        param[@"offset"] = [NSString stringWithFormat:@"%ld",(long)self.page];
-        param[@"unitId"] = [SDUserInfo obtainWithUniId];
-        param[@"userId"] = [SDUserInfo obtainWithUserId];
-        param[@"likeTitle"] = self.likeTitleStr;
-        if ([self.likeTitleStr isEqualToString:@""]) {
-          self.statuStr = @"0";
-        }
-        param[@"status"] = self.statuStr;
+
     }else if (_recordType == ApporvalRecordLeaveType){
         url = HTTP_ATTAPPLEAVELIST_URL;
-        param[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
-        param[@"token"] = [SDTool getNewToken];
-        param[@"offset"] = [NSString stringWithFormat:@"%ld",(long)self.page];
-        param[@"unitId"] = [SDUserInfo obtainWithUniId];
-        param[@"userId"] = [SDUserInfo obtainWithUserId];
-        param[@"likeTitle"] = self.likeTitleStr;
-        param[@"status"] = self.statuStr;
-    }else if (_recordType == ApporvalRecordLeaveType){
-        
-        
+    }else if (_recordType == ApporvalRecordCardType){
+        url = HTTP_ATTAPPREPAICARDLIST_URL;
     }
     
-    [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTAPPOUTGOOUTLIST_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
+    [[KRMainNetTool sharedKRMainNetTool]postRequstWith:url params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
         if ([showdata isKindOfClass:[NSArray class]]) {
             [self.dataArr addObjectsFromArray:showdata];
+            
+            if (self.dataArr.count > 0) {
+                self.showBlankSpaceView.hidden = YES;
+            }else{
+                self.showBlankSpaceView.hidden = NO;
+            }
+            
             [self.recordTableView reloadData];
         }
     }];
-    
-    
 }
 
 

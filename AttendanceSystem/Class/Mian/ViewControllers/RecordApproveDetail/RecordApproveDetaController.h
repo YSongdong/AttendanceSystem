@@ -12,7 +12,8 @@
 
 typedef  enum{
     RecordApproveGoOutDetaType = 0, //外出
-    RecordApproveLeaveDetaType      //请假
+    RecordApproveLeaveDetaType,      //请假
+    recordApproveCardDetaType      //补卡
     
 }RecordApproveDetaType;
 
@@ -33,4 +34,8 @@ typedef  enum{
 @property (nonatomic,strong)NSString *recordIdStr;
 //审批列表
 @property (nonatomic,strong)NSString *cardIdStr;
+
+//审批状态  1 审核中 2 其他
+@property (nonatomic,strong) NSString *chenkStatusStr;
+
 @end

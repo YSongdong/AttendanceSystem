@@ -168,7 +168,7 @@ UIImagePickerControllerDelegate
     }else if ([cell.showLeaveTypeLab.text isEqualToString:@"丧假"]){
         typeStr = @"6";
     }
-    weaSelf.dataDcit[@"leave"] =typeStr;
+    weaSelf.dataDcit[@"type"] =typeStr;
     //事由
     NSIndexPath *reasonIndexPath = [NSIndexPath indexPathForRow:1 inSection:0];
     ApprovarReasonCell *reasonCell =[self.leaveTableView cellForRowAtIndexPath:reasonIndexPath];
@@ -329,6 +329,7 @@ UIImagePickerControllerDelegate
     __weak typeof(self) weakSelf = self;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
     ApprovalSelectPhotoCell *cell = [self.leaveTableView cellForRowAtIndexPath:indexPath];
+    [cell.imageArr removeLastObject];
     [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_ATTAPPLEAVEADDLEAVE_URL params:self.dataDcit.copy andData:cell.imageArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
@@ -340,7 +341,10 @@ UIImagePickerControllerDelegate
         dispatch_after(delayTime, dispatch_get_main_queue(), ^{
             RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
             detaVC.detaType = RecordApproveLeaveDetaType;
+            detaVC.titleStr = [NSString stringWithFormat:@"%@请假申请",[SDUserInfo obtainWithRealName]];
             detaVC.typeStr = @"1";
+            //审核中
+            detaVC.chenkStatusStr = @"1";
             detaVC.recordIdStr = showdata[@"id"];
             [weakSelf.navigationController pushViewController:detaVC animated:YES];
         });

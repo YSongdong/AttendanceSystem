@@ -10,6 +10,9 @@
 
 @interface CollectionViewCell : UICollectionViewCell
 
+@property (weak, nonatomic) IBOutlet UIImageView *rightImagV;
+
+
 @property (nonatomic,strong) NSIndexPath *indexPath;
 
 @property (nonatomic,strong) NSDictionary *dict;

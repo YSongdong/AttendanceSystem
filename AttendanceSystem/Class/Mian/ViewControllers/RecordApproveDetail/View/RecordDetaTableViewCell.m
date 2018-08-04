@@ -10,7 +10,7 @@
 
 @interface RecordDetaTableViewCell ()
 
-@property (nonatomic,strong) UIView *topLineView;
+
 //
 @property (nonatomic,strong) UIImageView *headerImageV;
 
@@ -70,17 +70,15 @@
         make.centerX.equalTo(iconView.mas_centerX);
     }];
     
-    UIView *bottomLineView =[[UIView alloc]init];
-    [self addSubview:bottomLineView];
-    bottomLineView.backgroundColor =[UIColor colorWithHexString:@"#f6f6f6"];
-    [bottomLineView mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.bottomLineView =[[UIView alloc]init];
+    [self addSubview:self.bottomLineView];
+    self.bottomLineView.backgroundColor =[UIColor colorWithHexString:@"#f6f6f6"];
+    [self.bottomLineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(weakSelf);
         make.top.equalTo(iconView.mas_bottom);
         make.width.equalTo(@1);
         make.centerX.equalTo(iconView.mas_centerX);
     }];
-    
-    
     
     UIView *samilView = [[UIView alloc]init];
     [self addSubview:samilView];
@@ -151,7 +149,6 @@
     }];
     
 }
-
 -(void)setDict:(NSDictionary *)dict{
     _dict = dict;
     UIView *samilView = [self viewWithTag:200];
@@ -161,6 +158,7 @@
     self.showStatusLab.hidden = NO;
     self.showTimeLab.hidden = NO;
     self.showReasonLab.hidden = NO;
+    
     //主管
     NSString *levelStr = [NSString stringWithFormat:@"%@",dict[@"level"]];
     if ([levelStr isEqualToString:@"0"]) {
@@ -176,12 +174,14 @@
         self.showStatusLab.text =@"发起申请";
         self.showStatusLab.textColor = [UIColor colorTextBg28BlackColor];
         
-        self.showNameLab.text = @"我";
+        NSArray *arr = infoDict[@"userName"];
+        self.showNameLab.text = arr[0];
         self.showNameLab.textColor =[UIColor colorTextBg28BlackColor];
         
         //主管view
         samilView.hidden = YES;
         self.showReasonLab.hidden = YES;
+        
     }else{
         NSDictionary *infoDict = dict[@"userInfo"];
         //时间
@@ -239,7 +239,7 @@
             self.showStatusLab.text =@"待审核";
             self.showStatusLab.textColor = [UIColor colorWithHexString:@"#ffb046"];
             
-            self.showNameLab.text =[NSString stringWithFormat:@"等待%@审核",nameStr];
+            self.showNameLab.text =[NSString stringWithFormat:@"%@",nameStr];
             
             //原因
             self.showReasonLab.hidden = YES;

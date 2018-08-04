@@ -20,11 +20,14 @@ typedef  enum{
 
 //名字
 @property (weak, nonatomic) IBOutlet UILabel *showNameLab;
-
 //类型
 @property (nonatomic,assign) RecordCellType cellType;
 
+// 1 我的申请 我的审批 2 其他
+@property (nonatomic,strong) NSString *reasonTypeStr;
+
 @property (nonatomic,strong) NSDictionary *dict;
+
 
 
 @end

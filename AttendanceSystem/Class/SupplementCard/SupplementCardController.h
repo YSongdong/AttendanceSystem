@@ -11,4 +11,7 @@
 #import "SDBaseController.h"
 @interface SupplementCardController : SDBaseController
 
+//考勤记录id
+@property (nonatomic,strong)NSString *recordIdStr;
+
 @end

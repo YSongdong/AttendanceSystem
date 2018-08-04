@@ -173,6 +173,7 @@
     
     UILabel *showBeginTimeLab = [[UILabel alloc]init];
     [self addSubview:showBeginTimeLab];
+    showBeginTimeLab.tag = 300;
     showBeginTimeLab.text = @"开始时间";
     showBeginTimeLab.font = Font(12);
     showBeginTimeLab.textColor = [UIColor colorTextBg98BlackColor];
@@ -188,11 +189,13 @@
     self.beginTimeLab.textColor = [UIColor colorTextBg28BlackColor];
     [self.beginTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(showBeginTimeLab.mas_right).offset(28);
-        make.centerY.equalTo(showBeginTimeLab.mas_centerY);
+        make.top.equalTo(showBeginTimeLab.mas_top);
+//        make.right.equalTo(weakSelf).offset(-12);
     }];
     
     UILabel *showEndTimeLab = [[UILabel alloc]init];
     [self addSubview:showEndTimeLab];
+    showEndTimeLab.tag = 301;
     showEndTimeLab.text = @"结束时间";
     showEndTimeLab.font = Font(12);
     showEndTimeLab.textColor = [UIColor colorTextBg98BlackColor];
@@ -213,6 +216,7 @@
     
     UILabel *showTimeNumberLab = [[UILabel alloc]init];
     [self addSubview:showTimeNumberLab];
+    showTimeNumberLab.tag = 302;
     showTimeNumberLab.text = @"时长(小时)";
     showTimeNumberLab.font = Font(12);
     showTimeNumberLab.textColor = [UIColor colorTextBg98BlackColor];
@@ -319,11 +323,21 @@
 }
 -(void)setDict:(NSDictionary *)dict{
     _dict = dict;
+    UILabel *showBeginTimeLab =  [self viewWithTag:300];
+    UILabel *showEndTimeLab =  [self viewWithTag:301];
+    UILabel *showTimeNumberLab = [self viewWithTag:302];
+    showBeginTimeLab.text = @"开始时间";
+    showEndTimeLab.hidden = NO;
+    showTimeNumberLab.hidden = NO;
     self.statusImageV.hidden = NO;
     self.ImageArrView.hidden = NO;
     self.showAddressLab.hidden = NO;
     self.addressLab.hidden = NO;
     self.addressImageV.hidden =NO;
+    //结束时间
+    self.endTimeLab.hidden =NO;
+    //时长
+    self.timeNumberLab.hidden =NO;
     
     //外出
     NSDictionary *infoDict = dict[@"userInfo"];
@@ -377,17 +391,18 @@
     self.attendGrounpLab.text =dict[@"agName"];
     //部门
     self.departmentNameLab.text =dict[@"department"];
-    //开始时间
-    self.beginTimeLab.text =dict[@"startTime"];
-    //结束时间
-    self.endTimeLab.text =dict[@"endTime"];
-    //时长
-    self.timeNumberLab.text =dict[@"numbers"];
     
-
     __weak typeof(self) weakSelf = self;
     if (_headerType == RecordDetailHeaderGoOutType) {
        
+        //开始时间
+        self.beginTimeLab.text =dict[@"startTime"];
+        //结束时间
+        self.endTimeLab.text =dict[@"endTime"];
+        //时长
+        self.timeNumberLab.text =dict[@"numbers"];
+        
+    
         NSString *outGoStr = dict[@"outGo"];
         if ([outGoStr isEqualToString:@""]) {
             [self.showAddressLab mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -397,6 +412,7 @@
         }
         
         //外出事由
+        self.incidentReaSonLab.numberOfLines = 4;
         self.incidentReaSonLab.text =outGoStr;
         //外出地点
         self.addressLab.text =dict[@"address"];
@@ -408,7 +424,7 @@
             for (int i=0; i<imageArr.count; i++) {
                 UIImageView *imageV = [[UIImageView alloc]init];
                 [self.ImageArrView addSubview:imageV];
-                imageV.image = imageArr[i];
+                [UIImageView sd_setImageView:imageV WithURL:imageArr[i]];
                 imageV.tag =  200+i;
                 [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(weakSelf).offset(85+i*54+i*5);
@@ -421,20 +437,31 @@
             }
         }
     }else if (_headerType == RecordDetailHeaderLeaveType){
+        
+        //开始时间
+        self.beginTimeLab.text =dict[@"startTime"];
+        //结束时间
+        self.endTimeLab.text =dict[@"endTime"];
+        //时长
+        self.timeNumberLab.text =dict[@"numbers"];
+        
         NSString *outGoStr = dict[@"leaveInfo"];
         if ([outGoStr isEqualToString:@""]) {
             [self.ImageArrView mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(weakSelf.showIncidentTypenLab.mas_bottom).offset(16);
-                make.left.equalTo(weakSelf.showIncidentTypenLab.mas_left);
+                make.left.right.equalTo(weakSelf);
+                make.height.equalTo(@52);
             }];
         }else{
             [self.ImageArrView mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(weakSelf.incidentReaSonLab.mas_bottom).offset(16);
-                make.left.equalTo(weakSelf.incidentReaSonLab.mas_left);
+                make.left.right.equalTo(weakSelf);
+                make.height.equalTo(@52);
             }];
         }
         self.showIncidentTypenLab.text = @"请假事由";
         //请假事由
+        self.incidentReaSonLab.numberOfLines = 4;
         self.incidentReaSonLab.text =outGoStr;
         
         //隐藏选择地点
@@ -449,7 +476,7 @@
             for (int i=0; i<imageArr.count; i++) {
                 UIImageView *imageV = [[UIImageView alloc]init];
                 [self.ImageArrView addSubview:imageV];
-                imageV.image = imageArr[i];
+                [UIImageView sd_setImageView:imageV WithURL:imageArr[i]];
                 imageV.tag =  200+i;
                 [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(weakSelf).offset(85+i*54+i*5);
@@ -462,6 +489,63 @@
             }
         }
         
+    }else if (_headerType == RecordDetailHeaderCardType){
+         //补卡
+        //结束时间
+        self.endTimeLab.hidden =YES;
+        //时长
+        self.timeNumberLab.hidden =YES;
+        showEndTimeLab.hidden = YES;
+        showTimeNumberLab.hidden = YES;
+        //隐藏选择地点
+        self.showAddressLab.hidden = YES;
+        self.addressLab.hidden = YES;
+        self.addressImageV.hidden =YES;
+        
+        //补卡班次
+        self.beginTimeLab.numberOfLines = 4;
+        self.beginTimeLab.text =[NSString stringWithFormat:@"%@,下班时间%@,补卡时间 %@",dict[@"createTime"],dict[@"replacementTime"],dict[@"cardTime"]];
+        
+        [self.beginTimeLab mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(showBeginTimeLab.mas_right).offset(28);
+            make.top.equalTo(showBeginTimeLab.mas_top);
+            make.right.equalTo(weakSelf).offset(-12);
+        }];
+        
+        //事由
+        self.showIncidentTypenLab.text = @"缺卡原因";
+        [self.showIncidentTypenLab mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(showBeginTimeLab.mas_left);
+            make.top.equalTo(weakSelf.beginTimeLab.mas_bottom).offset(16);
+        }];
+        //原因
+        self.incidentReaSonLab.text = dict[@"reason"];
+        
+        [self.ImageArrView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(weakSelf);
+            make.top.equalTo(weakSelf.showIncidentTypenLab.mas_bottom).offset(15);
+            make.height.equalTo(@52);
+        }];
+        
+        NSArray *imageArr = dict[@"images"];
+        if (imageArr.count == 0) {
+            self.ImageArrView.hidden = YES;
+        }else{
+            for (int i=0; i<imageArr.count; i++) {
+                UIImageView *imageV = [[UIImageView alloc]init];
+                [self.ImageArrView addSubview:imageV];
+                [UIImageView sd_setImageView:imageV WithURL:imageArr[i]];
+                imageV.tag =  200+i;
+                [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(weakSelf).offset(85+i*50+i*5);
+                    make.bottom.equalTo(weakSelf.mas_bottom).offset(-17);
+                    make.width.height.equalTo(@50);
+                }];
+                imageV.userInteractionEnabled = YES;
+                UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addImageAciton:)];
+                [imageV addGestureRecognizer:tap];
+            }
+        }
     }
 
 }
@@ -487,6 +571,7 @@
         if (imageArr.count > 0) {
             outGoHeig += 52;
         }
+         return outGoHeig + 320;
     }else if ([headerType isEqualToString:@"1"]){
         //计算请假事由高度
         NSString *leaveInfoStr = dict[@"leaveInfo"];
@@ -502,8 +587,23 @@
         }
         
         return outGoHeig + 290;
+    }else if ([headerType isEqualToString:@"3"]){
+        //计算请假事由高度
+        NSString *leaveInfoStr = dict[@"reason"];
+        //补卡
+        if (![leaveInfoStr isEqualToString:@""]) {
+            outGoHeig  = [SDTool getLabelHeightWithText:leaveInfoStr width:KScreenW-85-12 font:12];
+        }else{
+            outGoHeig = 17;
+        }
+        NSArray *imageArr = dict[@"images"];
+        if (imageArr.count > 0) {
+            outGoHeig += 52;
+        }
+        
+        return outGoHeig + 250;
     }
-    return outGoHeig + 320;
+     return 0;
 }
 
 

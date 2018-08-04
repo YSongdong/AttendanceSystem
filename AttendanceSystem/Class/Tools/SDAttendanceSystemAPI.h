@@ -12,10 +12,11 @@
 #define FT_INLINE static inline
 FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 
-
 //测试域名
 #define PUBLISH_DIMAIN_URL @"http://192.168.3.201:1088/"
-//#define PUBLISH_DIMAIN_URL @"http://192.168.2.56/"
+//#define PUBLISH_DIMAIN_URL @"http://agk.api.cqlanhui.com/"
+
+
 //---------------------------用户中心-----------------
 /*********身份证/手机号登录***********/
 #define  HTTP_ATTAPPUSERLOGIN_URL   getRequestPath(@"attendance/Att_app_user/userLogin")
@@ -78,10 +79,18 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 #define  HTTP_ATTAPPLEAVEURGE_URL   getRequestPath(@"attendance/Att_app_leave/leaveUrge")
 
 
-
 /*********补卡申请信息***********/
 #define  HTTP_ATTAPPREPAICARDINFO_URL   getRequestPath(@"attendance/Att_app_repaircard/cardInfo")
-
+/*********添加补卡***********/
+#define  HTTP_ATTAPPADDREPAIRCARD_URL   getRequestPath(@"attendance/Att_app_repaircard/addRepaircard")
+/*********补卡详情***********/
+#define  HTTP_ATTAPPRREPAICARDEPAICARDINFO_URL   getRequestPath(@"attendance/Att_app_repaircard/repaircardInfo")
+/*********补卡列表***********/
+#define  HTTP_ATTAPPREPAICARDLIST_URL   getRequestPath(@"attendance/Att_app_repaircard/repaircardList")
+/*********补卡撤销***********/
+#define  HTTP_ATTAPPREPAIRCARDREVOKE_URL   getRequestPath(@"attendance/Att_app_repaircard/repaircardRevoke")
+/*********补卡催办***********/
+#define  HTTP_ATTAPPREPAIRCARDURGE_URL   getRequestPath(@"attendance/Att_app_repaircard/repaircardUrge")
 
 
 /*********我的申请***********/
@@ -90,6 +99,12 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 #define  HTTP_ATTAPPAPPROVALLIST_URL   getRequestPath(@"attendance/Att_app_approval/approvalList")
 /*********审批状态：我的视角***********/
 #define  HTTP_ATTAPPAPPROVALSTATUS_URL   getRequestPath(@"attendance/Att_app_approval/approvalStatus")
+/********审批状态：第三方视角***********/
+#define  HTTP_ATTAPPSHOWAPPROVALSTATUS_URL   getRequestPath(@"attendance/Att_app_approval/showApprovalStatus")
+
+/********审批申请***********/
+#define  HTTP_ATTAPPEXAMINEAPPROVAL_URL   getRequestPath(@"attendance/Att_app_approval/examineApproval")
+
 
 
 FT_INLINE  NSString  * getRequestPath(NSString *op) {

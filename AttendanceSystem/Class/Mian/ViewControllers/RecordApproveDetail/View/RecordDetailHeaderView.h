@@ -10,8 +10,8 @@
 
 typedef  enum{
     RecordDetailHeaderGoOutType = 0, //外出
-    RecordDetailHeaderLeaveType      //请假
-    
+    RecordDetailHeaderLeaveType,     //请假
+    RecordDetailHeaderCardType      //请假
     
 }RecordDetailHeaderType;
 

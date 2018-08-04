@@ -118,6 +118,7 @@ UIImagePickerControllerDelegate
         weakSelf.cardDataDict[@"remark"] =@"";
         weakSelf.cardDataDict[@"sureTime"] =weakSelf.dict[@"sureTime"];
         weakSelf.cardDataDict[@"token"] =[SDTool getNewToken];
+        weakSelf.cardDataDict[@"coordinateSure"] = [SDTool convertToJsonData:weakSelf.dict[@"coordinate"]];
         //找到当前位置的
         NSDictionary *nowDict =  weakSelf.scopeDataArr[weakSelf.nowLocatIndex];
         NSString *abnormalCoordinateIsStr = nowDict[@"isScope"];

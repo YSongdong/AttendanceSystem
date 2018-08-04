@@ -73,7 +73,17 @@ UICollectionViewDelegateFlowLayout
 //确定
 -(void)selectTrueAction:(UIButton *) sender{
     
-    
+    NSMutableArray *mutableArr = [NSMutableArray array];
+    for (NSIndexPath *indexPath in self.selectIndexPathArr) {
+        NSArray *arr = self.dataArr[indexPath.section];
+        NSDictionary *dict = arr[indexPath.row];
+        [mutableArr addObject:dict];
+    }
+    //筛选
+    if ([self.delegate respondsToSelector:@selector(selectSiftArr:)]) {
+        [self.delegate selectSiftArr:mutableArr.copy];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     if (_siftType == RecordApproveSiftType) {
@@ -135,7 +145,7 @@ UICollectionViewDelegateFlowLayout
     //刷新
     [self.siftCollect reloadData];
    
-    if (_siftType == RecordApproveSiftType) {
+    if (_siftType == RecordApproveSiftType || _siftType ==  RecordTypeSiftType) {
         NSIndexPath *indexPath = self.selectIndexPathArr[0];
         NSDictionary *dict = self.dataArr[indexPath.section][indexPath.row];
         NSMutableArray *arr = [NSMutableArray array];
@@ -150,42 +160,83 @@ UICollectionViewDelegateFlowLayout
 -(void) loadData{
     [self.dataArr removeAllObjects];
    
-    NSArray *arr =@[@"全部",@"审批完成",@"审批中",@"已撤销"];
-    NSMutableArray *mutbleArr = [NSMutableArray array];
-    for (int i=0; i<arr.count; i++) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        dict[@"content"] = arr[i];
-        dict[@"isSelect"] = @"2";
-        dict[@"status"] = [NSString stringWithFormat:@"%d",i];
-        if (i == 0) {
-            //默认第一个选中
-            dict[@"isSelect"] = @"1";
+    if (_siftType == RecordApproveSiftType) {
+        NSArray *arr =@[@"全部",@"审批完成",@"审批中",@"已撤销"];
+        NSMutableArray *mutbleArr = [NSMutableArray array];
+        for (int i=0; i<arr.count; i++) {
+            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            dict[@"content"] = arr[i];
+            dict[@"isSelect"] = @"2";
+            dict[@"status"] = [NSString stringWithFormat:@"%d",i];
+            if (i == 0) {
+                //默认第一个选中
+                dict[@"isSelect"] = @"1";
+            }
+            [mutbleArr addObject:dict];
         }
-        [mutbleArr addObject:dict];
-    }
-    [self.dataArr addObject:mutbleArr];
-    
-    NSArray *typeArr =@[@"全部",@"请假",@"外出",@"补卡"];
-    NSMutableArray *mutbleTypeArr = [NSMutableArray array];
-    for (int i=0; i<typeArr.count; i++) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        dict[@"content"] = typeArr[i];
-        dict[@"isSelect"] = @"2";
-        dict[@"status"] = [NSString stringWithFormat:@"%d",i+1];
-        if (i == 0) {
-            //默认第一个选中
-            dict[@"isSelect"] = @"1";
+        [self.dataArr addObject:mutbleArr];
+        
+        NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.selectIndexPathArr addObject:nomalIndexPath];
+        
+    }else if (_siftType == RecordApplyForSiftType) {
+        NSArray *arr =@[@"全部",@"审批完成",@"审批中",@"已撤销"];
+        NSMutableArray *mutbleArr = [NSMutableArray array];
+        for (int i=0; i<arr.count; i++) {
+            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            dict[@"content"] = arr[i];
+            dict[@"isSelect"] = @"2";
+            dict[@"status"] = [NSString stringWithFormat:@"%d",i];
+            if (i == 0) {
+                //默认第一个选中
+                dict[@"isSelect"] = @"1";
+            }
+            [mutbleArr addObject:dict];
         }
-        [mutbleTypeArr addObject:dict];
-    }
-    [self.dataArr addObject:mutbleTypeArr];
-    
-    //选择默认第一个
-    for (int j=0 ; j<2; j++) {
-        NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:0 inSection:j];
+        [self.dataArr addObject:mutbleArr];
+        
+        
+        NSArray *typeArr =@[@"全部",@"请假",@"外出",@"补卡"];
+        NSMutableArray *mutbleTypeArr = [NSMutableArray array];
+        for (int i=0; i<typeArr.count; i++) {
+            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            dict[@"content"] = typeArr[i];
+            dict[@"isSelect"] = @"2";
+            dict[@"type"] = [NSString stringWithFormat:@"%d",i];
+            if (i == 0) {
+                //默认第一个选中
+                dict[@"isSelect"] = @"1";
+            }
+            [mutbleTypeArr addObject:dict];
+        }
+        [self.dataArr addObject:mutbleTypeArr];
+        
+        //选择默认第一个
+        for (int j=0 ; j<2; j++) {
+            NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:0 inSection:j];
+            [self.selectIndexPathArr addObject:nomalIndexPath];
+        }
+    }else if (_siftType == RecordTypeSiftType){
+        
+        NSArray *typeArr =@[@"全部",@"请假",@"外出",@"补卡"];
+        NSMutableArray *mutbleTypeArr = [NSMutableArray array];
+        for (int i=0; i<typeArr.count; i++) {
+            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            dict[@"content"] = typeArr[i];
+            dict[@"isSelect"] = @"2";
+            dict[@"type"] = [NSString stringWithFormat:@"%d",i];
+            if (i == 0) {
+                //默认第一个选中
+                dict[@"isSelect"] = @"1";
+            }
+            [mutbleTypeArr addObject:dict];
+        }
+        [self.dataArr addObject:mutbleTypeArr];
+        
+        NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.selectIndexPathArr addObject:nomalIndexPath];
     }
-
+    
 }
 -(void) createCollectView{
     self.bottomToolView = [[UIView alloc]init];
@@ -236,8 +287,7 @@ UICollectionViewDelegateFlowLayout
     trueBtn.layer.masksToBounds = YES;
     [trueBtn addTarget:self action:@selector(selectTrueAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    
-    if (_siftType == RecordApproveSiftType) {
+    if (_siftType == RecordApproveSiftType || _siftType == RecordTypeSiftType ) {
         self.bottomToolView.hidden = YES;
     }else{
         self.bottomToolView.hidden = NO;

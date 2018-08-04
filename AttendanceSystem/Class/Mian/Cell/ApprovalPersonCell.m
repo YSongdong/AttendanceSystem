@@ -84,6 +84,11 @@ UICollectionViewDelegateFlowLayout
 }
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     CollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:COLLECTIONVIEW_CELL forIndexPath:indexPath];
+    if (indexPath.row == self.dataArr.count-1) {
+        cell.rightImagV.hidden = YES;
+    }else{
+        cell.rightImagV.hidden = NO;
+    }
     cell.indexPath = indexPath;
     cell.dict = self.dataArr[indexPath.row];
     return cell;

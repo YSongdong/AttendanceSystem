@@ -12,6 +12,8 @@
 #import "ShowMarkView.h"
 
 #import "SupplementCardController.h"
+#import "RecordApproveDetaController.h"
+
 
 #import "ShowPunchCardCell.h"
 #define SHOWPUNCHCARD_CELL @"ShowPunchCardCell"
@@ -196,23 +198,65 @@
         };
         //补卡审核中
         cell.buCardChenkConcetBlock = ^{
-            
+            RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
+            //补卡
+            detaVC.detaType = recordApproveCardDetaType;
+            detaVC.typeStr = @"3";
+            if ([dict[@"no"] isEqualToString:@"2"]) {
+                detaVC.recordIdStr = dict[@"noId"];
+            }
+            detaVC.titleStr = [NSString stringWithFormat:@"%@补卡申请",[SDUserInfo obtainWithRealName]];
+            //其他
+            detaVC.chenkStatusStr = @"1";
+            [weakSelf.navigationController pushViewController:detaVC animated:YES];
         };
         //请假
         cell.askForLeaveBlock = ^{
-            
+            RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
+          
+            detaVC.detaType = RecordApproveLeaveDetaType;
+            detaVC.typeStr = @"1";
+            if ([dict[@"no"] isEqualToString:@"4"]) {
+                detaVC.recordIdStr = dict[@"noId"];
+            }
+            detaVC.titleStr = [NSString stringWithFormat:@"%@请假申请",[SDUserInfo obtainWithRealName]];
+            //其他
+            detaVC.chenkStatusStr = @"2";
+            [weakSelf.navigationController pushViewController:detaVC animated:YES];
         };
         //外勤补卡通过
         cell.leaveInBuCardSucceBlock = ^{
-            
+            RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
+            //补卡
+            detaVC.detaType = recordApproveCardDetaType;
+            detaVC.typeStr = @"3";
+            if ([dict[@"no"] isEqualToString:@"3"]) {
+                detaVC.recordIdStr = dict[@"noId"];
+            }
+            detaVC.titleStr = [NSString stringWithFormat:@"%@补卡申请",[SDUserInfo obtainWithRealName]];
+            //其他
+            detaVC.chenkStatusStr = @"2";
+            [weakSelf.navigationController pushViewController:detaVC animated:YES];
         };
         //外勤通过
         cell.leaveInWorkSuccesBlock = ^{
-            
+            RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
+            //外出
+            detaVC.detaType = RecordApproveGoOutDetaType;
+            detaVC.typeStr = @"2";
+            if ([dict[@"isGo"] isEqualToString:@"2"]) {
+                detaVC.recordIdStr = dict[@"outgoRecordId"];
+            }
+            detaVC.titleStr = [NSString stringWithFormat:@"%@外勤申请",[SDUserInfo obtainWithRealName]];
+            //其他
+            detaVC.chenkStatusStr = @"2";
+            [weakSelf.navigationController pushViewController:detaVC animated:YES];
         };
         //申请补卡
         cell.timeUnusualUFaceBuCardBlock = ^{
+            NSString *recordIdStr =dict[@"Id"];
             SupplementCardController *supplementVC = [[SupplementCardController alloc]init];
+            supplementVC.recordIdStr =recordIdStr;
             [weakSelf.navigationController pushViewController:supplementVC animated:YES];
         };
         return cell;

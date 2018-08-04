@@ -33,8 +33,10 @@ UITableViewDataSource
 @property (nonatomic,strong) NSMutableDictionary *dataDict;
 //数据源
 @property (nonatomic,strong) NSMutableArray *dataArr;
-
-
+//创建队列组
+@property (nonatomic,strong) dispatch_group_t group;
+//审批申请数据字典
+@property (nonatomic,strong) NSMutableDictionary *examiDict;
 
 @end
 
@@ -57,6 +59,17 @@ UITableViewDataSource
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     RecordDetaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:RECORDDETATABLEVIEW_CELL forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if (indexPath.row == 0) {
+        cell.topLineView.hidden = YES ;
+    }else{
+        cell.topLineView.hidden = NO;
+    }
+    NSArray *array = self.dataArr[indexPath.section];
+    if (array.count-1 == indexPath.row) {
+        cell.bottomLineView.hidden = YES;
+    }else{
+        cell.bottomLineView.hidden = NO;
+    }
     NSArray *arr =  self.dataArr[indexPath.section];
     cell.dict = arr[indexPath.row];
     return cell;
@@ -68,6 +81,8 @@ UITableViewDataSource
         headerView.headerType = RecordDetailHeaderGoOutType;
     }else if (_detaType == RecordApproveLeaveDetaType){
          headerView.headerType = RecordDetailHeaderLeaveType;
+    }else if (_detaType == recordApproveCardDetaType){
+        headerView.headerType = RecordDetailHeaderCardType;
     }
     headerView.dict =self.dataDict;
     
@@ -94,6 +109,10 @@ UITableViewDataSource
         // 1 请假
         CGFloat height = [RecordDetailHeaderView getWithTextHeaderViewHeight:self.dataDict headerType:@"1"];
         return height;
+    }else if (_detaType == recordApproveCardDetaType) {
+        // 3 补卡
+        CGFloat height = [RecordDetailHeaderView getWithTextHeaderViewHeight:self.dataDict headerType:@"3"];
+        return height;
     }
     return 0.01f;
 }
@@ -110,51 +129,70 @@ UITableViewDataSource
 -(void) createTableView{
     __weak typeof(self) weakSelf = self;
     
-    [self.view addSubview:self.toolView];
-    if (self.isApplyFor) {
-        [self.toolView.revokeBtn setTitle:@"拒绝" forState:UIControlStateNormal];
-        [self.toolView.revokeBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-        
-        [self.toolView.urgentBtn setTitle:@"同意" forState:UIControlStateNormal];
-        [self.toolView.urgentBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
-    }else{
-        [self.toolView.revokeBtn setTitle:@"撤销" forState:UIControlStateNormal];
-        [self.toolView.revokeBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-        
-        [self.toolView.urgentBtn setTitle:@"催办" forState:UIControlStateNormal];
-        [self.toolView.urgentBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
-    }
-    //撤销
-    self.toolView.RevokeBlock  = ^{
-        if (weakSelf.isApplyFor) {
-            [weakSelf createShowRefuseReasonView];
-            return ;
-        }
-        [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showRevokeView];
-        if (weakSelf.detaType == RecordApproveGoOutDetaType ) {
-            weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条外出申请?";
-        }else if (weakSelf.detaType == RecordApproveLeaveDetaType){
-            weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条请假申请?";
-        }
-        __weak typeof(weakSelf) stongSelf = weakSelf;
-        //确定
-        stongSelf.showRevokeView.trueBlock = ^{
-            [stongSelf requestRevokeDate];
-        };
-    };
-    //催办
-    self.toolView.UrgentBlock = ^{
-        if (weakSelf.isApplyFor) {
+    if ([self.chenkStatusStr isEqualToString:@"1"]) {
+        [self.view addSubview:self.toolView];
+        self.toolView.hidden = YES;
+        if (self.isApplyFor) {
+            [self.toolView.revokeBtn setTitle:@"拒绝" forState:UIControlStateNormal];
+            [self.toolView.revokeBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
             
-            return ;
+            [self.toolView.urgentBtn setTitle:@"同意" forState:UIControlStateNormal];
+            [self.toolView.urgentBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
+        }else{
+            [self.toolView.revokeBtn setTitle:@"撤销" forState:UIControlStateNormal];
+            [self.toolView.revokeBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+            
+            [self.toolView.urgentBtn setTitle:@"催办" forState:UIControlStateNormal];
+            [self.toolView.urgentBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
         }
-        [weakSelf  requestUrgeDate];
-    };
-    
-    self.detaTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-50)style:UITableViewStyleGrouped];
-    self.detaTableView.backgroundColor =[UIColor colorTextWhiteColor];
-    [self.view addSubview:self.detaTableView];
-    
+        //撤销
+        self.toolView.RevokeBlock  = ^{
+            if (weakSelf.isApplyFor) {
+                weakSelf.examiDict[@"status"] = @"1";
+                [weakSelf createShowRefuseReasonView];
+                return ;
+            }
+            [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showRevokeView];
+            if (weakSelf.detaType == RecordApproveGoOutDetaType ) {
+                weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条外出申请?";
+            }else if (weakSelf.detaType == RecordApproveLeaveDetaType){
+                weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条请假申请?";
+            }else if (weakSelf.detaType == recordApproveCardDetaType){
+                weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条补卡申请?";
+            }
+            __weak typeof(weakSelf) stongSelf = weakSelf;
+            //确定
+            stongSelf.showRevokeView.trueBlock = ^{
+                [stongSelf requestRevokeDate];
+            };
+        };
+        //催办
+        self.toolView.UrgentBlock = ^{
+            if (weakSelf.isApplyFor) {
+                [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showRevokeView];
+                [weakSelf.showRevokeView.trueBtn setTitle:@"确定" forState:UIControlStateNormal];
+                [weakSelf.showRevokeView.trueBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+                weakSelf.showRevokeView.showLab.text =[NSString stringWithFormat:@"您是否确认同意%@",weakSelf.titleStr];
+                __weak typeof(weakSelf) stongSelf = weakSelf;
+                //确定
+                stongSelf.showRevokeView.trueBlock = ^{
+                    weakSelf.examiDict[@"status"] = @"2";
+                    weakSelf.examiDict[@"info"] = @"";
+                    [stongSelf requestExamineApproval];
+                };
+                return ;
+            }
+            [weakSelf  requestUrgeDate];
+        };
+        
+        self.detaTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-50)style:UITableViewStyleGrouped];
+        self.detaTableView.backgroundColor =[UIColor colorTextWhiteColor];
+        [self.view addSubview:self.detaTableView];
+    }else{
+        self.detaTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight)style:UITableViewStyleGrouped];
+        self.detaTableView.backgroundColor =[UIColor colorTextWhiteColor];
+        [self.view addSubview:self.detaTableView];
+    }
     if (@available(iOS 11.0, *)) {
         self.detaTableView.estimatedRowHeight = 0;
         self.detaTableView.estimatedSectionFooterHeight = 0;
@@ -178,11 +216,11 @@ UITableViewDataSource
     weakSelf.showRfuseReasonView  =[[ShowRefuseReasonView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
     [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showRfuseReasonView];
     weakSelf.showRfuseReasonView.trueBlock = ^{
-        [weakSelf requestRevokeDate];
+        weakSelf.examiDict[@"info"] = weakSelf.showRfuseReasonView.refuesTextView.text;
+        [weakSelf requestExamineApproval];
         [weakSelf.showRfuseReasonView removeFromSuperview];
     };
 }
-
 //创建Navi
 -(void) createNavi{
     self.customNavBar.title = self.titleStr;
@@ -205,7 +243,15 @@ UITableViewDataSource
     }
     return _toolView;
 }
-
+-(void)setChenkStatusStr:(NSString *)chenkStatusStr{
+    _chenkStatusStr = chenkStatusStr;
+}
+-(NSMutableDictionary *)examiDict{
+    if (!_examiDict) {
+        _examiDict  =[NSMutableDictionary dictionary];
+    }
+    return _examiDict;
+}
 -(NSMutableArray *)dataArr{
     if (!_dataArr) {
         _dataArr = [NSMutableArray array];
@@ -235,27 +281,34 @@ UITableViewDataSource
 -(void)createGCDGroup{
     __weak typeof(self) weakSelf = self;
     //创建队列组
-    dispatch_group_t group = dispatch_group_create();
+   self.group = dispatch_group_create();
     //进入这个组
-    dispatch_group_enter(group);
-    dispatch_group_async(group, dispatch_get_global_queue(0, 0), ^{
+    dispatch_group_enter(self.group);
+    dispatch_group_async(self.group, dispatch_get_global_queue(0, 0), ^{
         sleep(1);
-        //请求
+        //详情
         [weakSelf requestDetaData];
-        //这个组的任务完成时离开
-        dispatch_group_leave(group);
     });
-    dispatch_group_enter(group);
-    dispatch_group_async(group, dispatch_get_global_queue(0, 0), ^{
+    dispatch_group_enter(_group);
+    dispatch_group_async(_group, dispatch_get_global_queue(0, 0), ^{
         sleep(2);
+        //我的视角
         [weakSelf requestApprovalStatusData];
-        dispatch_group_leave(group);
     });
     
     //当所有的任务都完成后会发送这个通知
-    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+    dispatch_group_notify(_group, dispatch_get_main_queue(), ^{
+        NSString *statusStr = [NSString stringWithFormat:@"%@",weakSelf.dataDict[@"status"]];
+        if ([statusStr isEqualToString:@"1"]) {
+            weakSelf.toolView.hidden = NO;
+        }else{
+            weakSelf.toolView.hidden = YES;
+            [weakSelf.detaTableView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(weakSelf.view).offset(KSNaviTopHeight);
+                make.left.right.bottom.equalTo(weakSelf.view);
+            }];
+        }
         [weakSelf.detaTableView reloadData];
-        
     });
 }
 //详情
@@ -274,32 +327,19 @@ UITableViewDataSource
         url =HTTP_ATTAPPOUTGOOUTGOINFO_URL ;
     }else if (_detaType == RecordApproveLeaveDetaType){
         url = HTTP_ATTAPPLEAVEINFO_URL;
+    }else if (_detaType == recordApproveCardDetaType){
+        url = HTTP_ATTAPPRREPAICARDEPAICARDINFO_URL;
     }
     
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:url params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
+        //这个组的任务完成时离开
+        dispatch_group_leave(self.group);
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
         if ([showdata isKindOfClass:[NSDictionary class]]) {
             self.dataDict = [NSMutableDictionary dictionaryWithDictionary:showdata];
-            NSString *statusStr = [NSString stringWithFormat:@"%@",showdata[@"status"]];
-            __weak typeof(self)weakSelf = self;
-            CGFloat naviHeight =KSNaviTopHeight;
-            if (![statusStr isEqualToString:@"1"]) {
-                self.toolView.hidden = YES;
-                [self.detaTableView mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.left.right.bottom.equalTo(weakSelf.view);
-                    make.top.equalTo(weakSelf.view).offset(naviHeight);
-                }];
-            }else{
-                 self.toolView.hidden = NO;
-                [self.detaTableView mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.left.right.equalTo(weakSelf.view);
-                    make.top.equalTo(weakSelf.view).offset(naviHeight);
-                    make.bottom.equalTo(weakSelf.view).offset(-50);
-                }];
-            }
         }
     }];
 }
@@ -312,14 +352,21 @@ UITableViewDataSource
     param[@"type"] = self.typeStr;
     param[@"unitId"] = [SDUserInfo obtainWithUniId];
     param[@"userId"] = [SDUserInfo obtainWithUserId];
-    [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTAPPAPPROVALSTATUS_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
+    NSString *url ;
+    if (self.isApplyFor) {
+        url = HTTP_ATTAPPSHOWAPPROVALSTATUS_URL ;
+    }else{
+        url =HTTP_ATTAPPAPPROVALSTATUS_URL;
+    }
+    [[KRMainNetTool sharedKRMainNetTool]postRequstWith:url params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
+        //这个组的任务完成时离开
+        dispatch_group_leave(self.group);
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
         if ([showdata isKindOfClass:[NSArray class]]) {
             [self.dataArr addObject:showdata];
-            [self.detaTableView reloadData];
         }
     }];
 }
@@ -331,6 +378,8 @@ UITableViewDataSource
         url =HTTP_ATTAPPOUTGOREVOKE_URL ;
     }else if (_detaType == RecordApproveLeaveDetaType){
         url = HTTP_ATTAPPLEAVEREVOKE_URL;
+    }else if (_detaType == recordApproveCardDetaType){
+        url = HTTP_ATTAPPREPAIRCARDREVOKE_URL;
     }
     param[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
     param[@"token"] = [SDTool getNewToken];
@@ -355,6 +404,8 @@ UITableViewDataSource
         url =HTTP_ATTAPPOUTGOURGE_URL ;
     }else if (_detaType == RecordApproveLeaveDetaType){
         url = HTTP_ATTAPPLEAVEURGE_URL;
+    }else if (_detaType == recordApproveCardDetaType){
+        url = HTTP_ATTAPPREPAIRCARDURGE_URL;
     }
     param[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
     param[@"token"] = [SDTool getNewToken];
@@ -369,7 +420,34 @@ UITableViewDataSource
         [SDShowSystemPrompView showSystemPrompStr:@"催办提醒已发送"];
     }];
 }
-
+//审批申请
+-(void)requestExamineApproval{
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
+    param[@"token"] = [SDTool getNewToken];
+    param[@"recordId"] = self.recordIdStr;
+    param[@"unitId"] = [SDUserInfo obtainWithUniId];
+    param[@"userId"] = [SDUserInfo obtainWithUserId];
+    param[@"cardId"] = self.cardIdStr;
+    param[@"status"] =self.examiDict[@"status"];
+    param[@"info"] =self.examiDict[@"info"];
+    if (_detaType == RecordApproveGoOutDetaType ) {
+         param[@"type"] = @"2";
+    }else if (_detaType == RecordApproveLeaveDetaType){
+        param[@"type"] = @"1";
+    }else if (_detaType == recordApproveCardDetaType){
+        param[@"type"] = @"3";
+    }
+    [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTAPPEXAMINEAPPROVAL_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
+        if (error) {
+            [SDShowSystemPrompView showSystemPrompStr:error];
+            return ;
+        }
+        [self.dataArr removeAllObjects];
+        self.dataDict = nil;
+        [self createGCDGroup];
+    }];
+}
 
 
 

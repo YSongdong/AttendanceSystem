@@ -10,6 +10,10 @@
 
 @interface RecordDetaTableViewCell : UITableViewCell
 
+@property (nonatomic,strong) UIView *topLineView;
+
+@property (nonatomic,strong) UIView *bottomLineView;
+
 @property (nonatomic,strong) NSDictionary *dict;
 
 //计算高度
