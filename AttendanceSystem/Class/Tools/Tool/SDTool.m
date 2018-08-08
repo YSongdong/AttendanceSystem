@@ -156,7 +156,7 @@
     return minute;
 }
 //计算两个时间的时长 (小时)
-+ (NSInteger)calculateWithStartTime:(NSString *)startTime endTime:(NSString *)endTime{
++ (CGFloat)calculateWithStartTime:(NSString *)startTime endTime:(NSString *)endTime{
     NSDateFormatter *date = [[NSDateFormatter alloc]init];
     
     [date setDateFormat:@"yyyy.MM.dd HH:mm"];
@@ -171,7 +171,7 @@
     
     NSTimeInterval value = end - start;
     
-    NSInteger minute = (NSInteger)value /(60*60);
+    CGFloat minute = (CGFloat)value /(60*60);
     
     return minute;
 

@@ -14,5 +14,7 @@
 
 @property (nonatomic,strong) UILabel *showPlaceLab;
 
+@property (nonatomic,strong) UILabel  *showLab;
+
 @property (nonatomic,copy) void(^trueBlock)(void);
 @end

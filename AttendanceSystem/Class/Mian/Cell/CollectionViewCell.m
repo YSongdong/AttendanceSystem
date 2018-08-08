@@ -56,10 +56,11 @@
         if (i != arr.count-1) {
            [nameStr appendString:@"/"];
         }
-        if (i == 0) {
-           [UIImageView sd_setImageView:self.coverImageV WithURL:nameDict[@"photo"]];
-        }
+//        if (i == 0) {
+//           [UIImageView sd_setImageView:self.coverImageV WithURL:nameDict[@"photo"]];
+//        }
     }
+    self.coverImageV.image = [UIImage imageNamed:@"pic_user"];
      self.nameLab.text = nameStr;
 }
 

@@ -123,9 +123,7 @@ UICollectionViewDelegateFlowLayout
     
     NSIndexPath *statuIndexPath = self.selectIndexPathArr[indexPath.section];
     NSMutableArray *mutableArr = self.dataArr[indexPath.section];
-//    if (indexPath.row == statuIndexPath.row) {
-//        return;
-//    }
+
     //把上次选中还原
     NSMutableDictionary *oldDict = [NSMutableDictionary dictionaryWithDictionary:mutableArr[statuIndexPath.row]];
     oldDict[@"isSelect"] = @"2";
@@ -244,7 +242,8 @@ UICollectionViewDelegateFlowLayout
     __weak typeof(self) weakSelf = self;
     self.bottomToolView.backgroundColor = [UIColor colorTextWhiteColor];
     [self.bottomToolView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(weakSelf.view);
+        make.left.right.equalTo(weakSelf.view);
+        make.bottom.equalTo(weakSelf.view).offset(-KSTabbarH);
         make.height.equalTo(@50);
     }];
     UIView *lineView = [[UIView alloc]init];
@@ -299,7 +298,7 @@ UICollectionViewDelegateFlowLayout
     layout.itemSize = CGSizeMake((KScreenW-5*12)/3, 33);
     layout.sectionInset = UIEdgeInsetsMake(0,12, 10, 12);
     
-    self.siftCollect = [[UICollectionView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-50) collectionViewLayout:layout];
+    self.siftCollect = [[UICollectionView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-50-KSTabbarH) collectionViewLayout:layout];
     [self.view addSubview:self.siftCollect];
     
     self.siftCollect.dataSource= self;
@@ -308,7 +307,6 @@ UICollectionViewDelegateFlowLayout
     
     [self.siftCollect registerClass:[RecordSiftCollectionViewCell class] forCellWithReuseIdentifier:RECORDSIFTCOLLECTIONVIEW_CELL];
     [self.siftCollect registerClass:[CollectionHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:COLLECTIONHEADERVIEW];
-    
 }
 //创建Navi
 -(void) createNavi{

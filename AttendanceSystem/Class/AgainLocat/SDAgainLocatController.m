@@ -15,8 +15,8 @@
 #import "ShowTureSignInView.h"
 #import "ShowLocatErrorView.h"
 
-#import "FVLivingDetectionViewController.h"
-#import "FVFaceGatherViewController.h"
+#import "FVAppSdk.h"
+
 
 #import "ShowUnkownPhotoPromtView.h"
 #import "SDPhotoCollectController.h"
@@ -29,8 +29,7 @@ MAMapViewDelegate,
 AMapLocationManagerDelegate,
 AMapGeoFenceManagerDelegate,
 AMapSearchDelegate,
-FVLivingDetectDelegate,
-FVFaceGatherViewDelegate,
+FVAppSdkControllerDelegate,
 UIGestureRecognizerDelegate,
 UINavigationControllerDelegate,
 UIImagePickerControllerDelegate
@@ -99,13 +98,15 @@ UIImagePickerControllerDelegate
     };
     //打卡
     self.toolView.cardBtnBlock = ^{
-        //判断是否有留底
-        if ([[SDUserInfo obtainWithPotoStatus] isEqualToString:@"4"]) {
-            [weakSelf.view addSubview:weakSelf.showPhotoView];
-            [weakSelf.showPhotoView.selectBtn addTarget:weakSelf action:@selector(selectUPdataPhoto:) forControlEvents:UIControlEventTouchUpInside];
-            return ;
+        //判断是否开启人脸识别
+        if ([weakSelf.dict[@"faceStatus"] isEqualToString:@"1"]) {
+            //判断是否有留底
+            if ([[SDUserInfo obtainWithPotoStatus] isEqualToString:@"4"]) {
+                [weakSelf.view addSubview:weakSelf.showPhotoView];
+                [weakSelf.showPhotoView.selectBtn addTarget:weakSelf action:@selector(selectUPdataPhoto:) forControlEvents:UIControlEventTouchUpInside];
+                return ;
+            }
         }
-        
         weakSelf.cardDataDict = [NSMutableDictionary dictionary];
         weakSelf.cardDataDict[@"agId"] =[SDUserInfo obtainWithProGroupId];
         weakSelf.cardDataDict[@"agName"] =[SDUserInfo obtainWithProGroupName];
@@ -332,22 +333,17 @@ UIImagePickerControllerDelegate
         //隐藏textview
         [self.testView removeFromSuperview];
         //获取照片
-        FVFaceGatherViewController *vc = [[FVFaceGatherViewController alloc] init];
-        vc.delegate = self;
-        [self presentViewController:vc animated:YES completion:NULL];
+        [[FVAppSdk sharedManager]gatherWithParentController:self];
     }else{
         //眨眼
-        FVLivingDetectionViewController *vc = [[FVLivingDetectionViewController alloc] init];
-        vc.delegate = self;
-        vc.livingMode = FVAppLivingFastMode ;
-        [self presentViewController:vc animated:YES completion:NULL];
+        [[FVAppSdk sharedManager]livingWithParentController:self mode:FVAppLivingFastMode level:FVAppLivingSafeMiddleMode];
     }
 }
 #pragma mark -----人脸-----
 /*
  * 活体结束时的委托方法：返回结果及正脸照。
  */
--(void)FVLivingDetect:(FVLivingDetectionViewController*)detector didFinishLiving:(FVAppLivingResult)result FrontalFace:(UIImage*)image{
+-(void)FVLivingDetect:(FVAppSdk *)detector didFinishLiving:(FVAppLivingResult)result FrontalFace:(UIImage*)image{
     if (image) {
         [self dismissViewControllerAnimated:YES completion:nil];
         //显示验证view
@@ -355,8 +351,19 @@ UIImagePickerControllerDelegate
         [self  requestFacePhotoLoad];
     }
 }
-//拍照
-- (void)FVFaceGatherView:(FVFaceGatherViewController *)gather didGatherImage:(UIImage*)image{
+/*
+ * 活体取消时的委托方法。
+ */
+-(void)FVLivingDetectDidCancel:(FVAppSdk*)detector{
+    //确认信息重新验证
+    if (self.isTureAgainFace) {
+        self.showTureSingInView.hidden= NO;
+    }
+}
+/*
+ * 采集结束时的委托方法：返回结果照片。
+ */
+-(void)FVFaceGatherView:(FVAppSdk *)gather didGatherImage:(UIImage*)image{
     if (image) {
         [self dismissViewControllerAnimated:YES completion:nil];
         self.faceImage = image;
@@ -364,10 +371,9 @@ UIImagePickerControllerDelegate
     }
 }
 /*
- * 活体检测退出时的回调。
+ * 采集取消时的委托方法。
  */
--(void)FVLivingDetectDidDismissViewController:(FVLivingDetectionViewController*)detector{
-    [self dismissViewControllerAnimated:YES completion:nil];
+-(void)FVFaceGatherViewDidCancel:(FVAppSdk*)gather{
     //确认信息重新验证
     if (self.isTureAgainFace) {
         self.showTureSingInView.hidden= NO;

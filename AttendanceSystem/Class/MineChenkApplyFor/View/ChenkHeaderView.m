@@ -15,6 +15,8 @@
 @property (nonatomic,strong) UIButton *chenkPassBtn;
 //线条
 @property (nonatomic,strong) UIView *lineView;
+//角标view
+@property (nonatomic,strong) UIView *hornNumberView;
 //角标数
 @property (nonatomic,strong) UILabel *hornNumberLab;
 
@@ -83,6 +85,28 @@
         make.centerX.equalTo(weakSelf.stayChenkBtn.mas_centerX);
         make.bottom.equalTo(weakSelf.stayChenkBtn);
     }];
+    
+    self.hornNumberView  =[[UIView alloc]init];
+    [self addSubview:self.hornNumberView];
+    self.hornNumberView.backgroundColor = [UIColor colorWithHexString:@"#fd5747"];
+    [self.hornNumberView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf).offset(9);
+        make.left.equalTo(weakSelf.stayChenkBtn.mas_centerX).offset(36);
+        make.width.height.equalTo(@18);
+    }];
+    self.hornNumberView.layer.cornerRadius =9;
+    self.hornNumberView.layer.masksToBounds = YES;
+    
+    self.hornNumberLab = [[UILabel alloc]init];
+    [self.hornNumberView addSubview:self.hornNumberLab];
+    self.hornNumberLab.text = @"";
+    self.hornNumberLab.font = Font(10);
+    self.hornNumberLab.textColor = [UIColor colorTextWhiteColor];
+    [self.hornNumberLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(weakSelf.hornNumberView.mas_centerX);
+        make.centerY.equalTo(weakSelf.hornNumberView.mas_centerY);
+    }];
+    self.hornNumberView.hidden = YES;
 }
 -(void)selectStayBtnAction:(UIButton *) sender{
     if (self.pageTag == sender.tag) {
@@ -99,7 +123,6 @@
     self.pageTag = sender.tag;
     //type 1 待我审批的  2我已审批的
     self.typeBlock(@"1");
-    
 }
 -(void)selectChenkBtnAction:(UIButton *) sender{
     if (self.pageTag == sender.tag) {
@@ -116,6 +139,24 @@
     //type 1 待我审批的  2我已审批的
     self.typeBlock(@"2");
 }
-
+//更新UI
+-(void) updateHeaderViewUI:(NSString *)countStr{
+     __weak typeof(self) weakSelf = self;
+    if ( [countStr isEqualToString:@"0"]) {
+        self.hornNumberView.hidden = YES;
+        return;
+    }
+    self.hornNumberView.hidden = NO;
+    
+    if ([countStr integerValue] > 10) {
+        [self.hornNumberView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(weakSelf).offset(9);
+            make.left.equalTo(weakSelf.stayChenkBtn.mas_centerX).offset(36);
+            make.width.equalTo(@23);
+            make.height.equalTo(@18);
+        }];
+    }
+    self.hornNumberLab.text = [countStr integerValue] > 99 ? @"99+":countStr;
+}
 
 @end

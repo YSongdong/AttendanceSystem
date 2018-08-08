@@ -52,6 +52,7 @@ UIImagePickerControllerDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorTextWhiteColor];
     [self createNavi];
     [self createTableView];
     [self requesRepairCardInfo];
@@ -65,6 +66,7 @@ UIImagePickerControllerDelegate
     __weak typeof(self) weakSelf = self;
     if (indexPath.row == 0) {
         SupplementCardTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:SUPPLEMENTCARDTIME_CELL forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.cardTimeBlock = ^{
             [weakSelf.view addSubview:weakSelf.datePickerView];
             [weakSelf.datePickerView showDateTimePickerView];
@@ -184,9 +186,10 @@ UIImagePickerControllerDelegate
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     SupplementCardTimeCell *cell  = [self.cardTableView cellForRowAtIndexPath:indexPath];
     cell.showCardTimeLab.text = date;
+    cell.showCardTimeLab.textColor = [UIColor colorTextBg28BlackColor];
 }
 -(void) createTableView{
-    self.cardTableView  =[[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight)];
+    self.cardTableView  =[[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-KSTabbarH)];
     [self.view addSubview:self.cardTableView];
     
     self.cardTableView.delegate = self;
@@ -288,7 +291,6 @@ UIImagePickerControllerDelegate
     param[@"unitId"] = [SDUserInfo obtainWithUniId];
     param[@"userId"] = [SDUserInfo obtainWithUserId];
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTAPPREPAICARDINFO_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
-        
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
@@ -300,7 +302,6 @@ UIImagePickerControllerDelegate
         }
     }];
 }
-
 //申请流程提交
 -(void) requestSubimtData{
     __weak typeof(self) weakSelf = self;
@@ -309,10 +310,11 @@ UIImagePickerControllerDelegate
     [cell.imageArr removeLastObject];
     [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_ATTAPPADDREPAIRCARD_URL params:self.dataDcit.copy andData:cell.imageArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
+            [cell.imageArr addObject:[UIImage imageNamed:@"att_attendance_dialogmsg_add"]];
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
-        [SDShowSystemPrompView showSystemPrompStr:@"补卡成功"];
+        [SDShowSystemPrompView showSystemPrompStr:@"提交成功，等待审批"];
         // 自动延迟3秒执行
         dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
         dispatch_after(delayTime, dispatch_get_main_queue(), ^{
@@ -320,14 +322,13 @@ UIImagePickerControllerDelegate
             detaVC.detaType = recordApproveCardDetaType;
             detaVC.titleStr = [NSString stringWithFormat:@"%@补卡申请",[SDUserInfo obtainWithRealName]];
             detaVC.typeStr = @"3";
+            detaVC.isSkipGrade = YES;
             //审核中
             detaVC.chenkStatusStr = @"1";
             detaVC.recordIdStr = showdata[@"id"];
             [weakSelf.navigationController pushViewController:detaVC animated:YES];
         });
     }];
-    
-    
 }
 
 

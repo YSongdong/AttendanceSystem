@@ -38,6 +38,7 @@ AMapSearchDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorTextWhiteColor];
     [self createNavi];
     [self createMapView];
 }
@@ -103,7 +104,8 @@ AMapSearchDelegate
     [self.view addSubview:toolView];
     toolView.backgroundColor =[UIColor colorTextWhiteColor];
     [toolView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(weakSelf.view);
+        make.left.right.equalTo(weakSelf.view);
+        make.bottom.equalTo(weakSelf.view).offset(-KSTabbarH);
         make.height.equalTo(@162);
     }];
     
@@ -162,7 +164,7 @@ AMapSearchDelegate
     [self.lookBtn addTarget:self action:@selector(selectLockAction:) forControlEvents:UIControlEventTouchUpInside];
     
     ///初始化地图
-    self.mapView = [[MAMapView alloc] initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-162)];
+    self.mapView = [[MAMapView alloc] initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-162-KSTabbarH)];
     self.mapView.delegate = self;
     //设置显示大小
     [self.mapView setZoomLevel:14.1 animated:NO];
@@ -230,7 +232,6 @@ AMapSearchDelegate
 -(MAPointAnnotation *)pointAnnotaiton{
     if (!_pointAnnotaiton) {
         _pointAnnotaiton  =[[MAPointAnnotation alloc]init];
-        [self.mapView addAnnotation:_pointAnnotaiton];
     }
     return _pointAnnotaiton;
 }

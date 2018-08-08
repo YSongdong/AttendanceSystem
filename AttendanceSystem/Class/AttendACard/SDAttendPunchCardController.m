@@ -10,8 +10,7 @@
 
 #import "SDPhotoCollectController.h"
 #import "SDAgainLocatController.h"
-#import "FVLivingDetectionViewController.h"
-#import "FVFaceGatherViewController.h"
+#import "FVAppSdk.h"
 #import "RecordApproveDetaController.h"
 #import "SupplementCardController.h"
 
@@ -45,8 +44,7 @@
 UITableViewDelegate,
 UITableViewDataSource,
 DateTimePickerViewDelegate,
-FVLivingDetectDelegate,
-FVFaceGatherViewDelegate,
+FVAppSdkControllerDelegate,
 UINavigationControllerDelegate,
 UIImagePickerControllerDelegate,
 AMapLocationManagerDelegate
@@ -102,16 +100,15 @@ AMapLocationManagerDelegate
     [self createNavi];
     [self createPromentView];
     self.isTureAgainFace = NO;
-    //请求当天的日期
-    NSString *dateStr = [[self requestDateFormatter]stringFromDate:[NSDate date]];
-    self.selectCalendarStr = dateStr;
-    [self requestAttendInfo:dateStr];
+    self.selectCalendarStr = @"";
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     //开启定位
     [self mobilePhonePositioning];
-    //请求数据
+    //请求当天的日期
+    NSString *dateStr = [[self requestDateFormatter]stringFromDate:[NSDate date]];
+    self.selectCalendarStr = dateStr;
     [self requestAttendInfo:self.selectCalendarStr];
 }
 //设置navi
@@ -129,7 +126,7 @@ AMapLocationManagerDelegate
     [self.view addSubview:self.headerView];
     [self.headerView.selectBtn addTarget:self action:@selector(selectTimeAction:) forControlEvents:UIControlEventTouchUpInside];
    
-    self.cardTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.headerView.frame)+20, KScreenW, KScreenH-CGRectGetHeight(self.headerView.frame)-KSNaviTopHeight-20)];
+    self.cardTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.headerView.frame)+20, KScreenW, KScreenH-CGRectGetHeight(self.headerView.frame)-KSNaviTopHeight-20-KSTabbarH)];
     [self.view addSubview:self.cardTableView];
     
     self.cardTableView.delegate = self;
@@ -149,7 +146,6 @@ AMapLocationManagerDelegate
     }else{
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
-    
     //相差时间大view
     self.showTimeBigView = [[ShowTwoTimeDifferBigView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, CGRectGetHeight(self.cardTableView.frame))];
     [self.cardTableView addSubview:self.showTimeBigView];
@@ -195,28 +191,15 @@ AMapLocationManagerDelegate
                 [stongSelf.cardTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
             };
         };
-        //补卡审核中
-        cell.buCardChenkConcetBlock = ^{
-            RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
-            //补卡
-            detaVC.detaType = recordApproveCardDetaType;
-            detaVC.typeStr = @"3";
-            if ([dict[@"no"] isEqualToString:@"2"]) {
-                detaVC.recordIdStr = dict[@"noId"];
-            }
-            detaVC.titleStr = [NSString stringWithFormat:@"%@补卡申请",[SDUserInfo obtainWithRealName]];
-            //其他
-            detaVC.chenkStatusStr = @"1";
-            [weakSelf.navigationController pushViewController:detaVC animated:YES];
-        };
         //请假
         cell.askForLeaveBlock = ^{
             RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
             //请假
             detaVC.detaType = RecordApproveLeaveDetaType;
             detaVC.typeStr = @"1";
-            if ([dict[@"no"] isEqualToString:@"4"]) {
-                detaVC.recordIdStr = dict[@"noId"];
+            NSString *leaveInStr = [NSString stringWithFormat:@"%@",dict[@"leaveIn"]];
+            if ([leaveInStr isEqualToString:@"2"]) {
+                detaVC.recordIdStr = dict[@"leaveInId"];
             }
             detaVC.titleStr = [NSString stringWithFormat:@"%@请假申请",[SDUserInfo obtainWithRealName]];
             //其他
@@ -283,13 +266,16 @@ AMapLocationManagerDelegate
             };
             //打卡
             cell.selectCardBlcok = ^(NSDictionary *addressDict) {
-                //判断是否有留底
-                if ([[SDUserInfo obtainWithPotoStatus] isEqualToString:@"4"]) {
-                    [weakSelf.view addSubview:weakSelf.showPhotoView];
-                    [weakSelf.showPhotoView.selectBtn addTarget:weakSelf action:@selector(selectUPdataPhoto:) forControlEvents:UIControlEventTouchUpInside];
-                    return ;
-                }
                 
+                //判断是否开启人脸识别
+                if ([dict[@"faceStatus"] isEqualToString:@"1"]) {
+                    //判断是否有留底
+                    if ([[SDUserInfo obtainWithPotoStatus] isEqualToString:@"4"]) {
+                        [weakSelf.view addSubview:weakSelf.showPhotoView];
+                        [weakSelf.showPhotoView.selectBtn addTarget:weakSelf action:@selector(selectUPdataPhoto:) forControlEvents:UIControlEventTouchUpInside];
+                        return ;
+                    }
+                }
                 weakSelf.cardDataDict = [NSMutableDictionary dictionary];
                 weakSelf.cardDataDict[@"abnormalCoordinateIs"] = [NSNumber numberWithInteger:[addressDict[@"abnormalCoordinateIs"] integerValue]];
                 weakSelf.cardDataDict[@"coordinate"] = [SDTool convertToJsonData:addressDict];
@@ -345,28 +331,15 @@ AMapLocationManagerDelegate
                     [stongSelf.cardTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
                 };
             };
-            //补卡审核中
-            cell.buCardChenkConcetBlock = ^{
-                RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
-                //补卡
-                detaVC.detaType = recordApproveCardDetaType;
-                detaVC.typeStr = @"3";
-                if ([dict[@"no"] isEqualToString:@"2"]) {
-                    detaVC.recordIdStr = dict[@"noId"];
-                }
-                detaVC.titleStr = [NSString stringWithFormat:@"%@补卡申请",[SDUserInfo obtainWithRealName]];
-                //其他
-                detaVC.chenkStatusStr = @"1";
-                [weakSelf.navigationController pushViewController:detaVC animated:YES];
-            };
             //请假
             cell.askForLeaveBlock = ^{
                 RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
                 //请假
                 detaVC.detaType = RecordApproveLeaveDetaType;
                 detaVC.typeStr = @"1";
-                if ([dict[@"no"] isEqualToString:@"4"]) {
-                    detaVC.recordIdStr = dict[@"noId"];
+                NSString *leaveInStr = [NSString stringWithFormat:@"%@",dict[@"leaveIn"]];
+                if ([leaveInStr isEqualToString:@"2"]) {
+                    detaVC.recordIdStr = dict[@"leaveInId"];
                 }
                 detaVC.titleStr = [NSString stringWithFormat:@"%@请假申请",[SDUserInfo obtainWithRealName]];
                 //其他
@@ -466,22 +439,22 @@ AMapLocationManagerDelegate
         //隐藏textview
         [self.testView removeFromSuperview];
         //获取照片
-        FVFaceGatherViewController *vc = [[FVFaceGatherViewController alloc] init];
-        vc.delegate = self;
-        [self presentViewController:vc animated:YES completion:NULL];
+        [[FVAppSdk sharedManager]gatherWithParentController:self];
+        [FVAppSdk sharedManager].fvLanderDelegate =  self;
     }else{
         //眨眼
-        FVLivingDetectionViewController *vc = [[FVLivingDetectionViewController alloc] init];
-        vc.delegate = self;
-        vc.livingMode = FVAppLivingFastMode ;
-        [self presentViewController:vc animated:YES completion:NULL];
+         [[FVAppSdk sharedManager]livingWithParentController:self mode:FVAppLivingFastMode level:FVAppLivingSafeMiddleMode];
+        [FVAppSdk sharedManager].fvLanderDelegate =  self;
+    }//确认信息重新验证
+    if (self.isTureAgainFace) {
+        self.showTureSingInView.hidden= NO;
     }
 }
 #pragma mark -----人脸-----
 /*
  * 活体结束时的委托方法：返回结果及正脸照。
  */
--(void)FVLivingDetect:(FVLivingDetectionViewController*)detector didFinishLiving:(FVAppLivingResult)result FrontalFace:(UIImage*)image{
+-(void)FVLivingDetect:(FVAppSdk *)detector didFinishLiving:(FVAppLivingResult)result FrontalFace:(UIImage*)image{
     if (image) {
         [self dismissViewControllerAnimated:YES completion:nil];
         //显示验证view
@@ -489,8 +462,20 @@ AMapLocationManagerDelegate
         [self  requestFacePhotoLoad];
     }
 }
-//拍照
-- (void)FVFaceGatherView:(FVFaceGatherViewController *)gather didGatherImage:(UIImage*)image{
+/*
+ * 活体取消时的委托方法。
+ */
+-(void)FVLivingDetectDidCancel:(FVAppSdk*)detector{
+    
+    //确认信息重新验证
+    if (self.isTureAgainFace) {
+        self.showTureSingInView.hidden= NO;
+    }
+}
+/*
+ * 采集结束时的委托方法：返回结果照片。
+ */
+-(void)FVFaceGatherView:(FVAppSdk *)gather didGatherImage:(UIImage*)image{
     if (image) {
         [self dismissViewControllerAnimated:YES completion:nil];
         self.faceImage = image;
@@ -498,11 +483,9 @@ AMapLocationManagerDelegate
     }
 }
 /*
- * 活体检测退出时的回调。
+ * 采集取消时的委托方法。
  */
--(void)FVLivingDetectDidDismissViewController:(FVLivingDetectionViewController*)detector{
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
+-(void)FVFaceGatherViewDidCancel:(FVAppSdk*)gather{
     //确认信息重新验证
     if (self.isTureAgainFace) {
         self.showTureSingInView.hidden= NO;
@@ -724,7 +707,6 @@ AMapLocationManagerDelegate
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
-    
         if ([showdata isKindOfClass:[NSDictionary class]]) {
             //移除数据源
             self.dataDict = nil;

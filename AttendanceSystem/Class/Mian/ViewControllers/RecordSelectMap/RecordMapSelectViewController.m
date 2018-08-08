@@ -55,6 +55,7 @@ AMapSearchDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.searchStr =@"";
     [self createNavi];
     [self createSearchView];
     [self createTableView];
@@ -66,14 +67,19 @@ AMapSearchDelegate
 }
 #pragma mark ----搜索Pol -----
 -(void) searchStr:(NSString *) str{
-    AMapPOIAroundSearchRequest *request = [[AMapPOIAroundSearchRequest alloc] init];
     
-    request.location            = [AMapGeoPoint locationWithLatitude:self.userLocation.coordinate.latitude longitude:self.userLocation.coordinate.longitude];
+    AMapPOIKeywordsSearchRequest *request = [[AMapPOIKeywordsSearchRequest alloc] init];
+    
     request.keywords            = str;
-    /* 按照距离排序. */
-    request.sortrule            = 0;
+    request.city                = self.reGeocode.city;
+  //  request.types               = @"高等院校";
     request.requireExtension    = YES;
-    [self.search AMapPOIAroundSearch:request];
+    
+    /*  搜索SDK 3.2.0 中新增加的功能，只搜索本城市的POI。*/
+    request.cityLimit           = YES;
+    request.requireSubPOIs      = YES;
+    
+    [self.search AMapPOIKeywordsSearch:request];
 }
 #pragma mark ----- AMapSearchDelegate-----
 - (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error
@@ -93,6 +99,7 @@ AMapSearchDelegate
         self.searchSpaceView.hidden = NO;
         return;
     }
+    [self.dataArr removeAllObjects];
     
     self.searchSpaceView.hidden = YES;
     for (POIAnnotation *tation in poiAnnotations) {
@@ -124,13 +131,13 @@ AMapSearchDelegate
     if (reGeocode)
     {
         self.reGeocode = reGeocode;
-        if (self.searchStr == nil) {
+        if ([self.searchStr isEqualToString:@""]) {
+            self.searchStr = reGeocode.POIName;
             [self searchStr:reGeocode.POIName];
         }
+        self.userLocation = location;
+        [self.mapView addAnnotation:_pointAnnotaiton];
     }
-    self.userLocation = location;
-    
-    [self.mapView addAnnotation:_pointAnnotaiton];
 }
 #pragma mark  -----点击事件------
 -(void)tap:(UITapGestureRecognizer *) sender{
@@ -146,6 +153,7 @@ AMapSearchDelegate
     self.mapView.showsUserLocation = YES;
     if(self.mapView.userLocation.updating && self.mapView.userLocation.location) {
         [self.mapView setCenterCoordinate:self.mapView.userLocation.location.coordinate animated:YES];
+        [self.mapView removeAnnotation:_pointAnnotaiton];
     }
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -161,7 +169,7 @@ AMapSearchDelegate
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     self.mapView.showsUserLocation = NO;
-    [self.mapView removeAnnotation:_pointAnnotaiton];
+    [self.mapView addAnnotation:_pointAnnotaiton];
     
     if (self.selectIndexPtah == nil) {
         NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:self.dataArr[indexPath.row]];
@@ -170,19 +178,14 @@ AMapSearchDelegate
         [self.searchTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationNone];
         self.selectIndexPtah = indexPath;
         
-    
         //重新标点
         NSDictionary *dict = self.dataArr[indexPath.row];
         CLLocation *location = dict[@"location"];
-        [self.mapView addAnnotation:_pointAnnotaiton];
         [self.mapView setCenterCoordinate:location.coordinate];
         [self.pointAnnotaiton setCoordinate:location.coordinate];
         return ;
     }
     
-    if (self.selectIndexPtah.row == indexPath.row) {
-        return;
-    }
     NSMutableDictionary *oldDict = [NSMutableDictionary dictionaryWithDictionary:self.dataArr[self.selectIndexPtah.row]];
     oldDict[@"isSelect"] = @"2";
     [self.dataArr replaceObjectAtIndex:self.selectIndexPtah.row withObject:oldDict.copy];
@@ -194,11 +197,9 @@ AMapSearchDelegate
     [self.searchTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationNone];
     self.selectIndexPtah = indexPath;
     
-   
     //重新定位
     NSDictionary *dict = self.dataArr[indexPath.row];
     CLLocation *location = dict[@"location"];
-    [self.mapView addAnnotation:_pointAnnotaiton];
     [self.mapView setCenterCoordinate:location.coordinate];
     [self.pointAnnotaiton setCoordinate:location.coordinate];
 }
@@ -244,7 +245,7 @@ AMapSearchDelegate
                     range:NSMakeRange(7, searchStr.length-7)];
     showSettingLab.attributedText = attribuStr;
     
-    self.searchTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 45, KScreenW, 265-45)];
+    self.searchTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 45, KScreenW, 265-45-KSTabbarH)];
     [searchView addSubview:self.searchTableView];
     
     self.searchTableView.delegate = self;
@@ -263,7 +264,7 @@ AMapSearchDelegate
     self.mapView = [[MAMapView alloc] initWithFrame:CGRectMake(0, KSNaviTopHeight+CGRectGetHeight(self.searchHeaderView.frame), KScreenW, KScreenH-KSNaviTopHeight-CGRectGetHeight(self.searchHeaderView.frame)-265)];
     self.mapView.delegate = self;
     //设置显示大小
-    [self.mapView setZoomLevel:17.1 animated:NO];
+    [self.mapView setZoomLevel:14.1 animated:NO];
     self.mapView.distanceFilter = 10.f;
     ///如果您需要进入地图就显示定位小蓝点，则需要下面两行代码
 //    self.mapView.showsUserLocation = YES;

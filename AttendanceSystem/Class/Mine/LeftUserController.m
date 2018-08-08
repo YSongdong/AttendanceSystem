@@ -42,7 +42,11 @@
     
     UIImageView *naviImageV = [[UIImageView alloc]init];
     [bgView addSubview:naviImageV];
-    naviImageV.image = [UIImage imageNamed:@"cbl_bg"];
+    if (KIsiPhoneX) {
+        naviImageV.image = [UIImage imageNamed:@"cbl_bg-1"];
+    }else{
+        naviImageV.image = [UIImage imageNamed:@"cbl_bg"];
+    }
     [naviImageV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(weakSelf.view);
     }];

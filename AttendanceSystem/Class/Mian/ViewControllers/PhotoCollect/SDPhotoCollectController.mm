@@ -9,14 +9,14 @@
 #import "SDPhotoCollectController.h"
 
 #import "PhotoCollectView.h"
-#import "FVFaceGatherViewController.h"
+#import "FVAppSdk.h"
 
 #import "BindingPhoneController.h"
 #import "AlterPassNumberController.h"
 
 @interface SDPhotoCollectController ()
 <
-FVFaceGatherViewDelegate
+FVAppSdkControllerDelegate
 >
 @property (nonatomic,strong) PhotoCollectView *photoView;
 //选择图片
@@ -30,6 +30,7 @@ FVFaceGatherViewDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.isUpdatePhoto = NO;
+   // [self createNavi];
     //创建UI
     [self createView];
 }
@@ -49,11 +50,18 @@ FVFaceGatherViewDelegate
         }
     }
 }
+//设置navi
+-(void) createNavi{
+    self.customNavBar.title = @"用户留底照片采集";
+    [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
+    __weak typeof(self) weakSelf = self;
+    self.customNavBar.onClickLeftButton = ^{
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    };
+}
 #pragma mark   -----创建UI-----
 -(void) createView{
-    
     self.automaticallyAdjustsScrollViewInsets = NO;
-
     UIScrollView *scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
     scrollView.backgroundColor = [UIColor colorBgGreyColor];
     [self.view addSubview:scrollView];
@@ -68,12 +76,10 @@ FVFaceGatherViewDelegate
     __weak typeof(self) weakSelf = self;
     //开始采集
     self.photoView.beginBlock = ^{
-        
         if (!weakSelf.isUpdatePhoto) {
-            
-            FVFaceGatherViewController *vc = [[FVFaceGatherViewController alloc] init];
-            vc.delegate = weakSelf;
-            [weakSelf presentViewController:vc animated:YES completion:NULL];
+            //获取照片
+            [[FVAppSdk sharedManager]gatherWithParentController:weakSelf];
+            [FVAppSdk sharedManager].fvLanderDelegate =  weakSelf;
         }else{
             NSString *phoneStr = [SDUserInfo obtainWithBindPhone];
             if ([phoneStr isEqualToString:@"1"]) {
@@ -98,8 +104,10 @@ FVFaceGatherViewDelegate
         self.photoView.backBtn.hidden = YES;
     }
 }
-//前端采集照片
-- (void)FVFaceGatherView:(FVFaceGatherViewController *)gather didGatherImage:(UIImage*)image{
+/*
+ * 采集结束时的委托方法：返回结果照片。
+ */
+-(void)FVFaceGatherView:(FVAppSdk *)gather didGatherImage:(UIImage*)image{
     if (image) {
         [self dismissViewControllerAnimated:YES completion:nil];
         [self.photoView.beginBtn setTitle:@"重新采集" forState:UIControlStateNormal];
@@ -109,12 +117,12 @@ FVFaceGatherViewDelegate
         self.photoView.updataBtn.hidden = NO;
     }
 }
+
 -(void)setIsMine:(BOOL)isMine{
     _isMine = isMine;
 }
 -(void)setChenkStatu:(NSString *)chenkStatu{
     _chenkStatu = chenkStatu;
-    
 }
 -(void)setChenkErrorStr:(NSString *)chenkErrorStr{
     _chenkErrorStr = chenkErrorStr;
@@ -130,9 +138,7 @@ FVFaceGatherViewDelegate
     param[@"token"]= [SDTool getNewToken];
     NSMutableArray *imageArr = [NSMutableArray array];
     [imageArr addObject:[self.selecdImage fixOrientation]];
-    [SVProgressHUD showWithStatus:@"正在上传!"];
     [[KRMainNetTool sharedKRMainNetTool] upLoadData:HTTP_USERUPLOADPHONO_URL params:param.copy andData:imageArr.copy waitView:self.view complateHandle:^(id showdata, NSString *error) {
-        [SVProgressHUD dismiss];
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;

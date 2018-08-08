@@ -228,4 +228,14 @@
     NSDictionary *dict = [userD objectForKey:@"Login"];
     return dict[@"proGroupName"];
 }
+//获取 isCharge  是不是主管
++(NSString *) obtainWithIsCharge{
+    NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict = [userD objectForKey:@"Login"];
+    return dict[@"isCharge"];
+}
+
+
+
+
 @end

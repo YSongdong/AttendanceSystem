@@ -62,7 +62,7 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <state key="normal" title="重新定位&gt;">
-                                    <color key="titleColor" red="0.2156862745" green="0.71372549019999998" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="0.13725490196078433" green="0.58431372549019611" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AtM-ee-PdB">

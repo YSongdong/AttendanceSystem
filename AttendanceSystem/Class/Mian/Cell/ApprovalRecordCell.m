@@ -50,7 +50,7 @@
     if ([statusStr isEqualToString:@"3"]) {
         //不通过
         self.chenkStatuLab.text = @"审核未通过";
-        self.chenkStatuLab.textColor = [UIColor colorWithHexString:@"#f75354"];
+        self.chenkStatuLab.textColor = [UIColor colorWithHexString:@"#f75254"];
     }else if ([statusStr isEqualToString:@"2"]){
         //通过
         self.chenkStatuLab.text = @"审核通过";
@@ -99,12 +99,21 @@
         //结束时间
         self.endTimeLab.text =[NSString stringWithFormat:@"结束时间: %@",dict[@"endTime"]];
 
-        NSDictionary *userDict = dict[@"userInfo"];
-        //头像
-        [UIImageView sd_setImageView:self.coverImageV WithURL:userDict[@"photo"]];
         
-        //发起申请者
-        self.showNameLab.text = [NSString stringWithFormat:@"%@的外出申请",userDict[@"realName"]];
+        if ([self.reasonTypeStr isEqualToString:@"2"]) {
+            //头像
+            [UIImageView sd_setImageView:self.coverImageV WithURL:[SDUserInfo obtainWithPhoto]];
+            
+            //发起申请者
+            self.showNameLab.text = [NSString stringWithFormat:@"%@的外出申请",[SDUserInfo obtainWithRealName]];
+        }else{
+            NSDictionary *userDict = dict[@"userInfo"];
+            //头像
+            [UIImageView sd_setImageView:self.coverImageV WithURL:userDict[@"photo"]];
+            
+            //发起申请者
+            self.showNameLab.text = [NSString stringWithFormat:@"%@的外出申请",userDict[@"realName"]];
+        }
         
     }else if (_cellType == RecordCellLeaveType){
          //请假
@@ -141,12 +150,20 @@
         //结束时间
         self.cellReasonLab.text =[NSString stringWithFormat:@"结束时间: %@",dict[@"endTime"]];
         
-        NSDictionary *userDict = dict[@"userInfo"];
-        //头像
-        [UIImageView sd_setImageView:self.coverImageV WithURL:userDict[@"photo"]];
-
-        //发起申请者
-        self.showNameLab.text = [NSString stringWithFormat:@"%@的请假申请",userDict[@"realName"]];
+        if ([self.reasonTypeStr isEqualToString:@"2"]) {
+            //头像
+            [UIImageView sd_setImageView:self.coverImageV WithURL:[SDUserInfo obtainWithPhoto]];
+            
+            //发起申请者
+            self.showNameLab.text = [NSString stringWithFormat:@"%@的请假申请",[SDUserInfo obtainWithRealName]];
+        }else{
+            NSDictionary *userDict = dict[@"userInfo"];
+            //头像
+            [UIImageView sd_setImageView:self.coverImageV WithURL:userDict[@"photo"]];
+            
+            //发起申请者
+            self.showNameLab.text = [NSString stringWithFormat:@"%@的请假申请",userDict[@"realName"]];
+        }
         
     }else if (_cellType == RecordCellCardType){
         //补卡
@@ -167,13 +184,20 @@
         //结束时间
         self.cellReasonLab.hidden=  YES;
         
-        NSDictionary *userDict = dict[@"userInfo"];
-        
-        //头像
-        [UIImageView sd_setImageView:self.coverImageV WithURL:userDict[@"photo"]];
-        
-        //发起申请者
-        self.showNameLab.text = [NSString stringWithFormat:@"%@的补卡申请",userDict[@"realName"]];
+        if ([self.reasonTypeStr isEqualToString:@"2"]) {
+            //头像
+            [UIImageView sd_setImageView:self.coverImageV WithURL:[SDUserInfo obtainWithPhoto]];
+            
+            //发起申请者
+            self.showNameLab.text = [NSString stringWithFormat:@"%@的补卡申请",[SDUserInfo obtainWithRealName]];
+        }else{
+            NSDictionary *userDict = dict[@"userInfo"];
+            //头像
+            [UIImageView sd_setImageView:self.coverImageV WithURL:userDict[@"photo"]];
+            
+            //发起申请者
+            self.showNameLab.text = [NSString stringWithFormat:@"%@的补卡申请",userDict[@"realName"]];
+        }
     }
 }
 

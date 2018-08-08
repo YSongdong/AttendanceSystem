@@ -94,9 +94,19 @@ typedef enum {
     //大背景
     UIImageView *bigImageV = [[UIImageView alloc]init];
     [bgView addSubview:bigImageV];
-    bigImageV.image = [UIImage imageNamed:@"bg"];
+    bigImageV.image = [UIImage imageNamed:@"dl_bg"];
     [bigImageV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(bgView);
+    }];
+    
+    UIImageView *logoImageV = [[UIImageView alloc]init];
+    [bgView addSubview:logoImageV];
+    logoImageV.image = [UIImage imageNamed:@"dl_logo"];
+    logoImageV.contentMode = UIViewContentModeScaleAspectFit;
+    [logoImageV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(bgView).offset(KSNaviTopHeight+21);
+        make.centerX.equalTo(bgView.mas_centerX);
+      //  make.height.equalTo(@165);
     }];
     
     //账号
@@ -104,7 +114,7 @@ typedef enum {
     [bgView addSubview:phoneView];
     phoneView.backgroundColor =[UIColor colorWithHexString:@"#69cbb4"];
     [phoneView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(bgView).offset(KSNaviTopHeight+279);
+        make.top.equalTo(logoImageV.mas_bottom).offset(85);
         make.left.equalTo(bgView).offset(25);
         make.right.equalTo(bgView).offset(-25);
         make.height.equalTo(@44);
@@ -131,7 +141,7 @@ typedef enum {
         make.top.bottom.right.equalTo(phoneView);
         make.centerY.equalTo(phoneView.mas_centerY);
     }];
-    self.phoneTF.placeholder = @"请输入员工身份证号码/绑定手机号";
+    self.phoneTF.placeholder = @"请输入员工工号/绑定手机号";
     //设置颜色和大小
     [ self.phoneTF setValue:[UIColor colorTextWhiteColor] forKeyPath:@"_placeholderLabel.textColor"];
     [ self.phoneTF setValue:[UIFont systemFontOfSize:15] forKeyPath:@"_placeholderLabel.font"];
@@ -260,23 +270,23 @@ typedef enum {
     }];
     [self.forgetPsdBtn addTarget:self action:@selector(forgetPassAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    //切换登录方式
-    self.cutTypeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [bgView addSubview:self.cutTypeBtn];
-    [self.cutTypeBtn setImage:[UIImage imageNamed:@"btn_enter"] forState:UIControlStateNormal];
-    [self.cutTypeBtn setTitle:@"验证码登录 " forState:UIControlStateNormal];
-    [self.cutTypeBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.cutTypeBtn LZSetbuttonType:LZCategoryTypeLeft];
-    });
-    self.cutTypeBtn.titleLabel.font = Font(14);
-    [self.cutTypeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.forgetPsdBtn.mas_bottom).offset(56);
-        make.right.equalTo(bgView).offset(-25);
-        make.height.equalTo(@20);
-    }];
-    [self.cutTypeBtn addTarget:self action:@selector(selectCatAction:) forControlEvents:UIControlEventTouchUpInside];
+//    //切换登录方式
+//    self.cutTypeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [bgView addSubview:self.cutTypeBtn];
+//    [self.cutTypeBtn setImage:[UIImage imageNamed:@"btn_enter"] forState:UIControlStateNormal];
+//    [self.cutTypeBtn setTitle:@"验证码登录 " forState:UIControlStateNormal];
+//    [self.cutTypeBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
+//
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [weakSelf.cutTypeBtn LZSetbuttonType:LZCategoryTypeLeft];
+//    });
+//    self.cutTypeBtn.titleLabel.font = Font(14);
+//    [self.cutTypeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(weakSelf.forgetPsdBtn.mas_bottom).offset(56);
+//        make.right.equalTo(bgView).offset(-25);
+//        make.height.equalTo(@20);
+//    }];
+//    [self.cutTypeBtn addTarget:self action:@selector(selectCatAction:) forControlEvents:UIControlEventTouchUpInside];
  
 }
 #pragma mark ----UITextFeildDelegate---
@@ -372,7 +382,7 @@ typedef enum {
 -(void)selectLoginAction:(UIButton *) sender{
     if ([self.type isEqualToString:@"account"]) {
         if (self.phoneTF.text.length == 0) {
-            [SDShowSystemPrompView showSystemPrompStr:@"请输入员工身份证号码/绑定手机号"];
+            [SDShowSystemPrompView showSystemPrompStr:@"请输入员工工号/绑定手机号"];
             return ;
         }
         if (self.passwordTF.text.length == 0 ) {

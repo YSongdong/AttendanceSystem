@@ -88,32 +88,40 @@
         //显示timelab
         self.timeLab = [[UILabel alloc]init];
         [self.bgView addSubview:self.timeLab];
-        self.timeLab.text = @"类型选择";
+        self.timeLab.text = @"请假类型";
         self.timeLab.font = Font(18);
         self.timeLab.textColor = [UIColor colorCommonGreenColor];
         [self.timeLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(weakSelf.bgView.mas_centerX);
             make.centerY.equalTo(weakSelf.completionBtn.mas_centerY);
         }];
-        
     }
     return self;
 }
-
-
 #pragma mark-----UIPickerViewDataSource
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
     return 1;
 }
-
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
     return self.customArr.count;
 }
-
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    return self.customArr[row];
+-(UIView*)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
+    // 设置分割线的颜色
+    for(UIView *singleLine in pickerView.subviews)
+    {
+        if (singleLine.frame.size.height < 1)
+        {
+            singleLine.backgroundColor = [UIColor colorWithHexString:@"#cccccc"];
+        }
+    }
+    UILabel*label=[[UILabel alloc]initWithFrame:CGRectMake((KScreenW-30)/2, 15,KScreenW-30.30, 30)];
+    label.font=[UIFont systemFontOfSize:20.0];
+    label.tag=component*100+row;
+    label.textAlignment=NSTextAlignmentCenter;
+    label.textColor = [UIColor colorTextBg28BlackColor];
+    label.text = self.customArr[row];
+    return label;
 }
-
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     self.selectedStr = self.customArr[row];
 }
@@ -138,9 +146,7 @@
 #pragma mark-----取消
 - (void)cancelBtnClick{
     [self hideAnimation];
-    
 }
-
 #pragma mark-----取消
 - (void)completionBtnClick{
     NSString *str = [self.customArr objectAtIndex:[self.pickerView selectedRowInComponent:0]];

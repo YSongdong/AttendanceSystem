@@ -20,13 +20,6 @@ UIGestureRecognizerDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //设置导航栏背景颜色
-//    [self.navigationController.navigationBar setBackgroundImage:[[UIImage new]imageWithColor:[UIColor orangeColor]]  forBarMetrics:UIBarMetricsDefault];
-//    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
-    
-    
-  //  self.navigationController.interactivePopGestureRecognizer.delegate = self;
-    
     self.navigationController.navigationBar.hidden = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self setupNavBar];
@@ -35,9 +28,13 @@ UIGestureRecognizerDelegate
 {
     [self.view addSubview:self.customNavBar];
     
-    // 设置自定义导航栏背景图片
-    self.customNavBar.barBackgroundImage = [UIImage imageNamed:@"grzx_nav_bg"];
-    
+    if (KIsiPhoneX) {
+        // 设置自定义导航栏背景图片
+        self.customNavBar.barBackgroundImage = [UIImage imageNamed:@"grzl_nav_bg"];
+    }else{
+        // 设置自定义导航栏背景图片
+        self.customNavBar.barBackgroundImage = [UIImage imageNamed:@"grzx_nav_bg"];
+    }
     // 设置自定义导航栏标题颜色
     self.customNavBar.titleLabelColor = [UIColor whiteColor];
     

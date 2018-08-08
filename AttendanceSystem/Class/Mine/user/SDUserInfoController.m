@@ -90,11 +90,13 @@ UITableViewDataSource
     [self.dataArr addObject:headerArr];
     [self.dataArr addObject:infoArr];
     [self.dataArr addObject:@[@{}]];
+    
+    [self.userTableView reloadData];
 }
 //创建tableView
 -(void) createTableView{
     
-    self.userTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight) style:UITableViewStyleGrouped];
+    self.userTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-KSTabbarH) style:UITableViewStyleGrouped];
     self.userTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.userTableView.rowHeight = 60;
     self.userTableView.delegate = self;
@@ -223,10 +225,8 @@ UITableViewDataSource
             [self loadData];
             return ;
         }
-        
         //修改用户保存信息
         [SDUserInfo alterUserInfo:showdata];
-        
         if ([showdata[@"photoStatus"] isEqualToString:@"2"]) {
             self.chenkErrorStr =  showdata[@"photoInfo"];
         }

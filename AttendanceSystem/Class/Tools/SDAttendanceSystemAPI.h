@@ -13,9 +13,8 @@
 FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 
 //测试域名
-#define PUBLISH_DIMAIN_URL @"http://192.168.3.201:1088/"
-//#define PUBLISH_DIMAIN_URL @"http://agk.api.cqlanhui.com/"
-
+//#define PUBLISH_DIMAIN_URL @"http://192.168.3.201:1088/"
+#define PUBLISH_DIMAIN_URL @"http://kq.api.cqlanhui.com/"
 
 //---------------------------用户中心-----------------
 /*********身份证/手机号登录***********/
@@ -104,6 +103,7 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 
 /********审批申请***********/
 #define  HTTP_ATTAPPEXAMINEAPPROVAL_URL   getRequestPath(@"attendance/Att_app_approval/examineApproval")
+
 
 
 

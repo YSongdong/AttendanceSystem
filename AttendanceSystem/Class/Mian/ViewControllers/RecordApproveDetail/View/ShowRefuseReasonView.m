@@ -73,13 +73,13 @@
         make.height.equalTo(@50);
     }];
     
-     UILabel  *showLab = [[UILabel alloc]init];
-    [concetView addSubview:showLab];
-    showLab.text = @"您是否确认撤销该条外出申请?";
-    showLab.font = Font(14);
-    showLab.numberOfLines = 0;
-    showLab.textColor = [UIColor colorTextBg65BlackColor];
-    [showLab mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.showLab = [[UILabel alloc]init];
+    [concetView addSubview:self.showLab];
+    self.showLab.text = @"您是否确认撤销该条外出申请?";
+    self.showLab.font = Font(14);
+    self.showLab.numberOfLines = 0;
+    self.showLab.textColor = [UIColor colorTextBg65BlackColor];
+    [self.showLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(concetView).offset(10);
         make.right.equalTo(concetView).offset(-10);
         make.centerX.equalTo(concetView.mas_centerX);

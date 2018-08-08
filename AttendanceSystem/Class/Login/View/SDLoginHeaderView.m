@@ -42,18 +42,31 @@
     //大背景
     UIImageView *bigImageV = [[UIImageView alloc]init];
     [bgView addSubview:bigImageV];
-    bigImageV.image = [UIImage imageNamed:@"bg"];
+    if (KIsiPhoneX) {
+         bigImageV.image = [UIImage imageNamed:@"dl_bg"];
+    }else{
+        bigImageV.image = [UIImage imageNamed:@"bg"];
+    }
     [bigImageV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(bgView);
     }];
     
+    UIImageView *logoImageV = [[UIImageView alloc]init];
+    [self addSubview:logoImageV];
+    logoImageV.image = [UIImage imageNamed:@"dl_logo"];
+    logoImageV.contentMode = UIViewContentModeScaleAspectFit;
+    [logoImageV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf).offset(KSNaviTopHeight+21);
+        make.centerX.equalTo(weakSelf.mas_centerX);
+        make.height.equalTo(@165);
+    }];
     
     //账号
     UIView *phoneView = [[UIView alloc]init];
     [bgView addSubview:phoneView];
     phoneView.backgroundColor =[UIColor colorWithHexString:@"#69vbb4"];
     [phoneView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(bgView).offset(KSNaviTopHeight+279);
+        make.top.equalTo(logoImageV.mas_bottom).offset(85);
         make.left.equalTo(bgView).offset(25);
         make.right.equalTo(bgView).offset(-25);
         make.height.equalTo(@44);
@@ -77,10 +90,6 @@
         make.centerY.equalTo(phoneView.mas_centerY);
     }];
     
-    
-    
-    
-   
 }
 -(void)selectdAccountBtn:(UIButton *) sender{
     

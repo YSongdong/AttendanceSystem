@@ -64,7 +64,7 @@ AMapSearchDelegate
     //显示上班和时间
     self.showWorkTimeLab = [[UILabel alloc]init];
     [self addSubview:self.showWorkTimeLab];
-    self.showWorkTimeLab.text = @"上班 (时间09:00)";
+    self.showWorkTimeLab.text = @"";
     self.showWorkTimeLab.font = Font(13);
     self.showWorkTimeLab.textColor = [UIColor colorTextBg65BlackColor];
     [self.showWorkTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {

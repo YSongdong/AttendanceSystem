@@ -37,7 +37,7 @@
 + (NSInteger)dateTimeDifferenceWithStartTime:(NSString *)startTime endTime:(NSString *)endTime;
 
 //计算两个时间的时长 (小时)
-+ (NSInteger)calculateWithStartTime:(NSString *)startTime endTime:(NSString *)endTime;
++ (CGFloat)calculateWithStartTime:(NSString *)startTime endTime:(NSString *)endTime;
 
 // 字典转json字符串方法
 +(NSString *)convertToJsonData:(NSDictionary *)dict;

@@ -21,10 +21,16 @@
 #import "InitiateApplyForController.h"
 #import "MineChenkApplyForController.h"
 
+
+
 @interface HomeViewController ()
 <
 SGAdvertScrollViewDelegate
 >
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *headerImageVHeight;
+
+@property (weak, nonatomic) IBOutlet UIImageView *NaviBgImageV;
+
 //头像背景view
 @property (weak, nonatomic) IBOutlet UIView *headerBgView;
 //头像背景
@@ -35,7 +41,8 @@ SGAdvertScrollViewDelegate
 @property (weak, nonatomic) IBOutlet UILabel *posiLab;
 //跑马灯
 @property (weak, nonatomic) IBOutlet SGAdvertScrollView *advertView;
-
+//广告imageV
+@property (weak, nonatomic) IBOutlet UIImageView *msgImageV;
 /*********考勤专区************/
 //考勤专区
 - (IBAction)attendPrefecAction:(UIButton *)sender;
@@ -56,22 +63,38 @@ SGAdvertScrollViewDelegate
 //我审核的申请
 - (IBAction)meChenkApplication:(UIButton *)sender;
 
+@property (weak, nonatomic) IBOutlet UIButton *meExamBtn;
+@property (weak, nonatomic) IBOutlet UIImageView *meExamImageV;
+
+@property (weak, nonatomic) IBOutlet UILabel *meExamLab;
 @end
 
 @implementation HomeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
+    //计算高度
+    self.headerImageVHeight.constant = KSNaviTopHeight+13;
     //更新ui
     [self updateView];
+    
 }
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    __weak typeof(self) weakSelf = self;
     //隐藏Tabbar
     self.tabBarController.tabBar.hidden = YES;
     //请求数据
-    [self requestUserInfoData];
+    [weakSelf requestUserInfoData];
+    if ([[SDUserInfo obtainWithIsCharge] isEqualToString:@"2"]) {
+        weakSelf.meExamBtn.hidden = YES;
+        weakSelf.meExamImageV.hidden = YES;
+        weakSelf.meExamLab.hidden = YES;
+    }else{
+        weakSelf.meExamBtn.hidden = NO;
+        weakSelf.meExamImageV.hidden = NO;
+        weakSelf.meExamLab.hidden = NO;
+    }
 }
 //更新ui
 -(void) updateView{
@@ -83,11 +106,11 @@ SGAdvertScrollViewDelegate
         [weakSelf.frostedViewController presentMenuViewController];
     };
     [self.view addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)]];
-    //右边按钮
-    [self.customNavBar wr_setRightButtonWithImage:[UIImage imageNamed:@"sy_nav_ico_news"]];
-    self.customNavBar.onClickRightButton = ^{
-        
-    };
+//    //右边按钮
+//    [self.customNavBar wr_setRightButtonWithImage:[UIImage imageNamed:@"sy_nav_ico_news"]];
+//    self.customNavBar.onClickRightButton = ^{
+//        
+//    };
     //设置导航栏透明
     [self.customNavBar wr_setBackgroundAlpha:0];
     
@@ -102,13 +125,22 @@ SGAdvertScrollViewDelegate
     self.nameLab.text = [SDUserInfo obtainWithRealName];
     //部门
     self.posiLab.text = [NSString stringWithFormat:@"部门名称:%@",[SDUserInfo obtainWithDepartmentName]];
-    //跑马灯
-    _advertView.titles = @[@"京东、天猫等 app 首页常见的广告滚动视图", @"采用代理设计模式进行封装, 可进行事件点击处理", @"建议在 github 上下载"];
-    _advertView.titleColor = [UIColor whiteColor];
-    _advertView.textAlignment = NSTextAlignmentLeft;
-    _advertView.titleFont = [UIFont systemFontOfSize:12];
-    _advertView.delegate = self;
+//    //跑马灯
+//    _advertView.titles = @[@"京东、天猫等 app 首页常见的广告滚动视图", @"采用代理设计模式进行封装, 可进行事件点击处理", @"建议在 github 上下载"];
+//    _advertView.titleColor = [UIColor whiteColor];
+//    _advertView.textAlignment = NSTextAlignmentLeft;
+//    _advertView.titleFont = [UIFont systemFontOfSize:12];
+//    _advertView.delegate = self;
     
+    //隐藏广告
+    self.msgImageV.hidden = YES;
+    self.advertView.hidden = YES;
+    
+    if (KIsiPhoneX) {
+        self.NaviBgImageV.image = [UIImage imageNamed:@"sy_bg"];
+    }else{
+        self.NaviBgImageV.image = [UIImage imageNamed:@"sy_nav_bg"];
+    }
 }
 //滑动显示侧边栏
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender{
@@ -132,6 +164,12 @@ SGAdvertScrollViewDelegate
 }
 //考勤记录
 - (IBAction)attendCountAction:(UIButton *)sender {
+    //删除
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"暂无开发" preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 /*********审批中心************/
 //外出
@@ -172,6 +210,8 @@ SGAdvertScrollViewDelegate
         }
         //修改用户保存信息
         [SDUserInfo alterUserInfo:showdata];
+        
+        [UIImageView sd_setImageView:self.headerImageV WithURL:[SDUserInfo obtainWithPhoto]];
     }];
 }
 

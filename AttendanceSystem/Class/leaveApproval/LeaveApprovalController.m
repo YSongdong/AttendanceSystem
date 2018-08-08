@@ -54,6 +54,7 @@ UIImagePickerControllerDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorTextWhiteColor];
     [self createNavi];
     [self createTableView];
     [self requestApprovalMemberData];
@@ -137,15 +138,17 @@ UIImagePickerControllerDelegate
     __weak typeof(self) weaSelf= self;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     SelectTimeTypeCell *cell  = [self.leaveTableView cellForRowAtIndexPath:indexPath];
-    if ([cell.showEndTimeLab.text isEqualToString:@"请选择"]) {
-        [SDShowSystemPrompView showSystemPrompStr:@"请选择结束时间"];
-        return;
-    }
    
     if ([cell.showBeginTimeLab.text isEqualToString:@"请选择"]) {
         [SDShowSystemPrompView showSystemPrompStr:@"请选择开始时间"];
         return;
     }
+    
+    if ([cell.showEndTimeLab.text isEqualToString:@"请选择"]) {
+        [SDShowSystemPrompView showSystemPrompStr:@"请选择结束时间"];
+        return;
+    }
+    
     NSString *endStr =cell.showEndTimeLab.text;
     weaSelf.dataDcit[@"endTime"] =[endStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     NSString *beginStr =cell.showBeginTimeLab.text;
@@ -235,9 +238,10 @@ UIImagePickerControllerDelegate
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     SelectTimeTypeCell *cell  = [self.leaveTableView cellForRowAtIndexPath:indexPath];
     cell.showLeaveTypeLab.text = text;
+    cell.showLeaveTypeLab.textColor = [UIColor colorTextBg65BlackColor];
 }
 -(void) createTableView{
-    self.leaveTableView  =[[ UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight)];
+    self.leaveTableView  =[[ UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-KSTabbarH)];
     [self.view addSubview:self.leaveTableView];
     
     self.leaveTableView.dataSource = self;
@@ -332,10 +336,11 @@ UIImagePickerControllerDelegate
     [cell.imageArr removeLastObject];
     [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_ATTAPPLEAVEADDLEAVE_URL params:self.dataDcit.copy andData:cell.imageArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
+            [cell.imageArr addObject:[UIImage imageNamed:@"att_attendance_dialogmsg_add"]];
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
-        [SDShowSystemPrompView showSystemPrompStr:@"请假成功"];
+        [SDShowSystemPrompView showSystemPrompStr:@"提交成功，等待审批"];
         // 自动延迟3秒执行
         dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
         dispatch_after(delayTime, dispatch_get_main_queue(), ^{
@@ -343,6 +348,7 @@ UIImagePickerControllerDelegate
             detaVC.detaType = RecordApproveLeaveDetaType;
             detaVC.titleStr = [NSString stringWithFormat:@"%@请假申请",[SDUserInfo obtainWithRealName]];
             detaVC.typeStr = @"1";
+            detaVC.isSkipGrade = YES;
             //审核中
             detaVC.chenkStatusStr = @"1";
             detaVC.recordIdStr = showdata[@"id"];

@@ -22,6 +22,8 @@
     
     __weak typeof(self) weakSelf = self;
     
+    self.backgroundColor  =[UIColor colorWithHexString:@"#f7f7f7"];
+    
     UIImageView *imageV = [[UIImageView alloc]init];
     [self addSubview:imageV];
     imageV.image = [UIImage imageNamed:@"kqjl_pic_xx"];

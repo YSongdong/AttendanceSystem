@@ -46,9 +46,11 @@
     if ([timeType isEqualToString:@"1"]) {
         //开始时间
         self.showBeginTimeLab.text = timeStr;
+        self.showBeginTimeLab.textColor = [UIColor colorTextBg65BlackColor];
     }else{
         //结束时间
         self.showEndTimeLab.text = timeStr;
+        self.showEndTimeLab.textColor = [UIColor colorTextBg65BlackColor];
     }
     if ([self.showBeginTimeLab.text isEqualToString:@"请选择"]) {
         return;
@@ -57,12 +59,12 @@
         return;
     }
     if (self.showBeginTimeLab.text.length != 0 && self.showEndTimeLab.text.length != 0) {
-        NSInteger timeLong = [SDTool calculateWithStartTime:self.showBeginTimeLab.text endTime:self.showEndTimeLab.text];
+        CGFloat timeLong = [SDTool calculateWithStartTime:self.showBeginTimeLab.text endTime:self.showEndTimeLab.text];
         if (timeLong < 0 ) {
             [SDShowSystemPrompView showSystemPrompStr:@"结束时间小于开始时间"];
             return;
         }
-        self.showTimeLongLab.text = [NSString stringWithFormat:@"%ld",(long)timeLong];
+        self.showTimeLongLab.text = [NSString stringWithFormat:@"%.2f",timeLong];
     }
 }
 

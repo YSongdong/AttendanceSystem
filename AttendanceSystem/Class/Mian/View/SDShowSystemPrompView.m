@@ -23,10 +23,13 @@
     UILabel *lab = [[UILabel alloc]init];
     [bgView addSubview:lab];
     lab.text = str;
+    lab.numberOfLines = 0;
     lab.textColor = [UIColor whiteColor];
     lab.font = Font(16);
+    lab.textAlignment = NSTextAlignmentCenter;
     [lab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(bgView.mas_centerX);
+        make.left.equalTo(bgView).offset(10);
+        make.right.equalTo(bgView).offset(-10);
         make.centerY.equalTo(bgView.mas_centerY);
     }];
 

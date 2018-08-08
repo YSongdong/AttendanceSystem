@@ -116,7 +116,7 @@
     
     self.showTimeLab = [[UILabel alloc]init];
     [self addSubview:self.showTimeLab];
-    self.showTimeLab.text =@"2018.03.03 20:30";
+    self.showTimeLab.text =@"";
     self.showTimeLab.textColor = [UIColor colorWithHexString:@"#aaaaaa"];
     self.showTimeLab.font = Font(12);
     [self.showTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -127,7 +127,7 @@
     
     self.showNameLab = [[UILabel alloc]init];
     [self addSubview:self.showNameLab];
-    self.showNameLab.text =@"李巧";
+    self.showNameLab.text =@"";
     self.showNameLab.font = Font(11);
     self.showNameLab.numberOfLines = 3;
     self.showNameLab.textColor = [UIColor colorTextBg28BlackColor];
@@ -140,7 +140,7 @@
     self.showReasonLab = [[UILabel alloc]init];
     [self addSubview:self.showReasonLab];
     self.showReasonLab.textColor = [UIColor colorWithHexString:@"#656565"];
-    self.showReasonLab.text =@"拒绝原因：我无法接我发完我发我无法";
+    self.showReasonLab.text =@"";
     self.showReasonLab.font = Font(11);
     self.showReasonLab.numberOfLines = 3;
     [self.showReasonLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -183,6 +183,7 @@
         self.showReasonLab.hidden = YES;
         
     }else{
+        
         NSDictionary *infoDict = dict[@"userInfo"];
         //时间
         self.showTimeLab.text = infoDict[@"createTime"];
@@ -196,10 +197,7 @@
             self.showStatusLab.hidden = YES;
             iconView.backgroundColor =[UIColor colorWithHexString:@"#f6f6f6"];
         }
-        
-        //头像
-        [UIImageView sd_setImageView:self.headerImageV WithURL:infoDict[@"photo"]];
-        
+
         NSArray *arr = infoDict[@"userName"];
         NSMutableString *nameStr = [NSMutableString new];
         if (arr.count > 0 ) {
@@ -210,7 +208,14 @@
                 }
             }
         }
-        
+        if (arr.count > 1) {
+            //头像
+            self.headerImageV.image = [UIImage imageNamed:@"pic_user"];
+        }else{
+            //头像
+            [UIImageView sd_setImageView:self.headerImageV WithURL:infoDict[@"photo"]];
+        }
+       
         self.showNameLab.textColor =[UIColor colorTextBg28BlackColor];
         
         NSString *adoptStr =[NSString stringWithFormat:@"%@",infoDict[@"adopt"]];
@@ -220,7 +225,6 @@
             self.showStatusLab.textColor = [UIColor colorWithHexString:@"#f76254"];
             
             self.showNameLab.text = nameStr;
-            
             //原因
             self.showReasonLab.text = [NSString stringWithFormat:@"拒绝原因: %@",infoDict[@"info"]];
             
@@ -249,6 +253,8 @@
             self.showStatusLab.hidden = YES;
             self.showTimeLab.hidden = YES;
             self.showReasonLab.hidden = YES;
+            
+            self.showNameLab.text = nameStr;
         }
         
         //主管view

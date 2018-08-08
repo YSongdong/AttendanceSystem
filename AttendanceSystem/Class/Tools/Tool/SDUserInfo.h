@@ -72,4 +72,9 @@
 +(NSString *) obtainWithProGroupId;
 //获取proGroupName
 +(NSString *) obtainWithProGroupName;
+
+//获取 isCharge  是不是主管
++(NSString *) obtainWithIsCharge;
+
+
 @end

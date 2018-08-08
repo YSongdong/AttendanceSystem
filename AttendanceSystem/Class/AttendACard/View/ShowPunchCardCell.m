@@ -57,7 +57,7 @@
     //显示上班和时间
     self.showWorkTimeLab = [[UILabel alloc]init];
     [self addSubview:self.showWorkTimeLab];
-    self.showWorkTimeLab.text = @"上班 (时间09:00)";
+    self.showWorkTimeLab.text = @"";
     self.showWorkTimeLab.font = Font(13);
     self.showWorkTimeLab.textColor = [UIColor colorTextBg65BlackColor];
     [self.showWorkTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -90,7 +90,7 @@
     //打卡时间
     self.showCardTimeLab = [[UILabel alloc]init];
     [cardTimeView addSubview:self.showCardTimeLab];
-    self.showCardTimeLab.text =[NSString stringWithFormat:@"打卡时间： 09:00"];
+    self.showCardTimeLab.text =[NSString stringWithFormat:@""];
     self.showCardTimeLab.font = BFont(16);
     self.showCardTimeLab.textColor = [UIColor colorTextBg28BlackColor];
     [self.showCardTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -147,7 +147,7 @@
     [addressImageV addSubview:self.addressLab];
     self.addressLab.textColor = [UIColor colorWithHexString:@"#aaaaaa"];
     self.addressLab.font = Font(12);
-    self.addressLab.text =@"渝高。智博中心";
+    self.addressLab.text =@"";
     [self.addressLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(addressImageV.mas_right).offset(5);
         make.centerY.equalTo(addressImageV.mas_centerY);
@@ -157,7 +157,7 @@
     [addressImageV addSubview:self.addressStatuLab];
     self.addressStatuLab.font = Font(12);
     self.addressStatuLab.textColor = [UIColor colorWithHexString:@"#ffb046"];
-    self.addressStatuLab.text = @"地点异常";
+    self.addressStatuLab.text = @"";
     [self.addressStatuLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(weakSelf.addressLab.mas_right).offset(5);
         make.centerY.equalTo(weakSelf.addressLab.mas_centerY);
@@ -197,7 +197,7 @@
     [testView addSubview:self.identTestStatuLab];
     self.identTestStatuLab.textColor = [UIColor colorCommonGreenColor];
     self.identTestStatuLab.font = Font(12);
-    self.identTestStatuLab.text = @"已通过";
+    self.identTestStatuLab.text = @"";
     [self.identTestStatuLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(showIdentiTestLab.mas_right).offset(9);
         make.centerY.equalTo(showIdentiTestLab.mas_centerY);
@@ -210,15 +210,28 @@
         make.bottom.equalTo(weakSelf.identTestStatuLab.mas_bottom);
     }];
 
+    //外勤
+    self.workStatuBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self addSubview:self.workStatuBtn];
+    [self.workStatuBtn setTitle:@"外勤 已通过>" forState:UIControlStateNormal];
+    [self.workStatuBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+    self.workStatuBtn.titleLabel.font = Font(12);
+    [self.workStatuBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(testImageV.mas_left);
+        make.top.equalTo(testImageV.mas_bottom).offset(13);
+    }];
+    
     //申请补卡按钮
     self.applyCardBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self addSubview:self.applyCardBtn];
+    
+    self.applyCardBtn.tag = 500;
     [self.applyCardBtn setTitle:@"申请补卡 >" forState:UIControlStateNormal];
     [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
     self.applyCardBtn.titleLabel.font = Font(12);
     [self.applyCardBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(testImageV.mas_left);
-        make.top.equalTo(testImageV.mas_bottom).offset(13);
+        make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(22);
+        make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
     }];
     
     //备注
@@ -233,10 +246,9 @@
     }];
 }
 -(void)setDict:(NSDictionary *)dict{
-   
     __weak typeof(self) weakSelf = self;
     _dict = dict;
-   
+
     //第几次打卡
     NSString *clockinNumStr = [NSString stringWithFormat:@"%@",dict[@"clockinNum"]];
     NSString *clockStr;
@@ -277,12 +289,29 @@
     //外勤
     self.fieldWorkBtn.hidden = NO;
     self.applyCardBtn.hidden = NO;
+    self.workStatuBtn.hidden = NO;
+    self.applyCardBtn.tag = 500;
+    [self.workStatuBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(testImageV.mas_left);
+        make.top.equalTo(testImageV.mas_bottom).offset(13);
+    }];
+    
+    [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(testImageV.mas_left);
+        make.top.equalTo(testImageV.mas_bottom).offset(13);
+    }];
+    [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(weakSelf.applyCardBtn.mas_right).offset(22);
+        make.centerY.equalTo(weakSelf.applyCardBtn.mas_centerY);
+    }];
+    
     for (NSString *textStr in markArr) {
         //缺卡
         if ([textStr rangeOfString:@"缺卡"].location !=NSNotFound) {
 
             //隐藏打卡时间lab
             self.showCardTimeLab.hidden = YES;
+            
             //标签
             [self.normalStatusBtn setTitle:textStr forState:UIControlStateNormal];
             [self.normalStatusBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
@@ -292,99 +321,74 @@
                 make.top.equalTo(weakSelf.showWorkTimeLab.mas_bottom).offset(29);
                 make.left.equalTo(weakSelf).offset(33);
             }];
+            //判断是否是休息日
+            NSString *isRestStr = [NSString stringWithFormat:@"%@",dict[@"isRest"]];
+            if ([isRestStr isEqualToString:@"2"]) {
+                self.normalStatusBtn.hidden= YES;
+            }
             addressView.hidden = YES;
             testView.hidden = YES;
             //备注
             self.markBtn.hidden = YES;
             //外勤
             self.fieldWorkBtn.hidden = YES;
-        
+            self.workStatuBtn.hidden = YES;
             //是否包含外勤
             if ([markArr containsObject:@"外勤"]) {
-                
                 [self.fieldWorkBtn mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(weakSelf.normalStatusBtn.mas_right).offset(7);
                     make.centerY.equalTo(weakSelf.normalStatusBtn.mas_centerY);
                 }];
                 
                 //外出 已通过
-                [self.applyCardBtn setTitle:@"外出 已通过>" forState:UIControlStateNormal];
+                self.workStatuBtn.hidden = NO;
+                [self.workStatuBtn setTitle:@"外勤 已通过>" forState:UIControlStateNormal];
+                [self.workStatuBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+                self.workStatuBtn.titleLabel.font = Font(12);
+                [self.workStatuBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(weakSelf.normalStatusBtn.mas_left);
+                    make.top.equalTo(weakSelf.normalStatusBtn.mas_bottom).offset(13);
+                }];
+                [self.workStatuBtn addTarget:self action:@selector(leaveInWorkSucces:) forControlEvents:UIControlEventTouchUpInside];
+                
+                //申请补卡
+                self.applyCardBtn.hidden = NO;
+                self.applyCardBtn.tag = 500;
+                [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
                 [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                self.applyCardBtn.titleLabel.font = Font(12);
+                self.applyCardBtn.titleLabel.font =Font(12);
+                [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+            
+                self.markBtn.hidden = YES;
+            }else{
+                self.workStatuBtn.hidden = YES;
+                self.markBtn.hidden = YES;
+                 self.applyCardBtn.tag = 500;
+                [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
+                [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+                self.applyCardBtn.titleLabel.font =Font(12);
                 [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(weakSelf.normalStatusBtn.mas_left);
                     make.top.equalTo(weakSelf.normalStatusBtn.mas_bottom).offset(13);
                 }];
-                [self.applyCardBtn addTarget:self action:@selector(leaveInWorkSucces:) forControlEvents:UIControlEventTouchUpInside];
-                
-                NSDictionary *lackCardDict = dict[@"lackCardData"];
-                //有没有补卡记录 1 有  2 没有
-                NSString *isTypeStr = [NSString stringWithFormat:@"%@",lackCardDict[@"isType"]];
-                if ([isTypeStr isEqualToString:@"1"]) {
-                    //0未提交 1审核中 2审核通过 3未通过 4撤销
-                    NSString *isDoSureStatuStr = [NSString stringWithFormat:@"%@",lackCardDict[@"isDoSure"]];
-                    if ([isDoSureStatuStr isEqualToString:@"1"]) {
-                        //申请补卡
-                        self.markBtn.hidden = NO;
-                        [self.markBtn setTitle:@"补卡 审核中>" forState:UIControlStateNormal];
-                        [self.markBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                        self.markBtn.titleLabel.font =Font(12);
-                        [self.markBtn addTarget:self action:@selector(lackCardBuCardChenkConcet:) forControlEvents:UIControlEventTouchUpInside];
-                    }
-                    
-                }else{
-                    //申请补卡
-                    self.markBtn.hidden = NO;
-                    [self.markBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
-                    [self.markBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                    self.markBtn.titleLabel.font =Font(12);
-                    [self.markBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
-                }
-
-            }else{
-                NSDictionary *lackCardDict = dict[@"lackCardData"];
-                //有没有补卡记录 1 有  2 没有
-                NSString *isTypeStr = [NSString stringWithFormat:@"%@",lackCardDict[@"isType"]];
-                if ([isTypeStr isEqualToString:@"1"]) {
-                    //0未提交 1审核中 2审核通过 3未通过 4撤销
-                    NSString *isDoSureStatuStr = [NSString stringWithFormat:@"%@",lackCardDict[@"isDoSure"]];
-                    if ([isDoSureStatuStr isEqualToString:@"1"]) {
-                        [self.applyCardBtn setTitle:@"补卡 审核中>" forState:UIControlStateNormal];
-                        [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                        self.applyCardBtn.titleLabel.font =Font(12);
-                        [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                            make.left.equalTo(weakSelf.normalStatusBtn.mas_left);
-                            make.top.equalTo(weakSelf.normalStatusBtn.mas_bottom).offset(13);
-                        }];
-                        [self.applyCardBtn addTarget:self action:@selector(lackCardBuCardChenkConcet:) forControlEvents:UIControlEventTouchUpInside];
-                    }
-                }else{
-                    [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
-                    [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                    self.applyCardBtn.titleLabel.font =Font(12);
-                    [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                        make.left.equalTo(weakSelf.normalStatusBtn.mas_left);
-                        make.top.equalTo(weakSelf.normalStatusBtn.mas_bottom).offset(13);
-                    }];
-                    [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
-                }
-    
+                [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
             }
-
         }else if ([textStr rangeOfString:@"补卡"].location !=NSNotFound){
             self.normalStatusBtn.hidden = YES;
-            
+
             addressView.hidden = YES;
             testView.hidden = YES;
             //备注
             self.markBtn.hidden = YES;
             //外勤
             self.fieldWorkBtn.hidden = YES;
+
+            self.workStatuBtn.hidden = YES;
             
             NSDictionary *lackCardDict = dict[@"lackCardData"];
             //打卡时间
             self.showCardTimeLab.text = [NSString stringWithFormat:@"打卡时间: %@",lackCardDict[@"doTime"]];
-            
+
             //是否包含外勤
             if ([markArr containsObject:@"外勤"]) {
                 //外勤
@@ -393,32 +397,40 @@
                     make.left.equalTo(weakSelf.showCardTimeLab.mas_right).offset(7);
                     make.centerY.equalTo(weakSelf.showCardTimeLab.mas_centerY);
                 }];
-                
-                self.applyCardBtn.hidden = NO;
+
+                self.workStatuBtn.hidden = NO;
                 //外出 已通过
-                [self.applyCardBtn setTitle:@"外出 已通过>" forState:UIControlStateNormal];
-                [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                self.applyCardBtn.titleLabel.font = Font(12);
-                [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                [self.workStatuBtn setTitle:@"外勤 已通过>" forState:UIControlStateNormal];
+                [self.workStatuBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+                self.workStatuBtn.titleLabel.font = Font(12);
+                [self.workStatuBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(weakSelf.showCardTimeLab.mas_left);
                     make.top.equalTo(weakSelf.showCardTimeLab.mas_bottom).offset(13);
                 }];
-                [self.applyCardBtn addTarget:self action:@selector(leaveInWorkSucces:) forControlEvents:UIControlEventTouchUpInside];
+                [self.workStatuBtn addTarget:self action:@selector(leaveInWorkSucces:) forControlEvents:UIControlEventTouchUpInside];
+
                 
-                self.markBtn.hidden = NO;
                 //申请补卡按钮
-                [self.markBtn setTitle:@"补卡 已通过 >" forState:UIControlStateNormal];
-                [self.markBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                self.markBtn.titleLabel.font = Font(12);
-                [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.left.equalTo(weakSelf.applyCardBtn.mas_right).offset(22);
-                    make.centerY.equalTo(weakSelf.applyCardBtn.mas_centerY);
+                self.applyCardBtn.hidden = NO;
+                self.applyCardBtn.tag = 501;
+                [self.applyCardBtn setTitle:@"补卡 已通过 >" forState:UIControlStateNormal];
+                [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+                self.applyCardBtn.titleLabel.font = Font(12);
+                [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(22);
+                    make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
                 }];
-                 [self.markBtn addTarget:self action:@selector(leaveInBuCardSucce:) forControlEvents:UIControlEventTouchUpInside];
+                 [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+                
+                self.markBtn.hidden = YES;
                 return ;
             }
             
+            self.workStatuBtn.hidden = YES;
+            
             //申请补卡按钮
+            self.applyCardBtn.hidden = NO;
+            self.applyCardBtn.tag = 501;
             [self.applyCardBtn setTitle:@"补卡 已通过 >" forState:UIControlStateNormal];
             [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
             self.applyCardBtn.titleLabel.font = Font(12);
@@ -426,12 +438,14 @@
                 make.left.equalTo(weakSelf.showCardTimeLab.mas_left);
                 make.top.equalTo(weakSelf.showCardTimeLab.mas_bottom).offset(13);
             }];
-            [self.applyCardBtn addTarget:self action:@selector(leaveInBuCardSucce:) forControlEvents:UIControlEventTouchUpInside];
+            [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
     
         } else if ([textStr rangeOfString:@"迟到"].location !=NSNotFound || [textStr rangeOfString:@"正常"].location !=NSNotFound || [textStr rangeOfString:@"早退"].location !=NSNotFound || [textStr rangeOfString:@"旷工"].location !=NSNotFound){
          
             //外勤
             self.fieldWorkBtn.hidden = YES;
+            self.workStatuBtn.hidden = YES;
+            
             //打卡时间
             self.showCardTimeLab.text = [NSString stringWithFormat:@"打卡时间: %@",dict[@"timeClockinHi"]];
             //迟到标签
@@ -482,7 +496,8 @@
                 //隐藏身份验证view
                 testView.hidden = YES;
                 self.identTestStatuLab.text = @"未通过";
-
+                
+                self.applyCardBtn.tag = 500;
                 [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(addressImageV.mas_left);
                     make.top.equalTo(addressImageV.mas_bottom).offset(13);
@@ -503,20 +518,15 @@
             }
             if ([markArr containsObject:@"外勤"]) {
                 self.fieldWorkBtn.hidden = NO;
+                
+                self.workStatuBtn.hidden = NO;
+                
                 [self.fieldWorkBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(weakSelf.normalStatusBtn.mas_right).offset(7);
                     make.centerY.equalTo(weakSelf.normalStatusBtn.mas_centerY);
                 }];
                 
-                self.workStatuBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                [self addSubview:self.workStatuBtn];
-                [self.workStatuBtn setTitle:@"外勤 已通过 >" forState:UIControlStateNormal];
-                [self.workStatuBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                self.workStatuBtn.titleLabel.font = Font(12);
-                [self.workStatuBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.left.equalTo(testImageV.mas_left);
-                    make.top.equalTo(testImageV.mas_bottom).offset(13);
-                }];
+                
                 [self.workStatuBtn addTarget:self action:@selector(leaveInWorkSucces:) forControlEvents:UIControlEventTouchUpInside];
                 
                 //是否包含外勤
@@ -528,27 +538,17 @@
                     }];
                     [self.markBtn addTarget:self action:@selector(nomalLookMark:) forControlEvents:UIControlEventTouchUpInside];
                 }
+                
                 //申请补卡
                 [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(22);
                     make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
                 }];
-                
-                NSString *lackCardStr =[NSString stringWithFormat:@"%@",dict[@"lackCard"]];
-                if ([lackCardStr isEqualToString:@"2"]) {
-                    NSDictionary *lackCardDict = dict[@"lackCardData"];
-                    if ([lackCardDict[@"isDoSure"]integerValue] == 1) {
-                        [self.applyCardBtn setTitle:@"补卡 审核中>" forState:UIControlStateNormal];
-                        [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                        [self.applyCardBtn addTarget:self action:@selector(lackCardBuCardChenkConcet:) forControlEvents:UIControlEventTouchUpInside];
-                    }
-                }else{
-                    [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
-                    [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                    
-                    [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
-                }
-                
+                self.applyCardBtn.tag = 500;
+                [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
+                [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+                [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+               
                 //备注
                 NSString *remarkStr =dict[@"remark"];
                 //照片
@@ -561,6 +561,9 @@
                 [self.markBtn addTarget:self action:@selector(nomalLookMark:) forControlEvents:UIControlEventTouchUpInside];
                
             }else{
+            
+                self.workStatuBtn.hidden = YES;
+                
                 //是否包含外勤
                 if ([markArr containsObject:@"正常"]) {
                     self.applyCardBtn.hidden = YES;
@@ -569,7 +572,7 @@
                         make.top.equalTo(testImageV.mas_bottom).offset(13);
                     }];
                     
-                     [self.markBtn addTarget:self action:@selector(nomalLookMark:) forControlEvents:UIControlEventTouchUpInside];
+                    [self.markBtn addTarget:self action:@selector(nomalLookMark:) forControlEvents:UIControlEventTouchUpInside];
                 }
                 
                 //申请补卡
@@ -577,21 +580,12 @@
                     make.left.equalTo(testImageV.mas_left);
                     make.top.equalTo(testImageV.mas_bottom).offset(13);
                  }];
-                
-                NSString *lackCardStr =[NSString stringWithFormat:@"%@",dict[@"lackCard"]];
-                if ([lackCardStr isEqualToString:@"2"]) {
-                    NSDictionary *lackCardDict = dict[@"lackCardData"];
-                    if ([lackCardDict[@"isDoSure"]integerValue] == 1) {
-                        [self.applyCardBtn setTitle:@"补卡 审核中>" forState:UIControlStateNormal];
-                        [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                        [self.applyCardBtn addTarget:self action:@selector(lackCardBuCardChenkConcet:) forControlEvents:UIControlEventTouchUpInside];
-                    }
-                }else{
-                    [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
-                    [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+                self.applyCardBtn.tag = 500;
+                [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
+                [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
 
-                    [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
-                }
+                [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+                
                 //备注
                 NSString *remarkStr =dict[@"remark"];
                 //照片
@@ -603,7 +597,6 @@
                 }
                 [self.markBtn addTarget:self action:@selector(nomalLookMark:) forControlEvents:UIControlEventTouchUpInside];
             }
-          
         }else if ([textStr rangeOfString:@"请假"].location !=NSNotFound){
            
             //隐藏打卡时间lab
@@ -626,6 +619,7 @@
             //外勤
             self.fieldWorkBtn.hidden = YES;
 
+            self.workStatuBtn.hidden = YES;
             //是否包含外勤
             if ([markArr containsObject:@"外勤"]) {
                 //外勤
@@ -634,52 +628,66 @@
                 self.markBtn.hidden = NO;
 
                 //外勤 已通过>
-                [self.applyCardBtn setTitle:@"外勤 已通过>" forState:UIControlStateNormal];
-                [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                [self.workStatuBtn setTitle:@"外勤 已通过>" forState:UIControlStateNormal];
+                [self.workStatuBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+                [self.workStatuBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(weakSelf.normalStatusBtn.mas_left);
                     make.top.equalTo(weakSelf.normalStatusBtn.mas_bottom).offset(13);
                 }];
-                [self.applyCardBtn addTarget:self action:@selector(leaveInWorkSucces:) forControlEvents:UIControlEventTouchUpInside];
+                [self.workStatuBtn addTarget:self action:@selector(leaveInWorkSucces:) forControlEvents:UIControlEventTouchUpInside];
                 
                 //请假已通过>
-                [self.markBtn setTitle:@"请假 已通过>" forState:UIControlStateNormal];
-                [self.markBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                [self.markBtn addTarget:self action:@selector(askForLeave:) forControlEvents:UIControlEventTouchUpInside];
+                self.applyCardBtn.tag = 502;
+                [self.applyCardBtn setTitle:@"请假 已通过>" forState:UIControlStateNormal];
+                [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+                [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+                
+                self.markBtn.hidden = YES;
             }else{
+                self.workStatuBtn.hidden = YES;
+                self.markBtn.hidden = YES;
+                
                 //请假 已通过>
+                self.applyCardBtn.tag = 502;
                 [self.applyCardBtn setTitle:@"请假 已通过>" forState:UIControlStateNormal];
                 [self.applyCardBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
                 [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(weakSelf.normalStatusBtn.mas_left);
                     make.top.equalTo(weakSelf.normalStatusBtn.mas_bottom).offset(13);
                 }];
-                [self.applyCardBtn addTarget:self action:@selector(askForLeave:) forControlEvents:UIControlEventTouchUpInside];
+                [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
             }
         }
     }
- 
 }
 #pragma mark ------按钮点击事件------
-//补卡审核中
--(void)lackCardBuCardChenkConcet:(UIButton *)sender{
-    self.buCardChenkConcetBlock();
-}
-//请假
--(void)askForLeave:(UIButton *) sender{
-    self.askForLeaveBlock();
-}
-//外勤补卡通过
--(void)leaveInBuCardSucce:(UIButton *) sender{
-    self.leaveInBuCardSucceBlock();
-}
 //外勤通过
 -(void)leaveInWorkSucces:(UIButton *) sender{
     self.leaveInWorkSuccesBlock();
 }
 //申请补卡
 -(void)timeUnusualUFaceBuCard:(UIButton *) sender{
-    self.timeUnusualUFaceBuCardBlock();
+    switch (sender.tag - 500) {
+        case 0:{
+            //申请补卡
+             self.timeUnusualUFaceBuCardBlock();
+            break;
+        }
+        case 1:{
+            // 补卡 已通过
+            self.leaveInBuCardSucceBlock();
+            break;
+        }
+        case 2:{
+            // 请假 已通过
+            self.askForLeaveBlock();
+            break;
+        }
+        default:
+            break;
+    }
+    
+   
 }
 //备注
 -(void)nomalLookMark:(UIButton *) sender{

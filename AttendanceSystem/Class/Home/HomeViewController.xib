@@ -12,9 +12,15 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeViewController">
             <connections>
+                <outlet property="NaviBgImageV" destination="xVe-bY-EWU" id="bNW-Kl-JP2"/>
                 <outlet property="advertView" destination="2uY-c6-iqi" id="IOr-2O-dJ7"/>
                 <outlet property="headerBgView" destination="Bbq-73-Cqn" id="02r-pW-4G7"/>
                 <outlet property="headerImageV" destination="Nrl-pg-XGR" id="hXb-ps-flB"/>
+                <outlet property="headerImageVHeight" destination="f3S-fO-g5g" id="oyl-LQ-0yR"/>
+                <outlet property="meExamBtn" destination="h1w-Vc-OJJ" id="wkH-5j-YdP"/>
+                <outlet property="meExamImageV" destination="7If-HW-xCj" id="kbh-qx-pKj"/>
+                <outlet property="meExamLab" destination="GR9-Uh-cPI" id="Ddj-si-y39"/>
+                <outlet property="msgImageV" destination="SjN-pu-URJ" id="09U-Tz-Xb9"/>
                 <outlet property="nameLab" destination="zR4-z2-NnU" id="pCz-f9-Shg"/>
                 <outlet property="posiLab" destination="ahk-Uw-03F" id="ujU-j2-shP"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -318,11 +324,12 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="Oy9-eC-Ltp" secondAttribute="trailing" id="HA0-Bc-Gfd"/>
-                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="Oy9-eC-Ltp" secondAttribute="bottom" id="Vi7-M1-pwx"/>
-                <constraint firstItem="Oy9-eC-Ltp" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" constant="-20" id="sb8-Jy-gZY"/>
-                <constraint firstItem="Oy9-eC-Ltp" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="yxn-zh-rs0"/>
+                <constraint firstAttribute="trailing" secondItem="Oy9-eC-Ltp" secondAttribute="trailing" id="HA0-Bc-Gfd"/>
+                <constraint firstAttribute="bottom" secondItem="Oy9-eC-Ltp" secondAttribute="bottom" id="Vi7-M1-pwx"/>
+                <constraint firstItem="Oy9-eC-Ltp" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="XlO-ya-ssh"/>
+                <constraint firstItem="Oy9-eC-Ltp" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="yxn-zh-rs0"/>
             </constraints>
+            <nil key="simulatedTopBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <point key="canvasLocation" x="31.5" y="73.5"/>

@@ -65,11 +65,11 @@ UIImagePickerControllerDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorTextWhiteColor];
     [self createNavi];
     [self createTableView];
     [self requestApprovalMemberData];
 }
-
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 6;
 }
@@ -152,19 +152,18 @@ UIImagePickerControllerDelegate
 }
 -(void) getSubmitData{
     __weak typeof(self) weaSelf= self;
-    if (self.beginTimeStr == nil) {
-        [SDShowSystemPrompView showSystemPrompStr:@"请选择结束时间"];
-        return;
-    }
-    if (self.endTimeStr == nil) {
+    if (weaSelf.beginTimeStr == nil) {
         [SDShowSystemPrompView showSystemPrompStr:@"请选择开始时间"];
         return;
     }
-   
+    if (weaSelf.endTimeStr == nil) {
+        [SDShowSystemPrompView showSystemPrompStr:@"请选择结束时间"];
+        return;
+    }
+    CGFloat timeLong = [SDTool calculateWithStartTime:weaSelf.beginTimeStr endTime:weaSelf.endTimeStr];
     weaSelf.dataDcit[@"startTime"] = [weaSelf.beginTimeStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     weaSelf.dataDcit[@"endTime"] =[weaSelf.endTimeStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
-    NSInteger timeLong = [SDTool calculateWithStartTime:weaSelf.beginTimeStr endTime:weaSelf.endTimeStr];
-    weaSelf.dataDcit[@"numbers"] = [NSString stringWithFormat:@"%ld",(long)timeLong];
+    weaSelf.dataDcit[@"numbers"] = [NSString stringWithFormat:@"%.2f",timeLong];
     //事由
     NSIndexPath *reasonIndexPath = [NSIndexPath indexPathForRow:1 inSection:0];
     ApprovarReasonCell *reasonCell =[self.leaveTableView cellForRowAtIndexPath:reasonIndexPath];
@@ -174,7 +173,8 @@ UIImagePickerControllerDelegate
     //地址
     NSIndexPath *addressIndexPath = [NSIndexPath indexPathForRow:2 inSection:0];
     LeaveInDestinAddressCell *addressCell = [self.leaveTableView cellForRowAtIndexPath:addressIndexPath];
-    if (addressCell.showAddressLab.text == nil) {
+    NSString *addressStr =addressCell.showAddressLab.text;
+    if ([addressStr isEqualToString:@""]) {
         [SDShowSystemPrompView showSystemPrompStr:@"请选择外出地点"];
         return;
     }
@@ -238,17 +238,17 @@ UIImagePickerControllerDelegate
 }
 #pragma mark ----- delegate------
 - (void)didClickFinishDateTimePickerView:(NSString *)date{
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    SelectLeaveInTimeCell *cell  = [self.leaveTableView cellForRowAtIndexPath:indexPath];
-    [cell updateTimeType:self.selectTimeType andTimeStr:date];
     if ([self.selectTimeType isEqualToString:@"1"]) {
         self.beginTimeStr = date;
     }else{
         self.endTimeStr = date;
     }
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    SelectLeaveInTimeCell *cell  = [self.leaveTableView cellForRowAtIndexPath:indexPath];
+    [cell updateTimeType:self.selectTimeType andTimeStr:date];
 }
 -(void) createTableView{
-    self.leaveTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight)];
+    self.leaveTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-KSTabbarH)];
     [self.view addSubview:self.leaveTableView];
     
     self.leaveTableView.delegate = self;
@@ -263,6 +263,15 @@ UIImagePickerControllerDelegate
     [self.leaveTableView registerClass:[ApprovalSelectPhotoCell class] forCellReuseIdentifier:APPROVALSELECTPHOTO_CELL];
     [self.leaveTableView registerClass:[ApprovalSubintCell class] forCellReuseIdentifier:APPROVALSUBINT_CELL];
     [self.leaveTableView registerClass:[ApprovalPersonCell class] forCellReuseIdentifier:APPROVALPERSON_CELL];
+    
+    if (@available(iOS 11.0, *)) {
+        self.leaveTableView.estimatedRowHeight = 0;
+        self.leaveTableView.estimatedSectionFooterHeight = 0;
+        self.leaveTableView.estimatedSectionHeaderHeight = 0 ;
+        self.leaveTableView.contentInsetAdjustmentBehavior= UIScrollViewContentInsetAdjustmentNever;
+    }else{
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
     
     UITapGestureRecognizer *tableViewGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentTableViewTouchInSide)];
     [self.leaveTableView addGestureRecognizer:tableViewGesture];
@@ -348,17 +357,20 @@ UIImagePickerControllerDelegate
     ApprovalSelectPhotoCell *cell = [self.leaveTableView cellForRowAtIndexPath:indexPath];
     [cell.imageArr removeLastObject];
     [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_ATTAPPAPPADDOUTGO_URL params:self.dataDcit.copy andData:cell.imageArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
+        
         if (error) {
+            [cell.imageArr addObject:[UIImage imageNamed:@"att_attendance_dialogmsg_add"]];
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
         if ([showdata isKindOfClass:[NSDictionary class]]) {
-            [SDShowSystemPrompView showSystemPrompStr:@"外出申请成功"];
+            [SDShowSystemPrompView showSystemPrompStr:@"提交成功，等待审批"];
             // 自动延迟3秒执行
             dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
             dispatch_after(delayTime, dispatch_get_main_queue(), ^{
                 RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
                 detaVC.detaType = RecordApproveGoOutDetaType;
+                detaVC.isSkipGrade = YES;
                 detaVC.typeStr = @"2";
                 //审核中
                 detaVC.chenkStatusStr = @"1";
@@ -367,8 +379,8 @@ UIImagePickerControllerDelegate
                 [weakSelf.navigationController pushViewController:detaVC animated:YES];
             });
         }
-        
-        
+
+
     }];
     
     

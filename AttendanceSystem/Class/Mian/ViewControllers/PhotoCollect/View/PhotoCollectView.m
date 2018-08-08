@@ -22,12 +22,16 @@
     
     UIImageView *bgImageV = [[UIImageView alloc]init];
     [self addSubview:bgImageV];
-    bgImageV.image = [UIImage imageNamed:@"nav_bg"];
+    if (KIsiPhoneX) {
+        bgImageV.image = [UIImage imageNamed:@"cjzp_nav_bg"];
+    }else{
+        bgImageV.image = [UIImage imageNamed:@"nav_bg"];
+    }
     [bgImageV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.right.equalTo(weakSelf);
-        make.height.equalTo(@120);
+        make.height.equalTo(@(KSNaviTopHeight+50));
     }];
-    
+
     UILabel *titleLab  =[[UILabel alloc]init];
     [self addSubview:titleLab];
     titleLab.textColor = [UIColor colorTextWhiteColor];
@@ -35,7 +39,7 @@
     titleLab.font = Font(16);
     [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(bgImageV.mas_centerX);
-        make.centerY.equalTo(bgImageV.mas_centerY).offset(-15);
+        make.top.equalTo(weakSelf).offset(KSStatusHeight+20);
     }];
     
     self.backBtn  = [UIButton buttonWithType:UIButtonTypeCustom];

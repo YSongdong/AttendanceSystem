@@ -11,6 +11,7 @@ target 'AttendanceSystem' do
    pod 'AMapLocation'
    pod 'AMapSearch'
    pod 'JTCalendar', '~> 2.0'
+   pod 'MJRefresh'
 end
 
 

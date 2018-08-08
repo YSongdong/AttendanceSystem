@@ -14,6 +14,8 @@
 #import "RecordToolView.h"
 #import "ShowRevokeMsgView.h"
 #import "ShowRefuseReasonView.h"
+#import "ShowPromptMsgView.h"
+
 
 #import "RecordDetaTableViewCell.h"
 #define RECORDDETATABLEVIEW_CELL @"RecordDetaTableViewCell"
@@ -22,6 +24,8 @@
 UITableViewDelegate,
 UITableViewDataSource
 >
+@property (nonatomic,strong)ShowPromptMsgView *showPromptMsgView;
+
 @property (nonatomic,strong) RecordToolView *toolView;
 
 @property (nonatomic,strong) ShowRevokeMsgView *showRevokeView;
@@ -172,7 +176,7 @@ UITableViewDataSource
                 [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showRevokeView];
                 [weakSelf.showRevokeView.trueBtn setTitle:@"确定" forState:UIControlStateNormal];
                 [weakSelf.showRevokeView.trueBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-                weakSelf.showRevokeView.showLab.text =[NSString stringWithFormat:@"您是否确认同意%@",weakSelf.titleStr];
+                weakSelf.showRevokeView.showLab.text =[NSString stringWithFormat:@"您是否确认同意%@?",weakSelf.titleStr];
                 __weak typeof(weakSelf) stongSelf = weakSelf;
                 //确定
                 stongSelf.showRevokeView.trueBlock = ^{
@@ -185,11 +189,11 @@ UITableViewDataSource
             [weakSelf  requestUrgeDate];
         };
         
-        self.detaTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-50)style:UITableViewStyleGrouped];
+        self.detaTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-50-KSTabbarH)style:UITableViewStyleGrouped];
         self.detaTableView.backgroundColor =[UIColor colorTextWhiteColor];
         [self.view addSubview:self.detaTableView];
     }else{
-        self.detaTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight)style:UITableViewStyleGrouped];
+        self.detaTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-KSTabbarH)style:UITableViewStyleGrouped];
         self.detaTableView.backgroundColor =[UIColor colorTextWhiteColor];
         [self.view addSubview:self.detaTableView];
     }
@@ -214,6 +218,7 @@ UITableViewDataSource
 -(void) createShowRefuseReasonView{
     __weak typeof(self) weakSelf = self;
     weakSelf.showRfuseReasonView  =[[ShowRefuseReasonView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
+    weakSelf.showRfuseReasonView.showLab.text = [NSString stringWithFormat:@"您是否确认拒绝%@?",self.titleStr];
     [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showRfuseReasonView];
     weakSelf.showRfuseReasonView.trueBlock = ^{
         weakSelf.examiDict[@"info"] = weakSelf.showRfuseReasonView.refuesTextView.text;
@@ -227,7 +232,11 @@ UITableViewDataSource
     [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
     __weak typeof(self) weakSelf = self;
     self.customNavBar.onClickLeftButton = ^{
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        if (weakSelf.isSkipGrade) {
+            [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        }else{
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        }
     };
 }
 #pragma mark ----懒加载-----
@@ -239,9 +248,15 @@ UITableViewDataSource
 }
 -(RecordToolView *)toolView{
     if (!_toolView) {
-        _toolView =[[RecordToolView alloc]initWithFrame:CGRectMake(0, KScreenH-50, KScreenW, 50)];
+        _toolView =[[RecordToolView alloc]initWithFrame:CGRectMake(0, KScreenH-50-KSTabbarH, KScreenW, 50+KSTabbarH)];
     }
     return _toolView;
+}
+-(ShowPromptMsgView *)showPromptMsgView{
+    if (!_showPromptMsgView) {
+        _showPromptMsgView = [[ShowPromptMsgView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
+    }
+    return _showPromptMsgView;
 }
 -(void)setChenkStatusStr:(NSString *)chenkStatusStr{
     _chenkStatusStr = chenkStatusStr;
@@ -264,6 +279,9 @@ UITableViewDataSource
     }
     return _dataDict;
 }
+-(void)setIsSkipGrade:(BOOL)isSkipGrade{
+    _isSkipGrade = isSkipGrade;
+}
 -(void)setRecordIdStr:(NSString *)recordIdStr{
     _recordIdStr = recordIdStr;
 }
@@ -280,6 +298,7 @@ UITableViewDataSource
 //创建一个多线程任务组
 -(void)createGCDGroup{
     __weak typeof(self) weakSelf = self;
+   
     //创建队列组
    self.group = dispatch_group_create();
     //进入这个组
@@ -298,14 +317,15 @@ UITableViewDataSource
     
     //当所有的任务都完成后会发送这个通知
     dispatch_group_notify(_group, dispatch_get_main_queue(), ^{
-        NSString *statusStr = [NSString stringWithFormat:@"%@",weakSelf.dataDict[@"status"]];
-        if ([statusStr isEqualToString:@"1"]) {
+        if ([weakSelf.chenkStatusStr isEqualToString:@"1"]) {
             weakSelf.toolView.hidden = NO;
         }else{
+            [weakSelf.showPromptMsgView removeFromSuperview];
             weakSelf.toolView.hidden = YES;
             [weakSelf.detaTableView mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(weakSelf.view).offset(KSNaviTopHeight);
                 make.left.right.bottom.equalTo(weakSelf.view);
+                make.bottom.equalTo(weakSelf.view);
             }];
         }
         [weakSelf.detaTableView reloadData];
@@ -386,13 +406,16 @@ UITableViewDataSource
     param[@"recordId"] = self.recordIdStr;
     param[@"unitId"] = [SDUserInfo obtainWithUniId];
     param[@"userId"] = [SDUserInfo obtainWithUserId];
+    
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:url params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
+        [[UIApplication sharedApplication].keyWindow addSubview:self.showPromptMsgView];
         self.dataDict = nil;
         [self.dataArr removeAllObjects];
+        self.chenkStatusStr = @"2";
         [self createGCDGroup];
     }];
 }
@@ -443,8 +466,11 @@ UITableViewDataSource
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
+        
         [self.dataArr removeAllObjects];
         self.dataDict = nil;
+        self.chenkStatusStr = @"2";
+        [[UIApplication sharedApplication].keyWindow addSubview:self.showPromptMsgView];
         [self createGCDGroup];
     }];
 }

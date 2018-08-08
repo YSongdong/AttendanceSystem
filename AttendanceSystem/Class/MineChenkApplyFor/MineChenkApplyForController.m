@@ -23,6 +23,7 @@ UITableViewDelegate,
 UITableViewDataSource,
 ApprovalRecordSiftControllerDelegate
 >
+@property (nonatomic,strong)  ChenkHeaderView *chenkHeaderView;
 //搜索view
 @property (nonatomic,strong)RecordHeaderSearchView *headerSearchView;
 //空白页
@@ -49,6 +50,7 @@ ApprovalRecordSiftControllerDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorTextWhiteColor];
     self.cutTypeStr =@"1";
     self.page = 1;
     self.typeStr = @"0";
@@ -59,12 +61,14 @@ ApprovalRecordSiftControllerDelegate
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.page = 1;
     [self.dataArr removeAllObjects];
     [self requestDataList];
 }
 #pragma mark ------ApprovalRecordSiftControllerDelegate----
 //筛选
 - (void)selectSiftArr:(NSArray *)arr{
+    self.likeTitleStr = @"";
     NSMutableString *mutablStr = [NSMutableString string];
     //cuttype 1 待我审批的  2我已审批的
     if ([self.cutTypeStr isEqualToString:@"1"]) {
@@ -88,6 +92,9 @@ ApprovalRecordSiftControllerDelegate
         }
         self.headerSearchView.searchTextField.text = mutablStr.copy;
     }
+    self.page = 1;
+    [self.dataArr removeAllObjects];
+    [self requestDataList];
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.dataArr.count;
@@ -114,7 +121,7 @@ ApprovalRecordSiftControllerDelegate
     if ([typeStr isEqualToString:@"3"]){
         return 115;
     }else{
-        return 135;
+        return 140;
     }
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -132,7 +139,16 @@ ApprovalRecordSiftControllerDelegate
     NSString *statusStr  =[NSString stringWithFormat:@"%@",dict[@"status"]];
     if ([statusStr isEqualToString:@"1"]) {
         //审核中
-        detaVC.chenkStatusStr = @"1";
+        if ([_cutTypeStr isEqualToString:@"2"]) {
+            NSString *myStatusStr  =[NSString stringWithFormat:@"%@",dict[@"myStatus"]];
+            if ([myStatusStr isEqualToString:@"1"]) {
+                detaVC.chenkStatusStr = @"1";
+            }else{
+                detaVC.chenkStatusStr = @"2";
+            }
+        }else{
+           detaVC.chenkStatusStr = @"1";
+        }
     }else{
         //其他
         detaVC.chenkStatusStr = @"2";
@@ -163,8 +179,9 @@ ApprovalRecordSiftControllerDelegate
         weakSelf.likeTitleStr = searchStr;
         [weakSelf requestDataList];
     };
-    self.recordTableView =  [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight+60+50, KScreenW, KScreenH-KSNaviTopHeight-60-50)];
+    self.recordTableView =  [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight+60+50, KScreenW, KScreenH-KSNaviTopHeight-60-50-KSTabbarH)];
     [self.view addSubview:self.recordTableView];
+    self.recordTableView.backgroundColor = [UIColor colorWithHexString:@"#f2f2f2"];
     self.recordTableView.delegate = self;
     self.recordTableView.dataSource = self;
     self.recordTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -174,21 +191,31 @@ ApprovalRecordSiftControllerDelegate
     [self.recordTableView registerNib:[UINib nibWithNibName:APPROVALRECORD_CELL bundle:nil] forCellReuseIdentifier:APPROVALRECORD_CELL];
     
     //空白页
-    self.showBlankSpaceView = [[ShowBlankSpaceView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH-KSNaviTopHeight-60-50)];
-    [self.recordTableView addSubview:self.showBlankSpaceView];
+    self.showBlankSpaceView = [[ShowBlankSpaceView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight+50+60, KScreenW, KScreenH-KSNaviTopHeight-50-60)];
+    [self.view addSubview:self.showBlankSpaceView];
     
+    self.recordTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        weakSelf.page = 1;
+        [weakSelf requestDataList];
+    }];
+    self.recordTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        weakSelf.page ++;
+        [weakSelf requestDataList];
+    }];
+    self.recordTableView.mj_footer.hidden = YES;
 }
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [self.view endEditing:YES];
     [self.headerSearchView.searchTextField resignFirstResponder];
 }
 -(void) createChenkHeaderView{
-    ChenkHeaderView *chenkHeaderView = [[ChenkHeaderView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, 50)];
-    [self.view addSubview:chenkHeaderView];
+   self.chenkHeaderView = [[ChenkHeaderView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, 50)];
+    [self.view addSubview:self.chenkHeaderView];
     __weak typeof(self) weakSelf = self;
-    chenkHeaderView.typeBlock = ^(NSString *typeStr) {
+    self.chenkHeaderView.typeBlock = ^(NSString *typeStr) {
         weakSelf.statuStr =@"0";
         weakSelf.typeStr = @"0";
+        weakSelf.page = 1;
         weakSelf.cutTypeStr = typeStr;
         //清空当前搜索
         weakSelf.headerSearchView.searchTextField.text = nil;
@@ -251,14 +278,42 @@ ApprovalRecordSiftControllerDelegate
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
-        if ([showdata isKindOfClass:[NSArray class]])  {
-            [self.dataArr addObjectsFromArray:showdata];
+        if (self.page == 1) {
+            [self.dataArr removeAllObjects];
+            self.recordTableView.mj_footer.hidden = NO;
+        }
+        if ([showdata isKindOfClass:[NSDictionary class]])  {
+            NSArray *listArr = showdata[@"list"];
+            //更新角标数
+            if ([self.cutTypeStr isEqualToString:@"1"]) {
+                [self.chenkHeaderView updateHeaderViewUI:[NSString stringWithFormat:@"%@",showdata[@"count"]]];
+            }
+            if (listArr.count == 0) {
+                self.recordTableView.mj_footer.hidden = YES;
+                [self.recordTableView.mj_header endRefreshing];
+                [self.recordTableView.mj_footer endRefreshing];
+                if (self.dataArr.count > 0) {
+                    self.showBlankSpaceView.hidden = YES;
+                    [SDShowSystemPrompView showSystemPrompStr:@"没有更多的数据"];
+                }else{
+                    self.showBlankSpaceView.hidden = NO;
+                }
+                return;
+            }
+            [self.dataArr addObjectsFromArray:listArr];
+            if (self.dataArr.count > 9) {
+                self.recordTableView.mj_footer.hidden = NO;
+            }else{
+                self.recordTableView.mj_footer.hidden = YES;
+            }
             if (self.dataArr.count > 0) {
                 self.showBlankSpaceView.hidden = YES;
             }else{
                 self.showBlankSpaceView.hidden = NO;
             }
             [self.recordTableView reloadData];
+            [self.recordTableView.mj_header endRefreshing];
+            [self.recordTableView.mj_footer endRefreshing];
         }
         
     }];

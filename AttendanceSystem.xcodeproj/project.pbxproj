@@ -60,8 +60,6 @@
 		150C0DC72100697200A18C41 /* SDIdentityTestView.m in Sources */ = {isa = PBXBuildFile; fileRef = 150C0DC62100697100A18C41 /* SDIdentityTestView.m */; };
 		1517DEAE20F738F50003710A /* SDPhotoCollectController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1517DEAD20F738F50003710A /* SDPhotoCollectController.mm */; };
 		1517DEB220F74E980003710A /* PhotoCollectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1517DEB120F74E980003710A /* PhotoCollectView.m */; };
-		1517DEC020F754C70003710A /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1517DEB720F754C70003710A /* Media.xcassets */; };
-		1517DEC120F754C70003710A /* libFVAppSdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1517DEBE20F754C70003710A /* libFVAppSdk.a */; };
 		1517DEC220F754C70003710A /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1517DEBF20F754C70003710A /* opencv2.framework */; };
 		1517DEC420F7558C0003710A /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1517DEC320F7558C0003710A /* AssetsLibrary.framework */; };
 		151ACDB021018288004405D9 /* CustomCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 151ACDAF21018288004405D9 /* CustomCalloutView.m */; };
@@ -70,6 +68,8 @@
 		151F7266210809B50005FDCB /* ShowUnPunchCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 151F7265210809B50005FDCB /* ShowUnPunchCardCell.m */; };
 		151F726921081B500005FDCB /* ShowMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 151F726821081B500005FDCB /* ShowMarkView.m */; };
 		151F726C2108794D0005FDCB /* AttendFutureTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 151F726B2108794D0005FDCB /* AttendFutureTimeCell.m */; };
+		152DEC642119975000E9BB67 /* libFVAppSdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 152DEC5D2119974F00E9BB67 /* libFVAppSdk.a */; };
+		152DEC652119975000E9BB67 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 152DEC602119975000E9BB67 /* Media.xcassets */; };
 		153241CC20FD8C9B009FFE18 /* SDSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 153241CB20FD8C9B009FFE18 /* SDSettingViewController.m */; };
 		1556A35C20F49C3200F64523 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1556A35B20F49C3200F64523 /* AppDelegate.m */; };
 		1556A36220F49C3200F64523 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1556A36020F49C3200F64523 /* Main.storyboard */; };
@@ -122,6 +122,7 @@
 		15D74D7F2111E4CF00B2FCB5 /* CollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15D74D7D2111E4CF00B2FCB5 /* CollectionViewCell.xib */; };
 		15E93A7321030CCB002C70DB /* ShowTwoTimeDifferBigView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15E93A7221030CCB002C70DB /* ShowTwoTimeDifferBigView.m */; };
 		15E93A762103246A002C70DB /* ShowTureSignInView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15E93A752103246A002C70DB /* ShowTureSignInView.m */; };
+		15FD66BE211939B9009A132B /* ShowPromptMsgView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FD66BD211939B9009A132B /* ShowPromptMsgView.m */; };
 		42D592191F5874AE11635113 /* libPods-AttendanceSystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9DA8F321790FBC85F87A355 /* libPods-AttendanceSystem.a */; };
 /* End PBXBuildFile section */
 
@@ -240,14 +241,6 @@
 		1517DEAD20F738F50003710A /* SDPhotoCollectController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SDPhotoCollectController.mm; sourceTree = "<group>"; };
 		1517DEB020F74E980003710A /* PhotoCollectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoCollectView.h; sourceTree = "<group>"; };
 		1517DEB120F74E980003710A /* PhotoCollectView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoCollectView.m; sourceTree = "<group>"; };
-		1517DEB720F754C70003710A /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
-		1517DEB820F754C70003710A /* FVAppSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVAppSdk.h; sourceTree = "<group>"; };
-		1517DEB920F754C70003710A /* FVCertificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVCertificationViewController.h; sourceTree = "<group>"; };
-		1517DEBA20F754C70003710A /* FVUIConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVUIConfig.h; sourceTree = "<group>"; };
-		1517DEBB20F754C70003710A /* FVCityIdentifyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVCityIdentifyViewController.h; sourceTree = "<group>"; };
-		1517DEBC20F754C70003710A /* FVFaceGatherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVFaceGatherViewController.h; sourceTree = "<group>"; };
-		1517DEBD20F754C70003710A /* FVLivingDetectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVLivingDetectionViewController.h; sourceTree = "<group>"; };
-		1517DEBE20F754C70003710A /* libFVAppSdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFVAppSdk.a; sourceTree = "<group>"; };
 		1517DEBF20F754C70003710A /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		1517DEC320F7558C0003710A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		151ACDAE21018288004405D9 /* CustomCalloutView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomCalloutView.h; sourceTree = "<group>"; };
@@ -262,6 +255,11 @@
 		151F726821081B500005FDCB /* ShowMarkView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowMarkView.m; sourceTree = "<group>"; };
 		151F726A2108794D0005FDCB /* AttendFutureTimeCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttendFutureTimeCell.h; sourceTree = "<group>"; };
 		151F726B2108794D0005FDCB /* AttendFutureTimeCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttendFutureTimeCell.m; sourceTree = "<group>"; };
+		152DEC5D2119974F00E9BB67 /* libFVAppSdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFVAppSdk.a; sourceTree = "<group>"; };
+		152DEC602119975000E9BB67 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		152DEC612119975000E9BB67 /* FVAppSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVAppSdk.h; sourceTree = "<group>"; };
+		152DEC622119975000E9BB67 /* FVUIConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVUIConfig.h; sourceTree = "<group>"; };
+		152DEC632119975000E9BB67 /* FVCommonDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVCommonDefines.h; sourceTree = "<group>"; };
 		153241CA20FD8C9B009FFE18 /* SDSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDSettingViewController.h; sourceTree = "<group>"; };
 		153241CB20FD8C9B009FFE18 /* SDSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDSettingViewController.m; sourceTree = "<group>"; };
 		1556A35720F49C3200F64523 /* AttendanceSystem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AttendanceSystem.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -366,6 +364,8 @@
 		15E93A7221030CCB002C70DB /* ShowTwoTimeDifferBigView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowTwoTimeDifferBigView.m; sourceTree = "<group>"; };
 		15E93A742103246A002C70DB /* ShowTureSignInView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowTureSignInView.h; sourceTree = "<group>"; };
 		15E93A752103246A002C70DB /* ShowTureSignInView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowTureSignInView.m; sourceTree = "<group>"; };
+		15FD66BC211939B9009A132B /* ShowPromptMsgView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowPromptMsgView.h; sourceTree = "<group>"; };
+		15FD66BD211939B9009A132B /* ShowPromptMsgView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowPromptMsgView.m; sourceTree = "<group>"; };
 		51FBDEB42E43FD287D8D4510 /* Pods-AttendanceSystem.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AttendanceSystem.release.xcconfig"; path = "Pods/Target Support Files/Pods-AttendanceSystem/Pods-AttendanceSystem.release.xcconfig"; sourceTree = "<group>"; };
 		D623C36AD5B3FD58DB6CA29F /* Pods-AttendanceSystem.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AttendanceSystem.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AttendanceSystem/Pods-AttendanceSystem.debug.xcconfig"; sourceTree = "<group>"; };
 		D9DA8F321790FBC85F87A355 /* libPods-AttendanceSystem.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AttendanceSystem.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -378,7 +378,7 @@
 			files = (
 				1517DEC420F7558C0003710A /* AssetsLibrary.framework in Frameworks */,
 				1517DEC220F754C70003710A /* opencv2.framework in Frameworks */,
-				1517DEC120F754C70003710A /* libFVAppSdk.a in Frameworks */,
+				152DEC642119975000E9BB67 /* libFVAppSdk.a in Frameworks */,
 				42D592191F5874AE11635113 /* libPods-AttendanceSystem.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -626,6 +626,8 @@
 				155900B32112FC3700244956 /* ShowRevokeMsgView.m */,
 				155900B62113227C00244956 /* ShowRefuseReasonView.h */,
 				155900B72113227C00244956 /* ShowRefuseReasonView.m */,
+				15FD66BC211939B9009A132B /* ShowPromptMsgView.h */,
+				15FD66BD211939B9009A132B /* ShowPromptMsgView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -693,31 +695,28 @@
 		1517DEB420F754C70003710A /* SDK */ = {
 			isa = PBXGroup;
 			children = (
-				1517DEB520F754C70003710A /* include */,
-				1517DEBE20F754C70003710A /* libFVAppSdk.a */,
+				152DEC5E2119975000E9BB67 /* include */,
+				152DEC5D2119974F00E9BB67 /* libFVAppSdk.a */,
 				1517DEBF20F754C70003710A /* opencv2.framework */,
 			);
 			path = SDK;
 			sourceTree = "<group>";
 		};
-		1517DEB520F754C70003710A /* include */ = {
+		152DEC5E2119975000E9BB67 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				1517DEB620F754C70003710A /* FVAppSdk */,
+				152DEC5F2119975000E9BB67 /* FVAppSdk */,
 			);
 			path = include;
 			sourceTree = "<group>";
 		};
-		1517DEB620F754C70003710A /* FVAppSdk */ = {
+		152DEC5F2119975000E9BB67 /* FVAppSdk */ = {
 			isa = PBXGroup;
 			children = (
-				1517DEB720F754C70003710A /* Media.xcassets */,
-				1517DEB820F754C70003710A /* FVAppSdk.h */,
-				1517DEB920F754C70003710A /* FVCertificationViewController.h */,
-				1517DEBA20F754C70003710A /* FVUIConfig.h */,
-				1517DEBB20F754C70003710A /* FVCityIdentifyViewController.h */,
-				1517DEBC20F754C70003710A /* FVFaceGatherViewController.h */,
-				1517DEBD20F754C70003710A /* FVLivingDetectionViewController.h */,
+				152DEC602119975000E9BB67 /* Media.xcassets */,
+				152DEC612119975000E9BB67 /* FVAppSdk.h */,
+				152DEC622119975000E9BB67 /* FVUIConfig.h */,
+				152DEC632119975000E9BB67 /* FVCommonDefines.h */,
 			);
 			path = FVAppSdk;
 			sourceTree = "<group>";
@@ -1223,7 +1222,6 @@
 				1556A36720F49C3400F64523 /* LaunchScreen.storyboard in Resources */,
 				1556A36420F49C3400F64523 /* Assets.xcassets in Resources */,
 				1503F27F20F8A77000B9CDAA /* HomeViewController.xib in Resources */,
-				1517DEC020F754C70003710A /* Media.xcassets in Resources */,
 				1501893F210EF736005673FF /* SelectTimeTypeCell.xib in Resources */,
 				1556A36220F49C3200F64523 /* Main.storyboard in Resources */,
 				1501891E210EA84C005673FF /* SelectLeaveInTimeCell.xib in Resources */,
@@ -1231,6 +1229,7 @@
 				15018929210EB3E6005673FF /* LeaveInDestinAddressCell.xib in Resources */,
 				155CEC2120F9A2A400066FDD /* SDUserInfoTableViewCell.xib in Resources */,
 				15018924210EB090005673FF /* ApprovarReasonCell.xib in Resources */,
+				152DEC652119975000E9BB67 /* Media.xcassets in Resources */,
 				15018950210F11AF005673FF /* ApprovalRecordCell.xib in Resources */,
 				150C0DC121003EEB00A18C41 /* AtttendScopeTableViewCell.xib in Resources */,
 				1501895A210F16B7005673FF /* SupplementCardTimeCell.xib in Resources */,
@@ -1282,11 +1281,13 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-AttendanceSystem/Pods-AttendanceSystem-resources.sh",
 				"${PODS_ROOT}/AMap3DMap/MAMapKit.framework/AMap.bundle",
+				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
 				"${PODS_ROOT}/SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AMap.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SVProgressHUD.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1345,6 +1346,7 @@
 				155900B42112FC3700244956 /* ShowRevokeMsgView.m in Sources */,
 				1556A39E20F49CBF00F64523 /* SDRootNavigationController.m in Sources */,
 				1509AEEA210FFD5900D45EE3 /* RecordMapSelectViewController.m in Sources */,
+				15FD66BE211939B9009A132B /* ShowPromptMsgView.m in Sources */,
 				155CEC2820F9A30B00066FDD /* SDLeaveBtnShowView.m in Sources */,
 				1556A35C20F49C3200F64523 /* AppDelegate.m in Sources */,
 				1509AEFA211040F600D45EE3 /* SearchSpaceView.m in Sources */,
@@ -1500,7 +1502,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1552,7 +1554,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -1564,6 +1566,7 @@
 			baseConfigurationReference = D623C36AD5B3FD58DB6CA29F /* Pods-AttendanceSystem.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				ENABLE_BITCODE = NO;
@@ -1608,8 +1611,10 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.SDsongdong.AttendanceSystem;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1619,6 +1624,7 @@
 			baseConfigurationReference = 51FBDEB42E43FD287D8D4510 /* Pods-AttendanceSystem.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				ENABLE_BITCODE = NO;
@@ -1663,8 +1669,10 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.SDsongdong.AttendanceSystem;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -1674,6 +1682,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				INFOPLIST_FILE = AttendanceSystemTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1692,6 +1701,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				INFOPLIST_FILE = AttendanceSystemTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1709,6 +1719,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				INFOPLIST_FILE = AttendanceSystemUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1726,6 +1737,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				INFOPLIST_FILE = AttendanceSystemUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

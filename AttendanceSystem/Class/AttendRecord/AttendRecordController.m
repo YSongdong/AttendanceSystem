@@ -47,7 +47,7 @@
 //数据源字典
 @property (nonatomic,strong) NSDictionary *dataDict;
 //日历数据源
-@property (nonatomic,strong) NSMutableArray *calendarArr;
+@property (nonatomic,strong) NSMutableDictionary *calendarDict;
 //当天的数据源
 @property (nonatomic,strong) NSMutableArray *dayArr;
 @end
@@ -59,12 +59,17 @@
     self.view.backgroundColor = [UIColor colorTextWhiteColor];
     [self createNavi];
     [self createView];
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.dataDict = nil;
+    [self.dayArr removeAllObjects];
+    _dateSelected =[NSDate date];
     //获取当月的数据
     [self requestCalendarMondData:[[self requestDateFormatter]stringFromDate:[NSDate date]]];
     //获取当天的数据
     [self requestCalendarDayData:[[self requestDateFormatter]stringFromDate:[NSDate date]]];
 }
-
 -(void) createView{
     __weak typeof(self) weakSelf = self;
     UIView *headerBgView = [[UIView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, HEADERBGVIEWHIGHT)];
@@ -131,13 +136,13 @@
 
     self.calenderView = [[JTHorizontalCalendarView alloc]init];
     [headerBgView addSubview:self.calenderView];
+    self.calenderView.pagingEnabled = YES;
     [self.calenderView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(headerView.mas_bottom);
         make.right.left.equalTo(headerBgView);
         make.bottom.equalTo(attendGrounpView.mas_top);
         make.centerX.equalTo(headerBgView.mas_centerX);
     }];
-    
     self.calendarManager =[JTCalendarManager new];
     self.calendarManager.delegate = self;
 
@@ -150,7 +155,7 @@
     //在日历显示初始化的时候就需要
     [self.calendarManager setDate:[NSDate date]];
 
-    self.recordTableView  = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight)];
+    self.recordTableView  = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-KSTabbarH)];
     [self.view addSubview:self.recordTableView];
     
     self.recordTableView.delegate = self;
@@ -196,28 +201,15 @@
                 [stongSelf.recordTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
             };
         };
-        //补卡审核中
-        cell.buCardChenkConcetBlock = ^{
-            RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
-            //补卡
-            detaVC.detaType = recordApproveCardDetaType;
-            detaVC.typeStr = @"3";
-            if ([dict[@"no"] isEqualToString:@"2"]) {
-                detaVC.recordIdStr = dict[@"noId"];
-            }
-            detaVC.titleStr = [NSString stringWithFormat:@"%@补卡申请",[SDUserInfo obtainWithRealName]];
-            //其他
-            detaVC.chenkStatusStr = @"1";
-            [weakSelf.navigationController pushViewController:detaVC animated:YES];
-        };
         //请假
         cell.askForLeaveBlock = ^{
             RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
           
             detaVC.detaType = RecordApproveLeaveDetaType;
             detaVC.typeStr = @"1";
-            if ([dict[@"no"] isEqualToString:@"4"]) {
-                detaVC.recordIdStr = dict[@"noId"];
+            NSString *leaveInStr = [NSString stringWithFormat:@"%@",dict[@"leaveIn"]];
+            if ([leaveInStr isEqualToString:@"2"]) {
+                detaVC.recordIdStr = dict[@"leaveInId"];
             }
             detaVC.titleStr = [NSString stringWithFormat:@"%@请假申请",[SDUserInfo obtainWithRealName]];
             //其他
@@ -296,38 +288,38 @@
     }
     // Another day of the current month
     else{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSDictionary *dict = [self haveEventFordayView:dayView];
-            if ([dict[@"type"] isEqualToString:@"2"]) {
-                dayView.circleView.hidden = YES;
-                dayView.dotView.backgroundColor = [UIColor redColor];
-                dayView.textLabel.textColor = [UIColor colorWithHexString:@"#cccccc"];
-            }else{
-                dayView.circleView.hidden = YES;
-                dayView.dotView.backgroundColor = [UIColor redColor];
-                dayView.textLabel.textColor = [UIColor colorTextBg28BlackColor];
-            }
-      });
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
         NSDictionary *dict = [self haveEventFordayView:dayView];
-        if ([dict[@"status"] isEqualToString:@"1"]) {
-            dayView.dotView.hidden = NO;
-            //时间错误红色
-            dayView.dotView.backgroundColor = [UIColor colorWithHexString:@"#f75254"];
-        }else  if ([dict[@"status"] isEqualToString:@"2"]) {
-            dayView.dotView.hidden = NO;
-            //2身份地点错误黄色
-            dayView.dotView.backgroundColor = [UIColor colorWithHexString:@"#ffb046"];
-        }else if ([dict[@"status"] isEqualToString:@"3"]){
-            dayView.dotView.hidden = NO;
-            // 3都正确绿色
-            dayView.dotView.backgroundColor = [UIColor colorCommonGreenColor];
+        if ([dict[@"type"] isEqualToString:@"2"]) {
+            dayView.circleView.hidden = YES;
+            dayView.dotView.backgroundColor = [UIColor redColor];
+            dayView.textLabel.textColor = [UIColor colorWithHexString:@"#cccccc"];
+        }else{
+            dayView.circleView.hidden = YES;
+            dayView.dotView.backgroundColor = [UIColor redColor];
+            dayView.textLabel.textColor = [UIColor colorTextBg28BlackColor];
+        }
+    }
+
+        NSDictionary *dict = [self haveEventFordayView:dayView];
+        if ([dict[@"type"] isEqualToString:@"1"]) {
+            if ([dict[@"status"] isEqualToString:@"1"]) {
+                dayView.dotView.hidden = NO;
+                //时间错误红色
+                dayView.dotView.backgroundColor = [UIColor colorWithHexString:@"#f75254"];
+            }else  if ([dict[@"status"] isEqualToString:@"2"]) {
+                dayView.dotView.hidden = NO;
+                //2身份地点错误黄色
+                dayView.dotView.backgroundColor = [UIColor colorWithHexString:@"#ffb046"];
+            }else if ([dict[@"status"] isEqualToString:@"3"]){
+                dayView.dotView.hidden = NO;
+                // 3都正确绿色
+                dayView.dotView.backgroundColor = [UIColor colorCommonGreenColor];
+            }else{
+                dayView.dotView.hidden = YES;
+            }
         }else{
             dayView.dotView.hidden = YES;
         }
-    });
 }
 - (void)calendar:(JTCalendarManager *)calendar didTouchDayView:(JTCalendarDayView *)dayView
 {
@@ -351,6 +343,7 @@
     }
     //移除数据源
     [self.dayArr removeAllObjects];
+    self.dataDict = nil;
     //获取当天的数据
     [self requestCalendarDayData:[[self requestDateFormatter]stringFromDate:dayView.date]];
 }
@@ -362,41 +355,31 @@
     //设置选中日期
     _dateSelected = calendar.date;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        //从服务器请求下一个月时间
-        [ self requestCalendarMondData:[[self requestDateFormatter]stringFromDate:calendar.date]];
-        //请求下一月这一天的数据
-        [self requestCalendarDayData:[[self requestDateFormatter]stringFromDate:calendar.date]];
-        //显示日期
-        self.showNowCalendarLab.text =[[self showDateFormatter]stringFromDate:calendar.date];
-    });
+    //从服务器请求下一个月时间
+    [ self requestCalendarMondData:[[self requestDateFormatter]stringFromDate:calendar.date]];
+    //请求下一月这一天的数据
+    [self requestCalendarDayData:[[self requestDateFormatter]stringFromDate:calendar.date]];
+    //显示日期
+    self.showNowCalendarLab.text =[[self showDateFormatter]stringFromDate:calendar.date];
 }
 -(void)calendarDidLoadPreviousPage:(JTCalendarManager *)calendar{
     //移除数据源
     self.dataDict =  nil;
     [self.dayArr removeAllObjects];
-    
     //设置选中日期
     _dateSelected = calendar.date;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        //从服务器请求下一个月时间
-        [ self requestCalendarMondData:[[self requestDateFormatter]stringFromDate:calendar.date]];
-        //请求下一月这一天的数据
-        [self requestCalendarDayData:[[self requestDateFormatter]stringFromDate:calendar.date]];
-        //显示日期
-        self.showNowCalendarLab.text =[[self showDateFormatter]stringFromDate:calendar.date];
-    });
+    //从服务器请求下一个月时间
+    [ self requestCalendarMondData:[[self requestDateFormatter]stringFromDate:calendar.date]];
+    //请求下一月这一天的数据
+    [self requestCalendarDayData:[[self requestDateFormatter]stringFromDate:calendar.date]];
+    //显示日期
+    self.showNowCalendarLab.text =[[self showDateFormatter]stringFromDate:calendar.date];
 }
 -(NSDictionary *) haveEventFordayView:(JTCalendarDayView *)dayView{
-    NSMutableDictionary *mutableDict;
-    for (NSDictionary *dict in self.calendarArr) {
-         NSString *dateStr = dict[@"date"];
-        if ([_calendarManager.dateHelper date:[self stringWithDate:dateStr] isTheSameDayThan:dayView.date]) {
-            mutableDict = [NSMutableDictionary dictionaryWithDictionary:dict];
-        }
-    }
-    return mutableDict;
+    NSString *key =[self dateWithString:dayView.date];
+    NSDictionary *dict = self.calendarDict[key];
+    return dict;
 }
 #pragma mark -------按钮点击事件------
 //下一月
@@ -440,13 +423,15 @@
     NSDate *birthdayDate = [dateFormatter dateFromString:timeStr];
     return birthdayDate;
 }
-#pragma mark ----懒加载-------
--(NSMutableArray *)calendarArr{
-    if (!_calendarArr) {
-        _calendarArr = [NSMutableArray array];
-    }
-    return _calendarArr;
+-(NSString *) dateWithString:(NSDate *)date{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+//    //解决8小时时间差问题
+//    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
+    NSString *strDate = [dateFormatter stringFromDate:date];
+    return strDate;
 }
+#pragma mark ----懒加载-------
 -(NSMutableArray *)dayArr{
     if (!_dayArr) {
         _dayArr = [NSMutableArray array];
@@ -459,6 +444,13 @@
     }
     return _showMarkView;
 }
+-(NSMutableDictionary *)calendarDict{
+    if (!_calendarDict) {
+        _calendarDict = [NSMutableDictionary dictionary];
+    }
+    return _calendarDict;
+}
+
 //设置navi
 -(void) createNavi{
     self.customNavBar.title = @"考勤记录";
@@ -473,15 +465,18 @@
 -(void)requestCalendarMondData:(NSString *)date{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     param[@"date"] = date;
+    param[@"type"] = @"2";
     param[@"token"] = [SDTool getNewToken];
     param[@"userId"] = [SDUserInfo obtainWithUserId];
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_APPATTENDSTATUSLIST_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
+        
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
-        if ([showdata isKindOfClass:[NSArray class]]) {
-            self.calendarArr = [NSMutableArray arrayWithArray:showdata];
+        if ([showdata isKindOfClass:[NSDictionary class]]) {
+            //self.calendarArr = [NSMutableArray arrayWithArray:showdata];
+            self.calendarDict = [NSMutableDictionary dictionaryWithDictionary:showdata];
             [self.calendarManager reload];
         }
     }];
@@ -495,6 +490,7 @@
     param[@"unitId"] = [SDUserInfo obtainWithUniId];
     param[@"userId"] = [SDUserInfo obtainWithUserId];
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_APPUSERDAYSATTENDACEGROUINFO_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
+        
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;

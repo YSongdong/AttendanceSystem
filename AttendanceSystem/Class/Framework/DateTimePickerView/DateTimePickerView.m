@@ -47,8 +47,7 @@
         self.backgroundColor = RGBA(0, 0, 0, 0.5);
         self.alpha = 0;
         
-        
-        UIView *contentV = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight, screenWith, 220)];
+        UIView *contentV = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight+KSTabbarH, screenWith, 220)];
         contentV.backgroundColor = [UIColor whiteColor];
         [self addSubview:contentV];
         self.contentV = contentV;

@@ -36,13 +36,16 @@
         }
         return NO; //这里返回NO，就代表return键值失效，即页面上按下return，不会出现换行，如果为yes，则输入页面会换行
     }
-    
+
     if (text.length > 0) {
         self.showPropentReasonLab.hidden = YES;
     }else{
         if (self.cellTextView.text.length == 0) {
             self.showPropentReasonLab.hidden = NO;
         }
+    }
+    if (self.cellTextView.text.length > 60) {
+        return NO;
     }
     return YES;
 }

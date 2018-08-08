@@ -37,5 +37,8 @@ typedef  enum{
 
 //审批状态  1 审核中 2 其他
 @property (nonatomic,strong) NSString *chenkStatusStr;
+//是否要越级跳转  YES 是  NO 否
+@property (nonatomic,assign) BOOL isSkipGrade;
+
 
 @end

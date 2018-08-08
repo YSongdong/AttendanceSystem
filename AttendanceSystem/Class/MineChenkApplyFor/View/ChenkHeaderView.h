@@ -10,7 +10,12 @@
 
 @interface ChenkHeaderView : UIView
 
+
+
 //type 1 待我审批的  2我已审批的
 @property (nonatomic,copy) void(^typeBlock)(NSString *typeStr);
+
+//更新UI
+-(void) updateHeaderViewUI:(NSString *) countStr;
 
 @end

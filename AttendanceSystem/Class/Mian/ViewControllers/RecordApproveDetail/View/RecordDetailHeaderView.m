@@ -93,7 +93,7 @@
     
     self.statusLab = [[UILabel alloc]init];
     [headerView addSubview:self.statusLab];
-    self.statusLab.text =@"等待张兴";
+    self.statusLab.text =@"等待审核";
     self.statusLab.font = Font(13);
     self.statusLab.textColor = [UIColor colorWithHexString:@"#ffb046"];
     [self.statusLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -114,7 +114,7 @@
     
     self.approveNumberLab = [[UILabel alloc]init];
     [self addSubview:self.approveNumberLab];
-    self.approveNumberLab.text =@"232420420420482";
+    self.approveNumberLab.text =@"";
     self.approveNumberLab.font = Font(12);
     self.approveNumberLab.textColor = [UIColor colorTextBg28BlackColor];
     [self.approveNumberLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -142,7 +142,7 @@
     
     self.attendGrounpLab = [[UILabel alloc]init];
     [self addSubview:self.attendGrounpLab];
-    self.attendGrounpLab.text =@"产品部";
+    self.attendGrounpLab.text =@"";
     self.attendGrounpLab.font = Font(12);
     self.attendGrounpLab.textColor = [UIColor colorTextBg28BlackColor];
     [self.attendGrounpLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -163,7 +163,7 @@
     
     self.departmentNameLab = [[UILabel alloc]init];
     [self addSubview:self.departmentNameLab];
-    self.departmentNameLab.text =@"产品部";
+    self.departmentNameLab.text =@"";
     self.departmentNameLab.font = Font(12);
     self.departmentNameLab.textColor = [UIColor colorTextBg28BlackColor];
     [self.departmentNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -184,7 +184,7 @@
     
     self.beginTimeLab = [[UILabel alloc]init];
     [self addSubview:self.beginTimeLab];
-    self.beginTimeLab.text =@"2018.02.03 29:00";
+    self.beginTimeLab.text =@"";
     self.beginTimeLab.font = Font(12);
     self.beginTimeLab.textColor = [UIColor colorTextBg28BlackColor];
     [self.beginTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -206,7 +206,7 @@
     
     self.endTimeLab = [[UILabel alloc]init];
     [self addSubview:self.endTimeLab];
-    self.endTimeLab.text =@"2018.02.03 29:00";
+    self.endTimeLab.text =@"";
     self.endTimeLab.font = Font(12);
     self.endTimeLab.textColor = [UIColor colorTextBg28BlackColor];
     [self.endTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -227,7 +227,7 @@
     
     self.timeNumberLab = [[UILabel alloc]init];
     [self addSubview:self.timeNumberLab];
-    self.timeNumberLab.text =@"9";
+    self.timeNumberLab.text =@"";
     self.timeNumberLab.font = Font(12);
     self.timeNumberLab.textColor = [UIColor colorTextBg28BlackColor];
     [self.timeNumberLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -247,7 +247,7 @@
     
     self.incidentReaSonLab = [[UILabel alloc]init];
     [self addSubview:self.incidentReaSonLab];
-    self.incidentReaSonLab.text =@"fwowwwwfwfwofwwfw";
+    self.incidentReaSonLab.text =@"";
     self.incidentReaSonLab.font = Font(12);
     self.incidentReaSonLab.numberOfLines = 0;
     self.incidentReaSonLab.textColor = [UIColor colorTextBg28BlackColor];
@@ -269,7 +269,7 @@
     
     self.addressLab = [[UILabel alloc]init];
     [self addSubview:self.addressLab];
-    self.addressLab.text =@"fwowwwwfwfwofwwfw";
+    self.addressLab.text =@"";
     self.addressLab.font = Font(12);
     self.addressLab.numberOfLines = 0;
     self.addressLab.textColor = [UIColor colorCommonGreenColor];
@@ -400,9 +400,8 @@
         //结束时间
         self.endTimeLab.text =dict[@"endTime"];
         //时长
-        self.timeNumberLab.text =dict[@"numbers"];
+        self.timeNumberLab.text =[NSString stringWithFormat:@"%.2f",[dict[@"numbers"]floatValue]];
         
-    
         NSString *outGoStr = dict[@"outGo"];
         if ([outGoStr isEqualToString:@""]) {
             [self.showAddressLab mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -415,7 +414,16 @@
         self.incidentReaSonLab.numberOfLines = 4;
         self.incidentReaSonLab.text =outGoStr;
         //外出地点
+        NSString *addressStr =dict[@"address"];
+        CGFloat w = [SDTool calStrWith:addressStr andFontSize:12].width;
         self.addressLab.text =dict[@"address"];
+        if (w > KScreenW-129) {
+            [self.addressImageV mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.right.equalTo(weakSelf).offset(-12);
+                make.left.equalTo(weakSelf.addressLab.mas_right).offset(12);
+                make.centerY.equalTo(weakSelf.addressLab.mas_centerY);
+            }];
+        }
         
         NSArray *imageArr = dict[@"images"];
         if (imageArr.count == 0) {
@@ -443,7 +451,7 @@
         //结束时间
         self.endTimeLab.text =dict[@"endTime"];
         //时长
-        self.timeNumberLab.text =dict[@"numbers"];
+        self.timeNumberLab.text =[NSString stringWithFormat:@"%.2f",[dict[@"numbers"]floatValue]];
         
         NSString *outGoStr = dict[@"leaveInfo"];
         if ([outGoStr isEqualToString:@""]) {
@@ -502,9 +510,17 @@
         self.addressLab.hidden = YES;
         self.addressImageV.hidden =YES;
         
+        showBeginTimeLab.text = @"补卡班次";
+        
+        NSString *baseTypeStr  ;
+        if ([dict[@"baseType"] integerValue] == 2) {
+            baseTypeStr = @"下班";
+        }else{
+             baseTypeStr = @"上班";
+        }
         //补卡班次
         self.beginTimeLab.numberOfLines = 4;
-        self.beginTimeLab.text =[NSString stringWithFormat:@"%@,下班时间%@,补卡时间 %@",dict[@"createTime"],dict[@"replacementTime"],dict[@"cardTime"]];
+        self.beginTimeLab.text =[NSString stringWithFormat:@"%@,%@,%@%@,补卡时间 %@",dict[@"replacementTime"],dict[@"today"],baseTypeStr,dict[@"sureTime"],dict[@"cardTime"]];
         
         [self.beginTimeLab mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(showBeginTimeLab.mas_right).offset(28);

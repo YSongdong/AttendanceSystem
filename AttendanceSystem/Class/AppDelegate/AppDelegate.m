@@ -29,7 +29,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
    
     //地图sdk
-    [AMapServices sharedServices].apiKey = @"5e9e041642ecce8741b3efbab8b98c54";
+    [AMapServices sharedServices].apiKey = @"f28046f76f4bace772fb4daa312b1bf7";
     //人脸识别
     [[FVAppSdk sharedManager] initWithAppID:@"43645806" appKey:@"d39eba36386e3034ae4cc68d0fae3c303459e85b"];
     

@@ -45,6 +45,7 @@ ApprovalRecordSiftControllerDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorTextWhiteColor];
     self.page = 1;
     self.typeStr = @"0";
     self.statuStr = @"0";
@@ -53,6 +54,7 @@ ApprovalRecordSiftControllerDelegate
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.page = 1;
     [self.dataArr removeAllObjects];
     [self requestApprovalList];
 }
@@ -81,7 +83,7 @@ ApprovalRecordSiftControllerDelegate
     if ([typeStr isEqualToString:@"3"]){
         return 115;
     }else{
-        return 135;
+        return 140;
     }
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -120,6 +122,7 @@ ApprovalRecordSiftControllerDelegate
 }
 #pragma mark ----ApprovalRecordSiftControllerDelegate---
 - (void)selectSiftArr:(NSArray *)arr{
+    self.likeTitleStr = @"";
     NSMutableString *mutablStr = [NSMutableString string];
     for (int i=0; i<arr.count; i++) {
         NSDictionary *dict = arr[i];
@@ -132,6 +135,7 @@ ApprovalRecordSiftControllerDelegate
         }
     }
     self.headerSearchView.searchTextField.text = mutablStr.copy;
+    
 }
 -(void) createSearchView{
     __weak typeof(self) weakSelf = self;
@@ -145,8 +149,11 @@ ApprovalRecordSiftControllerDelegate
         [weakSelf requestApprovalList];
     };
     
-    self.recordTableView =  [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight+60, KScreenW, KScreenH-KSNaviTopHeight-60)];
+    self.recordTableView =  [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight+60, KScreenW, KScreenH-KSNaviTopHeight-60-KSTabbarH)];
     [self.view addSubview:self.recordTableView];
+    
+    self.recordTableView.backgroundColor = [UIColor colorWithHexString:@"#f2f2f2"];
+
     self.recordTableView.delegate = self;
     self.recordTableView.dataSource = self;
     self.recordTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -156,10 +163,19 @@ ApprovalRecordSiftControllerDelegate
     [self.recordTableView registerNib:[UINib nibWithNibName:APPROVALRECORD_CELL bundle:nil] forCellReuseIdentifier:APPROVALRECORD_CELL];
     
     //空白页
-    self.showBlankSpaceView = [[ShowBlankSpaceView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH-KSNaviTopHeight-60)];
-    [self.recordTableView addSubview:self.showBlankSpaceView];
+    self.showBlankSpaceView = [[ShowBlankSpaceView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight+60, KScreenW, KScreenH-KSNaviTopHeight-60)];
+    [self.view addSubview:self.showBlankSpaceView];
+    
+   
+    self.recordTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        weakSelf.page = 1;
+        [weakSelf requestApprovalList];
+    }];
+    self.recordTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        weakSelf.page ++;
+        [weakSelf requestApprovalList];
+    }];
 }
-
 //设置navi
 -(void) createNavi{
     self.customNavBar.title = @"我发起的";
@@ -200,20 +216,42 @@ ApprovalRecordSiftControllerDelegate
     param[@"unitId"] = [SDUserInfo obtainWithUniId];
     param[@"userId"] = [SDUserInfo obtainWithUserId];
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTAPPAPPLYLIST_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
-        
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
+        if (self.page == 1) {
+            [self.dataArr removeAllObjects];
+            self.recordTableView.mj_footer.hidden = NO;
+        }
         if ([showdata isKindOfClass:[NSArray class]])  {
-            [self.dataArr addObjectsFromArray:showdata];
-            
+            NSArray *arr = (NSArray *) showdata;
+            if (arr.count == 0) {
+                self.recordTableView.mj_footer.hidden = YES;
+                [self.recordTableView.mj_header endRefreshing];
+                [self.recordTableView.mj_footer endRefreshing];
+                if (self.dataArr.count > 0) {
+                    self.showBlankSpaceView.hidden = YES;
+                    [SDShowSystemPrompView showSystemPrompStr:@"没有更多的数据"];
+                }else{
+                    self.showBlankSpaceView.hidden = NO;
+                }
+                return;
+            }
+            [self.dataArr addObjectsFromArray:arr];
+            if (self.dataArr.count > 9) {
+                self.recordTableView.mj_footer.hidden = NO;
+            }else{
+                self.recordTableView.mj_footer.hidden = YES;
+            }
             if (self.dataArr.count > 0) {
                 self.showBlankSpaceView.hidden = YES;
             }else{
                 self.showBlankSpaceView.hidden = NO;
             }
             [self.recordTableView reloadData];
+            [self.recordTableView.mj_header endRefreshing];
+            [self.recordTableView.mj_footer endRefreshing];
         }
         
     }];
