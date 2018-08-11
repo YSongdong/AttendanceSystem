@@ -151,10 +151,8 @@ AMapSearchDelegate
 //重新定位
 -(void)selectPresentAction:(UIButton *)sender{
     self.mapView.showsUserLocation = YES;
-    if(self.mapView.userLocation.updating && self.mapView.userLocation.location) {
-        [self.mapView setCenterCoordinate:self.mapView.userLocation.location.coordinate animated:YES];
-        [self.mapView removeAnnotation:_pointAnnotaiton];
-    }
+    [self.mapView setCenterCoordinate:self.userLocation.coordinate animated:YES];
+    [self.mapView removeAnnotation:_pointAnnotaiton];
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.dataArr.count;
@@ -169,7 +167,7 @@ AMapSearchDelegate
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     self.mapView.showsUserLocation = NO;
-    [self.mapView addAnnotation:_pointAnnotaiton];
+    [self.mapView addAnnotation:self.pointAnnotaiton];
     
     if (self.selectIndexPtah == nil) {
         NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:self.dataArr[indexPath.row]];
@@ -277,6 +275,8 @@ AMapSearchDelegate
     tap.delegate = self; //一定要记得设置代理
     [self.mapView addGestureRecognizer:tap];
    
+    [self.mapView addAnnotation:self.pointAnnotaiton];
+    
     //搜索管理器
     self.search = [[AMapSearchAPI alloc] init];
     self.search.delegate = self;

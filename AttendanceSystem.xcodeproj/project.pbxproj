@@ -51,6 +51,7 @@
 		1509AF0E211086B300D45EE3 /* RecordDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1509AF0D211086B300D45EE3 /* RecordDetailHeaderView.m */; };
 		1509AF11211093AA00D45EE3 /* RecordDetaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1509AF10211093AA00D45EE3 /* RecordDetaTableViewCell.m */; };
 		1509AF1421109FC200D45EE3 /* RecordToolView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1509AF1321109FC200D45EE3 /* RecordToolView.m */; };
+		150A88DA211D6D37008ACBC5 /* UpdateVersionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 150A88D9211D6D37008ACBC5 /* UpdateVersionView.m */; };
 		150C0DB52100244900A18C41 /* SDAgainLocatController.m in Sources */ = {isa = PBXBuildFile; fileRef = 150C0DB42100244900A18C41 /* SDAgainLocatController.m */; };
 		150C0DB921002F9400A18C41 /* LocatToolView.m in Sources */ = {isa = PBXBuildFile; fileRef = 150C0DB821002F9400A18C41 /* LocatToolView.m */; };
 		150C0DBC21003A9600A18C41 /* ShowAtttendScopeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 150C0DBB21003A9600A18C41 /* ShowAtttendScopeView.m */; };
@@ -106,6 +107,11 @@
 		15721B2420F5D892001E1DBB /* UIImage+SDFixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 15721B1C20F5D892001E1DBB /* UIImage+SDFixOrientation.m */; };
 		15721B2620F5D892001E1DBB /* UIButton+LZCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 15721B1F20F5D892001E1DBB /* UIButton+LZCategory.m */; };
 		15721B2720F5D892001E1DBB /* UILabel+SDChangLineSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = 15721B2020F5D892001E1DBB /* UILabel+SDChangLineSpace.m */; };
+		15A6761F211BE2C300686B9E /* MessageCentreController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A6761E211BE2C300686B9E /* MessageCentreController.m */; };
+		15A67623211BE34C00686B9E /* MessageAttendaceRemindCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A67622211BE34C00686B9E /* MessageAttendaceRemindCell.m */; };
+		15A67626211BEEB300686B9E /* MessageAttendaceCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A67625211BEEB300686B9E /* MessageAttendaceCardCell.m */; };
+		15A67629211C122F00686B9E /* MessageAttendaceGoOutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A67628211C122F00686B9E /* MessageAttendaceGoOutCell.m */; };
+		15A6762C211C1C3C00686B9E /* ShowSiftMessageTypeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A6762B211C1C3C00686B9E /* ShowSiftMessageTypeView.m */; };
 		15A774752109CDE100EE4E39 /* SameDayHaveRestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A774742109CDE100EE4E39 /* SameDayHaveRestCell.m */; };
 		15B4FC5D20FEDF0F001F6366 /* XWScanImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B4FC5C20FEDF0E001F6366 /* XWScanImage.m */; };
 		15B4FC6420FF0BE3001F6366 /* SDAttendPunchCardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B4FC6320FF0BE3001F6366 /* SDAttendPunchCardController.m */; };
@@ -224,6 +230,8 @@
 		1509AF10211093AA00D45EE3 /* RecordDetaTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RecordDetaTableViewCell.m; sourceTree = "<group>"; };
 		1509AF1221109FC200D45EE3 /* RecordToolView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecordToolView.h; sourceTree = "<group>"; };
 		1509AF1321109FC200D45EE3 /* RecordToolView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RecordToolView.m; sourceTree = "<group>"; };
+		150A88D8211D6D37008ACBC5 /* UpdateVersionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UpdateVersionView.h; sourceTree = "<group>"; };
+		150A88D9211D6D37008ACBC5 /* UpdateVersionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UpdateVersionView.m; sourceTree = "<group>"; };
 		150C0DB32100244900A18C41 /* SDAgainLocatController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDAgainLocatController.h; sourceTree = "<group>"; };
 		150C0DB42100244900A18C41 /* SDAgainLocatController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDAgainLocatController.m; sourceTree = "<group>"; };
 		150C0DB721002F9400A18C41 /* LocatToolView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocatToolView.h; sourceTree = "<group>"; };
@@ -262,6 +270,7 @@
 		152DEC632119975000E9BB67 /* FVCommonDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVCommonDefines.h; sourceTree = "<group>"; };
 		153241CA20FD8C9B009FFE18 /* SDSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDSettingViewController.h; sourceTree = "<group>"; };
 		153241CB20FD8C9B009FFE18 /* SDSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDSettingViewController.m; sourceTree = "<group>"; };
+		15325845211C2337009E225D /* AttendanceSystem.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AttendanceSystem.entitlements; sourceTree = "<group>"; };
 		1556A35720F49C3200F64523 /* AttendanceSystem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AttendanceSystem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1556A35A20F49C3200F64523 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1556A35B20F49C3200F64523 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -333,6 +342,16 @@
 		15721B1E20F5D892001E1DBB /* UIButton+LZCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+LZCategory.h"; sourceTree = "<group>"; };
 		15721B1F20F5D892001E1DBB /* UIButton+LZCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+LZCategory.m"; sourceTree = "<group>"; };
 		15721B2020F5D892001E1DBB /* UILabel+SDChangLineSpace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+SDChangLineSpace.m"; sourceTree = "<group>"; };
+		15A6761D211BE2C300686B9E /* MessageCentreController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageCentreController.h; sourceTree = "<group>"; };
+		15A6761E211BE2C300686B9E /* MessageCentreController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageCentreController.m; sourceTree = "<group>"; };
+		15A67621211BE34C00686B9E /* MessageAttendaceRemindCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageAttendaceRemindCell.h; sourceTree = "<group>"; };
+		15A67622211BE34C00686B9E /* MessageAttendaceRemindCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageAttendaceRemindCell.m; sourceTree = "<group>"; };
+		15A67624211BEEB300686B9E /* MessageAttendaceCardCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageAttendaceCardCell.h; sourceTree = "<group>"; };
+		15A67625211BEEB300686B9E /* MessageAttendaceCardCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageAttendaceCardCell.m; sourceTree = "<group>"; };
+		15A67627211C122F00686B9E /* MessageAttendaceGoOutCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageAttendaceGoOutCell.h; sourceTree = "<group>"; };
+		15A67628211C122F00686B9E /* MessageAttendaceGoOutCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageAttendaceGoOutCell.m; sourceTree = "<group>"; };
+		15A6762A211C1C3C00686B9E /* ShowSiftMessageTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowSiftMessageTypeView.h; sourceTree = "<group>"; };
+		15A6762B211C1C3C00686B9E /* ShowSiftMessageTypeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowSiftMessageTypeView.m; sourceTree = "<group>"; };
 		15A774732109CDE100EE4E39 /* SameDayHaveRestCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SameDayHaveRestCell.h; sourceTree = "<group>"; };
 		15A774742109CDE100EE4E39 /* SameDayHaveRestCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SameDayHaveRestCell.m; sourceTree = "<group>"; };
 		15B4FC5B20FEDF0E001F6366 /* XWScanImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWScanImage.h; sourceTree = "<group>"; };
@@ -746,6 +765,7 @@
 		1556A35920F49C3200F64523 /* AttendanceSystem */ = {
 			isa = PBXGroup;
 			children = (
+				15325845211C2337009E225D /* AttendanceSystem.entitlements */,
 				1556A38C20F49C4200F64523 /* Class */,
 				1556A36320F49C3400F64523 /* Assets.xcassets */,
 				1556A36520F49C3400F64523 /* LaunchScreen.storyboard */,
@@ -790,6 +810,7 @@
 				15018951210F1627005673FF /* SupplementCard */,
 				1509AEFB2110443800D45EE3 /* InitiateApplyfor */,
 				1509AEFF211045BB00D45EE3 /* MineChenkApplyFor */,
+				15A6761C211BE27900686B9E /* MessageCentre */,
 				15D747F120FAFDA200B7CF14 /* Login */,
 			);
 			path = Class;
@@ -948,6 +969,8 @@
 				155CEC1B20F9A2A400066FDD /* SDUserLeaveTableViewCell.h */,
 				155CEC1D20F9A2A400066FDD /* SDUserLeaveTableViewCell.m */,
 				155CEC1920F9A2A300066FDD /* SDUserLeaveTableViewCell.xib */,
+				150A88D8211D6D37008ACBC5 /* UpdateVersionView.h */,
+				150A88D9211D6D37008ACBC5 /* UpdateVersionView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -997,6 +1020,31 @@
 				156AAA6920FC932500514F6C /* SDPassWordLookForController.m */,
 			);
 			path = PassLookFor;
+			sourceTree = "<group>";
+		};
+		15A6761C211BE27900686B9E /* MessageCentre */ = {
+			isa = PBXGroup;
+			children = (
+				15A67620211BE2E700686B9E /* View */,
+				15A6761D211BE2C300686B9E /* MessageCentreController.h */,
+				15A6761E211BE2C300686B9E /* MessageCentreController.m */,
+			);
+			path = MessageCentre;
+			sourceTree = "<group>";
+		};
+		15A67620211BE2E700686B9E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				15A67621211BE34C00686B9E /* MessageAttendaceRemindCell.h */,
+				15A67622211BE34C00686B9E /* MessageAttendaceRemindCell.m */,
+				15A67624211BEEB300686B9E /* MessageAttendaceCardCell.h */,
+				15A67625211BEEB300686B9E /* MessageAttendaceCardCell.m */,
+				15A67627211C122F00686B9E /* MessageAttendaceGoOutCell.h */,
+				15A67628211C122F00686B9E /* MessageAttendaceGoOutCell.m */,
+				15A6762A211C1C3C00686B9E /* ShowSiftMessageTypeView.h */,
+				15A6762B211C1C3C00686B9E /* ShowSiftMessageTypeView.m */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		15A7746C2109761700EE4E39 /* View */ = {
@@ -1183,6 +1231,11 @@
 				TargetAttributes = {
 					1556A35620F49C3200F64523 = {
 						CreatedOnToolsVersion = 9.4.1;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					1556A36E20F49C3400F64523 = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -1303,6 +1356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				153241CC20FD8C9B009FFE18 /* SDSettingViewController.m in Sources */,
+				150A88DA211D6D37008ACBC5 /* UpdateVersionView.m in Sources */,
 				15018959210F16B7005673FF /* SupplementCardTimeCell.m in Sources */,
 				15B4FC6820FF0C33001F6366 /* AttendCardHeaderView.m in Sources */,
 				15018962210F2D3E005673FF /* RecordSiftCollectionViewCell.m in Sources */,
@@ -1325,6 +1379,7 @@
 				155CEC2C20F9DB7B00066FDD /* HWWeakTimer.m in Sources */,
 				1509AF062110483600D45EE3 /* ChenkHeaderView.m in Sources */,
 				1509AEEF210FFE1600D45EE3 /* MapSearchHeaderView.m in Sources */,
+				15A67623211BE34C00686B9E /* MessageAttendaceRemindCell.m in Sources */,
 				1503F27E20F8A77000B9CDAA /* HomeViewController.m in Sources */,
 				1501892C210EB927005673FF /* ApprovalSelectPhotoCell.m in Sources */,
 				151E8381210C3EC000F180F8 /* ShowLocatErrorView.m in Sources */,
@@ -1335,6 +1390,7 @@
 				15B4FC6420FF0BE3001F6366 /* SDAttendPunchCardController.m in Sources */,
 				15721B2620F5D892001E1DBB /* UIButton+LZCategory.m in Sources */,
 				1556A3A520F49F4200F64523 /* CKLeftSlideViewController.m in Sources */,
+				15A67629211C122F00686B9E /* MessageAttendaceGoOutCell.m in Sources */,
 				1556A36A20F49C3400F64523 /* main.m in Sources */,
 				1503F28520F8BEF600B9CDAA /* WRNavigationBar.m in Sources */,
 				1509AF1421109FC200D45EE3 /* RecordToolView.m in Sources */,
@@ -1364,6 +1420,7 @@
 				15D747F420FAFDBD00B7CF14 /* SDLoginController.m in Sources */,
 				1501892F210EBE5E005673FF /* ApprovalSubintCell.m in Sources */,
 				155CEC2520F9A2DF00066FDD /* SDUserInfo.m in Sources */,
+				15A6761F211BE2C300686B9E /* MessageCentreController.m in Sources */,
 				155CEC3320F9EB2E00066FDD /* AlterPhoneNumberController.m in Sources */,
 				155CEC3620F9FD1A00066FDD /* SDTool.m in Sources */,
 				15721B2720F5D892001E1DBB /* UILabel+SDChangLineSpace.m in Sources */,
@@ -1392,7 +1449,9 @@
 				15018942210EFDA8005673FF /* GoOutRecordController.m in Sources */,
 				15018948210EFE29005673FF /* RecordHeaderSearchView.m in Sources */,
 				155CEC3020F9E58D00066FDD /* AlterPassNumberController.m in Sources */,
+				15A6762C211C1C3C00686B9E /* ShowSiftMessageTypeView.m in Sources */,
 				150C0DB52100244900A18C41 /* SDAgainLocatController.m in Sources */,
+				15A67626211BEEB300686B9E /* MessageAttendaceCardCell.m in Sources */,
 				1509AEF32110090100D45EE3 /* SearchTableViewCell.m in Sources */,
 				1509AF0E211086B300D45EE3 /* RecordDetailHeaderView.m in Sources */,
 				15721B2420F5D892001E1DBB /* UIImage+SDFixOrientation.m in Sources */,
@@ -1566,8 +1625,10 @@
 			baseConfigurationReference = D623C36AD5B3FD58DB6CA29F /* Pods-AttendanceSystem.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = AttendanceSystem/AttendanceSystem.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1613,8 +1674,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "bea01ce7-bb31-4209-bfbf-2b39a22e5391";
+				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1624,8 +1685,10 @@
 			baseConfigurationReference = 51FBDEB42E43FD287D8D4510 /* Pods-AttendanceSystem.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = AttendanceSystem/AttendanceSystem.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1671,8 +1734,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "bea01ce7-bb31-4209-bfbf-2b39a22e5391";
+				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

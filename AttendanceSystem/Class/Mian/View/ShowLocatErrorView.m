@@ -111,25 +111,23 @@
     [trueBtn addTarget:self action:@selector(tureBtnAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 -(void)tureBtnAction:(UIButton *) sender{
-    NSString * urlString = @"App-Prefs:root=MOBILE_DATA_SETTINGS_ID";
-    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:urlString]]) {
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
         
         if ([[UIDevice currentDevice].systemVersion doubleValue] >= 10.0) {
             
             if (@available(iOS 10.0, *)) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString] options:@{} completionHandler:nil];
+                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
             } else {
                 
             }
         } else {
             
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
-            
+            [[UIApplication sharedApplication] openURL:url];
+
         }
-        
+
     }
-    
-    
 }
 -(void)cancelBtnAction:(UIButton *) sender{
     [self selectdTap];

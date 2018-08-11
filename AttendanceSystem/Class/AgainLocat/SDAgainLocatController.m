@@ -404,6 +404,9 @@ UIImagePickerControllerDelegate
     
     //确认打卡
     weakSelf.showTureSingInView.trueInfoBlock = ^(NSDictionary *dict) {
+        //隐藏
+        weakSelf.showTureSingInView.hidden = YES;
+        
         weakSelf.cardDataDict[@"abnormalIdentityIs"] =dict[@"abnormalIdentityIs"];
         weakSelf.cardDataDict[@"remark"] =dict[@"remark"];
         //请求数据
@@ -581,6 +584,10 @@ UIImagePickerControllerDelegate
     
     [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_APPATTENDANCEAPPDOSIGNIN_URL params:self.cardDataDict andData:imageArr.copy waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
+            if (self.showTureSingInView) {
+                //显示确认打卡信息view
+                self.showTureSingInView.hidden = NO;
+            }
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }

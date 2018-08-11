@@ -16,6 +16,15 @@
 @interface LeftUserController ()
 //头部头像
 @property (nonatomic,strong) UIImageView *headerImageV;
+//状态
+@property (nonatomic,strong) UIImageView *chenkImageV ;
+//姓名
+@property (nonatomic,strong) UILabel *nameLab;
+//身份证
+@property (nonatomic,strong) UILabel *idCardLab;
+//所属部门
+@property (nonatomic,strong) UILabel *departNameLab;
+
 @end
 
 @implementation LeftUserController
@@ -24,12 +33,13 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorTextWhiteColor];
     [self.customNavBar wr_setBackgroundAlpha:0];
-   // [self createHeaderView];
+    [self createHeaderView];
+  
 }
-
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self createHeaderView];
+    //更新信息
+    [self updateUserInfo];
 }
 -(void) createHeaderView{
     __weak typeof(self) weakSelf = self;
@@ -55,44 +65,44 @@
     [bgView addSubview:self.headerImageV];
     [UIImageView sd_setImageView:self.headerImageV WithURL:[SDUserInfo obtainWithPhoto]];
     [self.headerImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.view).offset(KSNaviTopHeight+18);
+        make.top.equalTo(weakSelf.view).offset(KSNaviTopHeight+KSIphonScreenH(18));
         make.centerX.equalTo(weakSelf.view.mas_centerX);
-        make.width.height.equalTo(@80);
+        make.width.height.equalTo(@(KSIphonScreenW(80)));
     }];
-    self.headerImageV.layer.cornerRadius = 40;
+    self.headerImageV.layer.cornerRadius = KSIphonScreenW(40);
     self.headerImageV.layer.masksToBounds = YES;
     self.headerImageV.userInteractionEnabled = YES;
     
-    UIImageView *chenkImageV = [[UIImageView alloc]init];
-    [bgView addSubview:chenkImageV];
-    chenkImageV.tag = 200;
+    self.chenkImageV = [[UIImageView alloc]init];
+    [bgView addSubview:self.chenkImageV];
+    self.chenkImageV.tag = 200;
     NSString *photoStatu = [SDUserInfo obtainWithPotoStatus];
     if ([photoStatu isEqualToString:@"1"]) {
         //待审核
-        chenkImageV.image = [UIImage imageNamed:@"grzx_ico_shz"];
+        self.chenkImageV.image = [UIImage imageNamed:@"grzx_ico_shz"];
     }else if ([photoStatu isEqualToString:@"2"]){
         //未通过
-        chenkImageV.image = [UIImage imageNamed:@"grzx_ico_wtg"];
+        self.chenkImageV.image = [UIImage imageNamed:@"grzx_ico_wtg"];
     }else if ([photoStatu isEqualToString:@"3"]){
         //审核通过
-        chenkImageV.image = [UIImage imageNamed:@"grzx_ico_ytg"];
+        self.chenkImageV.image = [UIImage imageNamed:@"grzx_ico_ytg"];
     }else{
         //未采集
-        chenkImageV.image = [UIImage imageNamed:@"grzx_ico_wcj"];
+        self.chenkImageV.image = [UIImage imageNamed:@"grzx_ico_wcj"];
     }
-    [chenkImageV mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.chenkImageV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(weakSelf.headerImageV.mas_bottom);
         make.centerX.equalTo(weakSelf.headerImageV.mas_centerX);
     }];
     
-    UILabel *nameLab = [[UILabel alloc]init];
-    [bgView addSubview:nameLab];
-    nameLab.tag = 201;
-    nameLab.textAlignment = NSTextAlignmentCenter;
-    [nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(chenkImageV.mas_bottom).offset(10);
-        make.centerX.equalTo(chenkImageV.mas_centerX);
-        make.width.equalTo(@100);
+    self.nameLab = [[UILabel alloc]init];
+    [bgView addSubview:self.nameLab];
+    self.nameLab.tag = 201;
+    self.nameLab.textAlignment = NSTextAlignmentCenter;
+    [self.nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf.chenkImageV.mas_bottom).offset(KSIphonScreenH(10));
+        make.centerX.equalTo(weakSelf.chenkImageV.mas_centerX);
+        make.width.equalTo(@(KSIphonScreenW(100)));
     }];
     UIImage *img ;
     NSString *sexStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithSex]];
@@ -116,36 +126,42 @@
     NSAttributedString *attributeStr2 = [NSAttributedString attributedStringWithAttachment:attach];
     [attributeStr1 insertAttributedString:attributeStr2 atIndex:0];
     
-    nameLab.attributedText = attributeStr1;
+    self.nameLab.attributedText = attributeStr1;
     
     //身份证
-    UILabel *idCardLab  =[[UILabel alloc]init];
-    [bgView addSubview:idCardLab];
-    NSString *cardStr = [SDUserInfo obtainWithidcard];
-    NSRange range = NSMakeRange(3, 11);
-    cardStr =  [cardStr stringByReplacingCharactersInRange:range withString:@"*******"];
-    idCardLab.text = [NSString stringWithFormat:@"身份证号:%@",cardStr];
-    idCardLab.font = BFont(14);
-    idCardLab.textColor = [UIColor colorTextBg28BlackColor];
-    [idCardLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(nameLab.mas_bottom).offset(41);
-        make.centerX.equalTo(nameLab.mas_centerX);
+    self.idCardLab  =[[UILabel alloc]init];
+    [bgView addSubview:self.idCardLab];
+    self.idCardLab.font = BFont(14);
+    self.idCardLab.textColor = [UIColor colorTextBg28BlackColor];
+    [self.idCardLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf.nameLab.mas_bottom).offset(41);
+        make.centerX.equalTo(weakSelf.nameLab.mas_centerX);
     }];
+    NSString *cardStr = [SDUserInfo obtainWithidcard];
+    if (![cardStr isEqualToString:@"无身份证"]) {
+        NSRange range = NSMakeRange(3, 11);
+        cardStr =  [cardStr stringByReplacingCharactersInRange:range withString:@"*******"];
+        self.idCardLab.text = [NSString stringWithFormat:@"身份证号:%@",cardStr];
+    }else{
+        self.idCardLab.text =[NSString stringWithFormat:@"身份证号:%@",cardStr];
+    }
     
     //所属部门
-    UILabel *departNameLab = [[UILabel alloc]init];
-    [bgView addSubview:departNameLab];
-    departNameLab.text = [NSString stringWithFormat:@"所属部门:%@",[SDUserInfo obtainWithDepartmentName]];
-    departNameLab.font = BFont(14);
-    departNameLab.textColor = [UIColor colorTextBg98BlackColor];
-    [departNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(idCardLab.mas_bottom).offset(18);
-        make.centerX.equalTo(idCardLab.mas_centerX);
+    self.departNameLab = [[UILabel alloc]init];
+    [bgView addSubview:self.departNameLab];
+    self.departNameLab.text = [NSString stringWithFormat:@"所属部门:%@",[SDUserInfo obtainWithDepartmentName]];
+    self.departNameLab.font = BFont(14);
+    self.departNameLab.textAlignment = NSTextAlignmentCenter;
+    self.departNameLab.textColor = [UIColor colorTextBg98BlackColor];
+    [self.departNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf.idCardLab.mas_bottom).offset(KSIphonScreenH(18));
+        make.centerX.equalTo(weakSelf.idCardLab.mas_centerX);
+        make.width.equalTo(@(KSIphonScreenW(224)));
     }];
     
     [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.left.top.equalTo(weakSelf.view);
-        make.bottom.equalTo(departNameLab.mas_bottom).offset(74);
+        make.bottom.equalTo(weakSelf.departNameLab.mas_bottom).offset(KSIphonScreenH(74));
     }];
     
     
@@ -153,9 +169,9 @@
     [self.view addSubview:lineView];
     lineView.backgroundColor = [UIColor colorWithHexString:@"#e6e6e6"];
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(weakSelf.view).offset(-18);
-        make.top.equalTo(departNameLab.mas_bottom).offset(75);
-        make.width.equalTo(@223);
+        make.right.equalTo(weakSelf.view).offset(-KSIphonScreenW(18));
+        make.top.equalTo(weakSelf.departNameLab.mas_bottom).offset(KSIphonScreenH(75));
+        make.width.equalTo(@(KSIphonScreenW(223)));
         make.height.equalTo(@1);
     }];
     
@@ -163,8 +179,8 @@
     UIView *settingView =  [[UIView alloc]init];
     [self.view addSubview:settingView];
     [settingView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(lineView.mas_bottom).offset(10);
-        make.height.equalTo(@44);
+        make.top.equalTo(lineView.mas_bottom).offset(KSIphonScreenH(10));
+        make.height.equalTo(@(KSIphonScreenH(44)));
         make.left.width.equalTo(lineView);
         make.centerX.equalTo(lineView.mas_centerX);
     }];
@@ -176,7 +192,7 @@
     [settingView addSubview:leftImageV];
     leftImageV.image = [UIImage imageNamed:@"ico_sz"];
     [leftImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(settingView).offset(13);
+        make.left.equalTo(settingView).offset(KSIphonScreenW(13));
         make.centerY.equalTo(settingView.mas_centerY);
     }];
     
@@ -197,7 +213,6 @@
         make.right.equalTo(settingView);
         make.centerY.equalTo(settLab.mas_centerY);
     }];
-    
 }
 // 关闭右侧侧边栏
 -(void)selectTap{
@@ -206,19 +221,74 @@
     UINavigationController *navCtr= ((AppDelegate*)[UIApplication sharedApplication].delegate).rootTabbarCtrV.selectedViewController;
     SDUserInfoController *userVC = [[SDUserInfoController alloc]init];
     [navCtr pushViewController:userVC animated:YES];
-   
 }
-
 //设置
 -(void)selectSettTap{
-    
     // 关闭右侧侧边栏
     [self.frostedViewController hideMenuViewController];
     UINavigationController *navCtr= ((AppDelegate*)[UIApplication sharedApplication].delegate).rootTabbarCtrV.selectedViewController;
     SDSettingViewController *settingVC =[[SDSettingViewController alloc]init];
     [navCtr pushViewController:settingVC animated:YES];
-    
 }
+
+-(void) updateUserInfo{
+    //头像
+    [UIImageView sd_setImageView:self.headerImageV WithURL:[SDUserInfo obtainWithPhoto]];
+    
+    //状态
+    NSString *photoStatu = [SDUserInfo obtainWithPotoStatus];
+    if ([photoStatu isEqualToString:@"1"]) {
+        //待审核
+        self.chenkImageV.image = [UIImage imageNamed:@"grzx_ico_shz"];
+    }else if ([photoStatu isEqualToString:@"2"]){
+        //未通过
+        self.chenkImageV.image = [UIImage imageNamed:@"grzx_ico_wtg"];
+    }else if ([photoStatu isEqualToString:@"3"]){
+        //审核通过
+        self.chenkImageV.image = [UIImage imageNamed:@"grzx_ico_ytg"];
+    }else{
+        //未采集
+        self.chenkImageV.image = [UIImage imageNamed:@"grzx_ico_wcj"];
+    }
+    
+    //姓名
+    UIImage *img ;
+    NSString *sexStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithSex]];
+    if ([sexStr isEqualToString:@"1"]) {
+        //女
+        img  = [UIImage imageNamed:@"grzx_pic_ns"];
+    }else if ([sexStr isEqualToString:@"2"]){
+        //男
+        img  = [UIImage imageNamed:@"grzx_pic_nh"];
+    }
+    NSString *nameStr = [SDUserInfo obtainWithRealName];
+    //设置富文本
+    NSMutableAttributedString *attributeStr1 = [[NSMutableAttributedString alloc] initWithString:nameStr];
+    NSDictionary *attributeDict = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:14],NSFontAttributeName, [UIColor colorTextBg28BlackColor],NSForegroundColorAttributeName,nil];
+    [attributeStr1 addAttributes:attributeDict range:NSMakeRange(0, attributeStr1.length)];
+    
+    //添加图片
+    NSTextAttachment *attach = [[NSTextAttachment alloc] init];
+    attach.image = img;
+    attach.bounds = CGRectMake(-5, -2, 12, 12);
+    NSAttributedString *attributeStr2 = [NSAttributedString attributedStringWithAttachment:attach];
+    [attributeStr1 insertAttributedString:attributeStr2 atIndex:0];
+    self.nameLab.attributedText = attributeStr1;
+    
+    //身份证号
+    NSString *cardStr = [SDUserInfo obtainWithidcard];
+    if (![cardStr isEqualToString:@"无身份证"]) {
+        NSRange range = NSMakeRange(3, 11);
+        cardStr =  [cardStr stringByReplacingCharactersInRange:range withString:@"*******"];
+        self.idCardLab.text = [NSString stringWithFormat:@"身份证号:%@",cardStr];
+    }else{
+        self.idCardLab.text =[NSString stringWithFormat:@"身份证号:%@",cardStr];
+    }
+    
+    //部门
+    self.departNameLab.text = [NSString stringWithFormat:@"所属部门:%@",[SDUserInfo obtainWithDepartmentName]];
+}
+
 
 
 

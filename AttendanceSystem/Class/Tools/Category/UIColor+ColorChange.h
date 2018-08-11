@@ -29,6 +29,8 @@
 + (UIColor *) colorCommonGreenColor;
 //常用线条灰色
 + (UIColor *) colorLineGreyColor;
+//常用背景灰
++ (UIColor *) colorCommonf2GreyColor;
 
 + (UIColor *) colorWithHexString: (NSString *)color;
 + (UIColor *) colorWithHexString: (NSString *)color alpha:(CGFloat) alpha;

@@ -174,13 +174,9 @@
     CGFloat minute = (CGFloat)value /(60*60);
     
     return minute;
-
 }
-
-
 // 字典转json字符串方法
 +(NSString *)convertToJsonData:(NSDictionary *)dict
-
 {
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
@@ -192,7 +188,6 @@
     }
     return jsonString;
 }
-
 //输入位置和服务器返回位置做对比    返回一个对比的数组
 +(NSArray *) getData:(NSDictionary *)Datadict Locat:(CLLocation *)location{
     NSMutableArray *coordArr  = [NSMutableArray array];
@@ -226,7 +221,12 @@
     return coordArr.copy;
 }
 
-
+//图片显示
++(void)sd_setImageView:(UIImageView *)imageView WithURL:(NSString *)str
+{
+    NSURL *url =  [NSURL URLWithString:str];
+    [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"nomalImage"]options:SDWebImageRetryFailed];
+}
 
 
 @end

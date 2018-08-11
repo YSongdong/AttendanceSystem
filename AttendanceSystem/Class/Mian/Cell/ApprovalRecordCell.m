@@ -65,11 +65,15 @@
         NSMutableString *mutaleStr = [NSMutableString new];
         if (arr.count > 0) {
             for (int i=0; i< arr.count; i++) {
-                NSDictionary *dic = arr[i];
-                NSString *str =dic[@"realName"];
-                [mutaleStr appendString:str];
-                if (i!=arr.count-1) {
-                    [mutaleStr appendString:@"/"];
+                if ([arr[i] isKindOfClass:[NSDictionary class]]) {
+                    NSDictionary *dic = arr[i];
+                    if ([[dict allKeys] containsObject:@"realName"]) {
+                        NSString *str =dic[@"realName"];
+                        [mutaleStr appendString:str];
+                        if (i!=arr.count-1) {
+                            [mutaleStr appendString:@"/"];
+                        }
+                    }
                 }
             }
         }

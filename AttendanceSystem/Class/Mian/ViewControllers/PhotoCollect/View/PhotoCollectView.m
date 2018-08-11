@@ -125,6 +125,7 @@
     [markIamgeV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(headerView.mas_bottom).offset(30);
         make.left.equalTo(headerView.mas_left);
+        make.width.equalTo(@11);
     }];
     
     UILabel *markLab = [[UILabel alloc]init];

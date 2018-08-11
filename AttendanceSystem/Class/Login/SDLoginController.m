@@ -104,9 +104,8 @@ typedef enum {
     logoImageV.image = [UIImage imageNamed:@"dl_logo"];
     logoImageV.contentMode = UIViewContentModeScaleAspectFit;
     [logoImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(bgView).offset(KSNaviTopHeight+21);
+        make.top.equalTo(bgView).offset(KSIphonScreenH(KSNaviTopHeight)+KSIphonScreenH(21));
         make.centerX.equalTo(bgView.mas_centerX);
-      //  make.height.equalTo(@165);
     }];
     
     //账号
@@ -114,12 +113,12 @@ typedef enum {
     [bgView addSubview:phoneView];
     phoneView.backgroundColor =[UIColor colorWithHexString:@"#69cbb4"];
     [phoneView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(logoImageV.mas_bottom).offset(85);
-        make.left.equalTo(bgView).offset(25);
-        make.right.equalTo(bgView).offset(-25);
-        make.height.equalTo(@44);
+        make.top.equalTo(logoImageV.mas_bottom).offset(KSIphonScreenH(85));
+        make.left.equalTo(bgView).offset(KSIphonScreenW(25));
+        make.right.equalTo(bgView).offset(-KSIphonScreenW(25));
+        make.height.equalTo(@(KSIphonScreenH(44)));
     }];
-    phoneView.layer.cornerRadius = 22;
+    phoneView.layer.cornerRadius = KSIphonScreenH(22);
     phoneView.layer.masksToBounds = YES;
 
     UIImageView *leftImageV = [[UIImageView alloc]init];
@@ -127,8 +126,8 @@ typedef enum {
     leftImageV.tag =300;
     leftImageV.image = [UIImage imageNamed:@"att_login_account_num"];
     [leftImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(phoneView).offset(22);
-        make.width.equalTo(@15);
+        make.left.equalTo(phoneView).offset(KSIphonScreenW(22));
+        make.width.equalTo(@(KSIphonScreenW(15)));
         make.centerY.equalTo(phoneView.mas_centerY);
     }];
 
@@ -137,7 +136,7 @@ typedef enum {
     self.phoneTF.delegate = self;
     self.phoneTF.returnKeyType =UIReturnKeyDone;
     [self.phoneTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(leftImageV.mas_right).offset(12);
+        make.left.equalTo(leftImageV.mas_right).offset(KSIphonScreenW(12));
         make.top.bottom.right.equalTo(phoneView);
         make.centerY.equalTo(phoneView.mas_centerY);
     }];
@@ -156,7 +155,7 @@ typedef enum {
     [clearButton setBackgroundImage:[UIImage imageNamed:@"btn_delete"] forState:UIControlStateNormal];
     [phoneView addSubview:clearButton];
     [clearButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(phoneView).offset(-10);
+        make.right.equalTo(phoneView).offset(-KSIphonScreenW(10));
         make.centerY.equalTo(phoneView.mas_centerY);
     }];
     clearButton.hidden = YES;
@@ -166,12 +165,12 @@ typedef enum {
     [bgView addSubview:passView];
     passView.backgroundColor =[UIColor colorWithHexString:@"#69cbb4"];
     [passView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(phoneView.mas_bottom).offset(15);
+        make.top.equalTo(phoneView.mas_bottom).offset(KSIphonScreenW(15));
         make.left.equalTo(phoneView.mas_left);
         make.height.width.equalTo(phoneView);
         make.centerX.equalTo(phoneView.mas_centerX);
     }];
-    passView.layer.cornerRadius = 22;
+    passView.layer.cornerRadius = KSIphonScreenH(22);
     passView.layer.masksToBounds = YES;
 
     UIImageView *leftNameImageV = [[UIImageView alloc]init];
@@ -179,7 +178,7 @@ typedef enum {
     leftNameImageV.tag = 301;
     leftNameImageV.image = [UIImage imageNamed:@"att_login_account_pwd"];
     [leftNameImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(passView).offset(22);
+        make.left.equalTo(passView).offset(KSIphonScreenW(22));
         make.width.equalTo(@15);
         make.centerY.equalTo(passView.mas_centerY);
     }];
@@ -190,10 +189,10 @@ typedef enum {
     self.passwordTF.secureTextEntry = YES;
     self.passwordTF.returnKeyType =UIReturnKeyDone;
     [self.passwordTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(leftNameImageV.mas_right).offset(12);
+        make.left.equalTo(leftNameImageV.mas_right).offset(KSIphonScreenW(12));
         make.top.bottom.equalTo(passView);
         make.centerY.equalTo(passView.mas_centerY);
-        make.right.equalTo(passView).offset(-60);
+        make.right.equalTo(passView).offset(-KSIphonScreenW(60));
     }];
     self.passwordTF.placeholder = @"请输入员工登录密码";
     //设置颜色和大小
@@ -209,7 +208,7 @@ typedef enum {
     [self.hidePassBtn setImage:[UIImage imageNamed:@"ico_gb"] forState:UIControlStateNormal];
     [self.hidePassBtn setImage:[UIImage imageNamed:@"ico_xs"] forState:UIControlStateSelected];
     [self.hidePassBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(passView).offset(-10);
+        make.right.equalTo(passView).offset(-KSIphonScreenW(10));
         make.centerY.equalTo(passView.mas_centerY);
     }];
     [self.hidePassBtn addTarget:self action:@selector(selectHideAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -222,7 +221,7 @@ typedef enum {
     [clearPassButton setBackgroundImage:[UIImage imageNamed:@"btn_delete"] forState:UIControlStateNormal];
     [passView addSubview:clearPassButton];
     [clearPassButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(weakSelf.hidePassBtn.mas_left).offset(-10);
+        make.right.equalTo(weakSelf.hidePassBtn.mas_left).offset(-KSIphonScreenW(10));
         make.centerY.equalTo(passView.mas_centerY);
     }];
     clearPassButton.hidden = YES;
@@ -234,7 +233,7 @@ typedef enum {
     [self.sendBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
     self.sendBtn.titleLabel.font = [UIFont systemFontOfSize:11];
     [self.sendBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(@101);
+        make.width.equalTo(@(KSIphonScreenW(101)));
         make.height.right.equalTo(passView);
         make.centerY.equalTo(passView.mas_centerY);
     }];
@@ -250,11 +249,11 @@ typedef enum {
     self.loginBtn.backgroundColor = [UIColor colorTextWhiteColor];
     self.loginBtn.titleLabel.font = Font(15);
     [self.loginBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(passView.mas_bottom).offset(41);
+        make.top.equalTo(passView.mas_bottom).offset(KSIphonScreenH(41));
         make.left.width.height.equalTo(passView);
         make.centerX.equalTo(passView.mas_centerX);
     }];
-    self.loginBtn.layer.cornerRadius = 22;
+    self.loginBtn.layer.cornerRadius = KSIphonScreenH(22);
     self.loginBtn.layer.masksToBounds = YES;
     [self.loginBtn addTarget:self action:@selector(selectLoginAction:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -265,8 +264,8 @@ typedef enum {
     [self.forgetPsdBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
     self.forgetPsdBtn.titleLabel.font = Font(12);
     [self.forgetPsdBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(bgView).offset(44);
-        make.top.equalTo(weakSelf.loginBtn.mas_bottom).offset(16);
+        make.left.equalTo(bgView).offset(KSIphonScreenW(44));
+        make.top.equalTo(weakSelf.loginBtn.mas_bottom).offset(KSIphonScreenH(16));
     }];
     [self.forgetPsdBtn addTarget:self action:@selector(forgetPassAction:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -340,18 +339,31 @@ typedef enum {
    
     if (textField == self.passwordTF) {
         CGRect viewFrame =self.view.frame;
-        viewFrame.origin.y -= 50;
+        viewFrame.origin.y -= KSIphonScreenH(80);
+        [UIView animateWithDuration:0.25 animations:^{
+            self.view.frame = viewFrame;
+        }];
+    }
+    if (textField == self.phoneTF) {
+        CGRect viewFrame =self.view.frame;
+        viewFrame.origin.y -= KSIphonScreenH(20);
         [UIView animateWithDuration:0.25 animations:^{
             self.view.frame = viewFrame;
         }];
     }
     
-    
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     if (textField == self.passwordTF) {
         CGRect viewFrame =self.view.frame;
-        viewFrame.origin.y += 50;
+        viewFrame.origin.y +=KSIphonScreenH(80);
+        [UIView animateWithDuration:0.25 animations:^{
+            self.view.frame = viewFrame;
+        }];
+    }
+    if (textField == self.phoneTF) {
+        CGRect viewFrame =self.view.frame;
+        viewFrame.origin.y += KSIphonScreenH(20);
         [UIView animateWithDuration:0.25 animations:^{
             self.view.frame = viewFrame;
         }];
@@ -548,10 +560,24 @@ typedef enum {
                 [SDUserInfo delUserInfo];
                 // 保存用户信息
                 [SDUserInfo saveUserData:showdata];
+
+            //设置极光推送别名
+            NSString *aliasStr ;
+            if ([showdata[@"userId"] isEqualToString:@"1"]) {
+                aliasStr = @"one";
+            }else{
+                aliasStr = showdata[@"userId"];
+            }
+            [JPUSHService setAlias:aliasStr completion:^(NSInteger iResCode, NSString *iAlias, NSInteger seq) {
+                NSLog(@"---iAlias---%@-------",iAlias);
+                if (iResCode == 0) {
+                    NSLog(@"添加别名成功");
+                }
+            } seq:1];
             
-               //判断是否第一次进入
-               NSString *isFirstLoginStr = showdata[@"isFirstLogin"];
-               [self passHome:isFirstLoginStr];
+            //判断是否第一次进入
+            NSString *isFirstLoginStr = showdata[@"isFirstLogin"];
+            [self passHome:isFirstLoginStr];
         }];
     }else{
         NSMutableDictionary *param = [NSMutableDictionary dictionary];

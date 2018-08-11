@@ -185,7 +185,8 @@ UIImagePickerControllerDelegate
 - (void)didClickFinishDateTimePickerView:(NSString *)date{
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     SupplementCardTimeCell *cell  = [self.cardTableView cellForRowAtIndexPath:indexPath];
-    cell.showCardTimeLab.text = date;
+    NSString *timeStr = [NSString stringWithFormat:@"%@ %@",[[self requestDateFormatter]stringFromDate:[NSDate date]],date];
+    cell.showCardTimeLab.text = timeStr;
     cell.showCardTimeLab.textColor = [UIColor colorTextBg28BlackColor];
 }
 -(void) createTableView{
@@ -242,7 +243,7 @@ UIImagePickerControllerDelegate
     if (!_datePickerView) {
         _datePickerView = [[DateTimePickerView alloc] init];
         _datePickerView.delegate = self;
-        _datePickerView.pickerViewMode = DatePickerViewDateTimeMode;
+        _datePickerView.pickerViewMode = DatePickerViewTimeMode;
     }
     return _datePickerView;
 }
@@ -260,6 +261,14 @@ UIImagePickerControllerDelegate
 }
 -(void)setRecordIdStr:(NSString *)recordIdStr{
     _recordIdStr = recordIdStr;
+}
+- (NSDateFormatter *)requestDateFormatter{
+    static NSDateFormatter *dateFormatter;
+    if(!dateFormatter){
+        dateFormatter = [NSDateFormatter new];
+        dateFormatter.dateFormat = @"YYYY.MM.dd";
+    }
+    return dateFormatter;
 }
 #pragma mark ----数据相关-----
 //申请页审批流程

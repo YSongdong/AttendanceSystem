@@ -164,6 +164,10 @@
             self.showPlaceLab.hidden = NO;
         }
     }
+    if (self.refuesTextView.text.length > 45) {
+        return NO;
+    }
+    
     return YES;
 }
 -(void)selectdTap{

@@ -90,7 +90,7 @@ AMapSearchDelegate
 #pragma mark ---地图Delegate-----
 - (void)mapView:(MAMapView *)mapView didChangeUserTrackingMode:(MAUserTrackingMode)mode animated:(BOOL)animated
 {
-    self.mapView.showsUserLocation = NO;
+    self.mapView.showsUserLocation = YES;
 }
 - (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation{
     MAPinAnnotationView *annotationView = [[MAPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"MapSample"];

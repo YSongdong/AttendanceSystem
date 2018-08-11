@@ -367,11 +367,16 @@
         NSMutableString *nameStr = [NSMutableString new];
         if (arr.count > 0 ) {
             for (int i=0; i<arr.count; i++) {
-                NSDictionary *userDict = arr[i];
-                [nameStr appendString:userDict[@"realName"]];
-                if (i != arr.count-1) {
-                    [nameStr appendString:@"/"];
+                if ([arr[i] isKindOfClass:[NSDictionary class]]) {
+                    NSDictionary *userDict = arr[i];
+                    if([[userDict allKeys] containsObject:@"realName"]) {
+                        [nameStr appendString:userDict[@"realName"]];
+                        if (i != arr.count-1) {
+                            [nameStr appendString:@"/"];
+                        }
+                    }
                 }
+               
             }
         }
         self.statusLab.text =[NSString stringWithFormat:@"等待%@审批",nameStr];
@@ -432,7 +437,7 @@
             for (int i=0; i<imageArr.count; i++) {
                 UIImageView *imageV = [[UIImageView alloc]init];
                 [self.ImageArrView addSubview:imageV];
-                [UIImageView sd_setImageView:imageV WithURL:imageArr[i]];
+                [SDTool sd_setImageView:imageV WithURL:imageArr[i]];
                 imageV.tag =  200+i;
                 [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(weakSelf).offset(85+i*54+i*5);
@@ -484,7 +489,7 @@
             for (int i=0; i<imageArr.count; i++) {
                 UIImageView *imageV = [[UIImageView alloc]init];
                 [self.ImageArrView addSubview:imageV];
-                [UIImageView sd_setImageView:imageV WithURL:imageArr[i]];
+                [SDTool sd_setImageView:imageV WithURL:imageArr[i]];
                 imageV.tag =  200+i;
                 [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(weakSelf).offset(85+i*54+i*5);
@@ -550,7 +555,7 @@
             for (int i=0; i<imageArr.count; i++) {
                 UIImageView *imageV = [[UIImageView alloc]init];
                 [self.ImageArrView addSubview:imageV];
-                [UIImageView sd_setImageView:imageV WithURL:imageArr[i]];
+                [SDTool sd_setImageView:imageV WithURL:imageArr[i]];
                 imageV.tag =  200+i;
                 [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(weakSelf).offset(85+i*50+i*5);

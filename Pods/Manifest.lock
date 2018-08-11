@@ -21,6 +21,9 @@ PODS:
     - AMapFoundation (~> 1.4)
   - AMapSearch (6.1.1):
     - AMapFoundation (~> 1.4)
+  - JCore (1.2.0)
+  - JPush (3.0.9):
+    - JCore (~> 1.2.0)
   - JTCalendar (2.2.3)
   - Masonry (1.1.0)
   - MBProgressHUD (1.1.0)
@@ -39,6 +42,7 @@ DEPENDENCIES:
   - AMap3DMap
   - AMapLocation
   - AMapSearch
+  - JPush
   - JTCalendar (~> 2.0)
   - Masonry
   - MBProgressHUD
@@ -55,6 +59,8 @@ SPEC REPOS:
     - AMapFoundation
     - AMapLocation
     - AMapSearch
+    - JCore
+    - JPush
     - JTCalendar
     - Masonry
     - MBProgressHUD
@@ -70,6 +76,8 @@ SPEC CHECKSUMS:
   AMapFoundation: 58f883c80754c659cf626deb3150936bfe8f1772
   AMapLocation: 55116a2c8956eab7550cbb56e989aa5cdcc424e3
   AMapSearch: 3dcbf85c403a2a0fe0eda5318caabc272b31f5e1
+  JCore: b52e3dd73625eec70afd1244bb9c41038aa06087
+  JPush: 48041e8c5ad2ef9b48709eb0888af9640b36e9b0
   JTCalendar: f54975f1426facc38d112f372f0d3d955aae8d86
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
@@ -79,6 +87,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: e2f1463576896d4776e1f979b1f1bebe16fa8ecc
+PODFILE CHECKSUM: e55c661d974f633fb71678be5b22d78bfda6c728
 
 COCOAPODS: 1.5.3

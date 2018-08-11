@@ -53,9 +53,9 @@ UITextViewDelegate
     [self addSubview:samilView];
     samilView.backgroundColor = [UIColor colorWithHexString:@"#e9e9e9"];
     [samilView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf).offset(43);
-        make.right.equalTo(weakSelf).offset(-43);
-        make.height.equalTo(@340);
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(43));
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(43));
+        make.height.equalTo(@(KSIphonScreenH(340)));
         make.centerX.equalTo(weakSelf.mas_centerX);
         make.centerY.equalTo(weakSelf.mas_centerY);
     }];
@@ -70,7 +70,7 @@ UITextViewDelegate
     titleView.backgroundColor = [UIColor colorTextWhiteColor];
     [titleView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.right.left.equalTo(samilView);
-        make.height.equalTo(@45);
+        make.height.equalTo(@(KSIphonScreenH(45)));
     }];
     
     UILabel *showTitleLab  =[[UILabel alloc]init];
@@ -88,7 +88,7 @@ UITextViewDelegate
     bottomView.backgroundColor = [UIColor colorTextWhiteColor];
     [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(samilView);
-        make.height.equalTo(@53);
+        make.height.equalTo(@(KSIphonScreenH(53)));
     }];
     
     UIButton *uCardBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -121,7 +121,7 @@ UITextViewDelegate
     [bottomLineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(uCardBtn.mas_right);
         make.width.equalTo(@1);
-        make.height.equalTo(@21);
+        make.height.equalTo(@(KSIphonScreenH(21)));
         make.centerY.equalTo(uCardBtn.mas_centerY);
     }];
     //地点view
@@ -131,7 +131,7 @@ UITextViewDelegate
     [addressConcetView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(titleView.mas_bottom).offset(1);
         make.left.right.equalTo(samilView);
-        make.height.equalTo(@100);
+        make.height.equalTo(@(KSIphonScreenH(100)));
         make.centerX.equalTo(titleView);
     }];
     

@@ -15,6 +15,7 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 //测试域名
 //#define PUBLISH_DIMAIN_URL @"http://192.168.3.201:1088/"
 #define PUBLISH_DIMAIN_URL @"http://kq.api.cqlanhui.com/"
+//#define PUBLISH_DIMAIN_URL @"http://192.168.2.56/"
 
 //---------------------------用户中心-----------------
 /*********身份证/手机号登录***********/
@@ -34,7 +35,6 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 
 /*********修改绑定手机 第二步 验证当前手机号 ***********/
 #define  HTTP_ATTAPPUSERISBINGPHONE_URL   getRequestPath(@"attendance/Att_app_user/isBingPhone")
-
 /*********用户详情***********/
 #define  HTTP_ATTAPPUSERUSERINFO_URL   getRequestPath(@"attendance/Att_app_user/userInfo")
 
@@ -45,10 +45,8 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 #define  HTTP_APPATTENDANCEAPPDOSIGNIN_URL   getRequestPath(@"attendance/App_Attendance/sbqAppDoSignIn")
 /*********人脸检测***********/
 #define  HTTP_APPATTENDFACERECOGNITION_URL   getRequestPath(@"attendance/App_Attendance/sbqAppFaceRecognition")
-
 /*********人员考勤记录备注***********/
 #define  HTTP_APPATTENDFACERRECORDREMARK_URL   getRequestPath(@"attendance/App_Attendance/sbqAppEditUserRecordRemark")
-
 /*********获取日历状态值返回接口***********/
 #define  HTTP_APPATTENDSTATUSLIST_URL   getRequestPath(@"attendance/App_Attendance/getCalendarStatusList")
 
@@ -100,7 +98,6 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 #define  HTTP_ATTAPPAPPROVALSTATUS_URL   getRequestPath(@"attendance/Att_app_approval/approvalStatus")
 /********审批状态：第三方视角***********/
 #define  HTTP_ATTAPPSHOWAPPROVALSTATUS_URL   getRequestPath(@"attendance/Att_app_approval/showApprovalStatus")
-
 /********审批申请***********/
 #define  HTTP_ATTAPPEXAMINEAPPROVAL_URL   getRequestPath(@"attendance/Att_app_approval/examineApproval")
 

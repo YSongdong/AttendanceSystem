@@ -21,12 +21,26 @@
 #import "InitiateApplyForController.h"
 #import "MineChenkApplyForController.h"
 
-
+#import "MessageCentreController.h"
 
 @interface HomeViewController ()
 <
 SGAdvertScrollViewDelegate
 >
+//考勤专区高
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *attendaceConstraintHeight;
+//申请专区高
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *applyForConstraHeight;
+//我发起的申请
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *goOutConstraintHeight;
+//我审批的申请
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *meExamConstrainHeight;
+//考勤专区文字间隔
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *attendImageVConstrianHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *attendTextImageVConstranHeight;
+//审批中心， 间隔
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *chenkSpaceConstraWidth;
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *headerImageVHeight;
 
 @property (weak, nonatomic) IBOutlet UIImageView *NaviBgImageV;
@@ -73,8 +87,7 @@ SGAdvertScrollViewDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //计算高度
-    self.headerImageVHeight.constant = KSNaviTopHeight+13;
+   
     //更新ui
     [self updateView];
     
@@ -98,6 +111,21 @@ SGAdvertScrollViewDelegate
 }
 //更新ui
 -(void) updateView{
+    //计算高度
+    self.headerImageVHeight.constant = KSNaviTopHeight+13;
+    //考勤专区高
+    self.attendaceConstraintHeight.constant = KSIphonScreenH(138);
+    //申请专区高
+    self.goOutConstraintHeight.constant = KSIphonScreenH(120);
+    self.applyForConstraHeight.constant = KSIphonScreenH(50);
+    self.meExamConstrainHeight.constant = KSIphonScreenH(50);
+    
+    //考勤专区文字间隔
+    self.attendImageVConstrianHeight.constant = KSIphonScreenH(20);
+    self.attendTextImageVConstranHeight.constant = KSIphonScreenH(12);
+    //间隔
+    self.chenkSpaceConstraWidth.constant = KSIphonScreenW(15);
+    
     self.customNavBar.title = @"智能考勤管理系统";
     [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"sy_nav_ico_user"]];
     //左边按钮
@@ -109,7 +137,8 @@ SGAdvertScrollViewDelegate
 //    //右边按钮
 //    [self.customNavBar wr_setRightButtonWithImage:[UIImage imageNamed:@"sy_nav_ico_news"]];
 //    self.customNavBar.onClickRightButton = ^{
-//        
+//        MessageCentreController *msgVC = [[MessageCentreController alloc]init];
+//        [weakSelf.navigationController pushViewController:msgVC animated:YES];
 //    };
     //设置导航栏透明
     [self.customNavBar wr_setBackgroundAlpha:0];
@@ -141,6 +170,9 @@ SGAdvertScrollViewDelegate
     }else{
         self.NaviBgImageV.image = [UIImage imageNamed:@"sy_nav_bg"];
     }
+    
+  
+    
 }
 //滑动显示侧边栏
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender{
@@ -154,6 +186,10 @@ SGAdvertScrollViewDelegate
 /*********考勤专区************/
 //考勤专区
 - (IBAction)attendPrefecAction:(UIButton *)sender {
+    if ([[SDUserInfo obtainWithProGroupId] isEqualToString:@"0"]) {
+        [SDShowSystemPrompView showSystemPrompStr:@"未添加考勤组,无需打卡"];
+        return;
+    }
     SDAttendPunchCardController *attenCardVC = [[SDAttendPunchCardController alloc]init];
     [self.navigationController pushViewController:attenCardVC animated:YES];
 }
@@ -165,7 +201,7 @@ SGAdvertScrollViewDelegate
 //考勤记录
 - (IBAction)attendCountAction:(UIButton *)sender {
     //删除
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"暂无开发" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"暂无开放" preferredStyle:UIAlertControllerStyleAlert];
     [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }]];

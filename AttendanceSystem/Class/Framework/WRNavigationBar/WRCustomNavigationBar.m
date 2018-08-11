@@ -60,7 +60,7 @@
 @interface WRCustomNavigationBar ()
 @property (nonatomic, strong) UILabel     *titleLable;
 @property (nonatomic, strong) UIButton    *leftButton;
-@property (nonatomic, strong) UIButton    *rightButton;
+
 @property (nonatomic, strong) UIView      *bottomLine;
 @property (nonatomic, strong) UIView      *backgroundView;
 @property (nonatomic, strong) UIImageView *backgroundImageView;

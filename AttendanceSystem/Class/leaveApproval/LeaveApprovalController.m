@@ -321,6 +321,7 @@ UIImagePickerControllerDelegate
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
+      
         if ([showdata isKindOfClass:[NSArray class]]) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
             ApprovalPersonCell *cell =[self.leaveTableView cellForRowAtIndexPath:indexPath];

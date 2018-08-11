@@ -20,6 +20,8 @@
 @property (nonatomic, strong) UIColor  *barBackgroundColor;
 @property (nonatomic, strong) UIImage  *barBackgroundImage;
 
+@property (nonatomic, strong) UIButton    *rightButton;
+
 + (instancetype)CustomNavigationBar;
 
 - (void)wr_setBottomLineHidden:(BOOL)hidden;

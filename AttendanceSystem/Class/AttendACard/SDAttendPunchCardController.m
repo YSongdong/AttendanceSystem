@@ -98,6 +98,7 @@ AMapLocationManagerDelegate
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorTextWhiteColor];
     [self createNavi];
+   // [self createTableView];
     [self createPromentView];
     self.isTureAgainFace = NO;
     self.selectCalendarStr = @"";
@@ -128,12 +129,12 @@ AMapLocationManagerDelegate
    
     self.cardTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.headerView.frame)+20, KScreenW, KScreenH-CGRectGetHeight(self.headerView.frame)-KSNaviTopHeight-20-KSTabbarH)];
     [self.view addSubview:self.cardTableView];
-    
+
     self.cardTableView.delegate = self;
     self.cardTableView.dataSource = self;
     self.cardTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.cardTableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
-    
+
     [self.cardTableView registerClass:[AttendCardTableViewCell class] forCellReuseIdentifier:ATTENDCARDTABLEVIEW_CELL];
     [self.cardTableView registerClass:[ShowPunchCardCell class] forCellReuseIdentifier:SHOWPUNCHCARD_CELL];
     [self.cardTableView registerClass:[ShowUnPunchCardCell class] forCellReuseIdentifier:SHOWNNPUNCHCARD_CELL];
@@ -415,13 +416,24 @@ AMapLocationManagerDelegate
 }
 #pragma mark ---提示-----
 -(void) createPromentView{
-    //判断有没有开启定位权限
-    if([CLLocationManager locationServicesEnabled] && [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
-        [self.view addSubview:self.showLocatView];
-        return ;
+    //判断定位是否开启
+    if ([CLLocationManager locationServicesEnabled])
+    {
+        //  判断用户是否允许程序获取位置权限
+        if ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedWhenInUse||[CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedAlways)
+        {
+            //用户允许获取位置权限
+             [self createTableView];
+        }else
+        {
+            //用户拒绝开启用户权限
+           [self.view addSubview:self.showLocatView];
+        }
     }
-
-    [self createTableView];
+    else
+    {
+       [self.view addSubview:self.showLocatView];
+    }
 }
 -(void)selectUPdataPhoto:(UIButton *)sender{
     //用户头像
@@ -559,7 +571,7 @@ AMapLocationManagerDelegate
 }
 //定位失败时
 - (void)amapLocationManager:(AMapLocationManager *)manager didFailWithError:(NSError *)error{
-    [self.view addSubview:self.showLocatErrorView];
+  //  [self.view addSubview:self.showLocatErrorView];
 }
 #pragma mark ---时间选择器-----
 -(void)selectTimeAction:(UIButton *) sender{
@@ -598,6 +610,9 @@ AMapLocationManagerDelegate
     
     //确认打卡
     weakSelf.showTureSingInView.trueInfoBlock = ^(NSDictionary *dict) {
+        //隐藏
+        weakSelf.showTureSingInView.hidden = YES;
+        
         weakSelf.cardDataDict[@"abnormalIdentityIs"] =dict[@"abnormalIdentityIs"];
         weakSelf.cardDataDict[@"remark"] =dict[@"remark"];
         //请求数据
@@ -792,6 +807,10 @@ AMapLocationManagerDelegate
 
     [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_APPATTENDANCEAPPDOSIGNIN_URL params:self.cardDataDict.copy andData:imageArr.copy waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
+            if (self.showTureSingInView) {
+                //显示确认打卡信息view
+                self.showTureSingInView.hidden = NO;
+            }
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }

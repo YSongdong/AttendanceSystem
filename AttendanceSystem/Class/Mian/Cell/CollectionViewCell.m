@@ -45,23 +45,25 @@
     if (arr.count == 1) {
         NSDictionary *nameDict = arr[0];
         [UIImageView sd_setImageView:self.coverImageV WithURL:nameDict[@"photo"]];
-        NSString *nameStr = nameDict[@"realName"];
-        self.nameLab.text = nameStr;
+        if (![nameDict[@"realName"] isKindOfClass:[NSNull class]]) {
+            NSString *nameStr = nameDict[@"realName"];
+            self.nameLab.text = nameStr;
+        }
         return;
     }
+
     NSMutableString *nameStr = [NSMutableString new];
     for (int i=0; i<arr.count; i++) {
         NSDictionary *nameDict = arr[i];
-        [nameStr appendString:nameDict[@"realName"]];
-        if (i != arr.count-1) {
-           [nameStr appendString:@"/"];
+        if (![nameDict[@"realName"] isKindOfClass:[NSNull class]]) {
+            [nameStr appendString:nameDict[@"realName"]];
+            if (i != arr.count-1) {
+                [nameStr appendString:@"/"];
+            }
         }
-//        if (i == 0) {
-//           [UIImageView sd_setImageView:self.coverImageV WithURL:nameDict[@"photo"]];
-//        }
     }
     self.coverImageV.image = [UIImage imageNamed:@"pic_user"];
-     self.nameLab.text = nameStr;
+    self.nameLab.text = nameStr;
 }
 
 

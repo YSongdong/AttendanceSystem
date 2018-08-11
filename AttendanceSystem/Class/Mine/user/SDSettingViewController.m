@@ -8,7 +8,16 @@
 
 #import "SDSettingViewController.h"
 
+#import "UpdateVersionView.h"
+
 @interface SDSettingViewController ()
+
+//升级版本view
+@property (nonatomic,strong) UpdateVersionView *updateVersionView;
+
+//
+@property (nonatomic,strong) UILabel *updateLab;
+
 
 @end
 
@@ -18,6 +27,10 @@
     [super viewDidLoad];
     [self createNavi];
     [self createView];
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self checkVersion];
 }
 //创建Navi
 -(void) createNavi{
@@ -84,6 +97,17 @@
         make.centerY.equalTo(versiView.mas_centerY);
     }];
     
+    self.updateLab = [[UILabel alloc]init];
+    [versiView addSubview:self.updateLab];
+    self.updateLab.textColor = [UIColor colorTextBg98BlackColor];
+    self.updateLab.font = Font(13);
+    [self.updateLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(rightImageV.mas_left).offset(9);
+        make.centerY.equalTo(rightImageV.mas_centerY);
+    }];
+    self.updateLab.text = @"";
+    self.updateLab.hidden = YES;
+    
     UIView *clearView = [[UIView alloc]init];
     [self.view addSubview:clearView];
     clearView.backgroundColor = [UIColor colorTextWhiteColor];
@@ -113,18 +137,63 @@
         make.right.equalTo(rightImageV.mas_right);
         make.centerY.equalTo(clearView.mas_centerY);
     }];
-    
 }
 //版本跟新
 -(void)selectVersiTap{
-    [SDShowSystemPrompView showSystemPrompStr:@"已最新版本"];
+    if (self.updateLab.hidden) {
+        [SDShowSystemPrompView showSystemPrompStr:@"已最新版本"];
+        return ;
+    }
+    [[UIApplication sharedApplication].keyWindow addSubview:self.updateVersionView];
+   
+    self.updateVersionView.updateBlock = ^{
+       [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/%E4%BA%91%E6%97%B6%E9%99%85/id1422609325?mt=8"]];
+    };
 }
 //清除缓存
 -(void)selectclearTap{
      [[SDImageCache sharedImageCache]clearDiskOnCompletion:nil];
      [SDShowSystemPrompView showSystemPrompStr:@"清除成功"];
 }
+//检查更新
+-(void)checkVersion
+{
+    NSString *newVersion;
+    NSURL *url = [NSURL URLWithString:@"http://itunes.apple.com/cn/lookup?id=1422609325"];//这个URL地址是该app在iTunes connect里面的相关配置信息。其中id是该app在app store唯一的ID编号。
+    NSString *jsonResponseString = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:nil];
+    // NSLog(@"通过appStore获取的数据信息：%@",jsonResponseString);
+    
+    NSData *data = [jsonResponseString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    //获取本地软件的版本号
+    NSString *localVersion =  [[[NSBundle mainBundle]infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    
+    if (data) {
+        id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        
+        NSArray *array = json[@"results"];
+        
+        for (NSDictionary *dic in array) {
+            
+            newVersion = [dic valueForKey:@"version"];
+        }
+        //对比发现的新版本和本地的版本
+        if ([newVersion floatValue] > [localVersion floatValue]){
+             self.updateLab.hidden = NO;
+             self.updateLab.text = [NSString stringWithFormat:@"V%@版",newVersion];
+        }else{
+            self.updateLab.hidden = YES;
+            self.updateLab.text = @"";
+        }
+    }
+}
 
+-(UpdateVersionView *)updateVersionView{
+    if (!_updateVersionView) {
+        _updateVersionView  =[[UpdateVersionView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
+    }
+    return _updateVersionView;
+}
 
 
 

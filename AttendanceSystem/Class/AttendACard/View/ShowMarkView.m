@@ -54,9 +54,9 @@ UITextViewDelegate
     [self addSubview:samilView];
     samilView.backgroundColor = [UIColor colorWithHexString:@"#e9e9e9"];
     [samilView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf).offset(43);
-        make.right.equalTo(weakSelf).offset(-43);
-        make.height.equalTo(@340);
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(43));
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(43));
+        make.height.equalTo(@(KSIphonScreenH(340)));
         make.centerX.equalTo(weakSelf.mas_centerX);
         make.centerY.equalTo(weakSelf.mas_centerY);
     }];
@@ -320,7 +320,7 @@ UITextViewDelegate
         for (int i=0; i<photoArr.count; i++) {
             NSString *photoUrl = photoArr[i];
             UIImageView *imageV = [self viewWithTag:(400+i)];
-            [UIImageView sd_setImageView:imageV WithURL:photoUrl];
+            [SDTool sd_setImageView:imageV WithURL:photoUrl];
         }
     }else{
         for (int i=0; i<3; i++) {
@@ -328,7 +328,6 @@ UITextViewDelegate
             imageV.image = nil;
         }
     }
-   
     //备注类型，
     self.markTeView.text = @"";
     self.markTeView.editable = YES;
@@ -348,7 +347,6 @@ UITextViewDelegate
                imageV.userInteractionEnabled = NO;
             }
         }
-        
         [self.trueSubmitBtn setTitle:@"关闭" forState:UIControlStateNormal];
         [self.trueSubmitBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
     }else{
@@ -362,7 +360,6 @@ UITextViewDelegate
         [self.trueSubmitBtn setTitle:@"确认提交" forState:UIControlStateNormal];
         [self.trueSubmitBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
     }
-  
 }
 #pragma mark ----数据相关-----
 -(void) requestAddMarkData{

@@ -44,7 +44,8 @@
 //输入位置和服务器返回位置做对比    返回一个对比的数组
 +(NSArray *) getData:(NSDictionary *)Datadict Locat:(CLLocation *)location;
 
-
+//图片显示
++(void)sd_setImageView:(UIImageView *)imageView WithURL:(NSString*)str;
 
 
 @end

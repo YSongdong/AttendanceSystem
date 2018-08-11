@@ -27,7 +27,7 @@
 #import "AttendFutureTimeCell.h"
 #define ATTENDFUTURETIME_CELL @"AttendFutureTimeCell"
 
-#define HEADERBGVIEWHIGHT 388
+#define HEADERBGVIEWHIGHT 408
 @interface AttendRecordController ()
 <JTCalendarDelegate,UITableViewDelegate,UITableViewDataSource>
 {
@@ -73,6 +73,7 @@
 -(void) createView{
     __weak typeof(self) weakSelf = self;
     UIView *headerBgView = [[UIView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, HEADERBGVIEWHIGHT)];
+    headerBgView.backgroundColor = [UIColor colorTextWhiteColor];
    
     UIView *headerView  =[[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, 44)];
     headerView.backgroundColor =[UIColor colorTextWhiteColor];
@@ -120,7 +121,7 @@
         make.height.equalTo(@1);
     }];
 
-    UIView *attendGrounpView = [[UIView alloc]initWithFrame:CGRectMake(0, HEADERBGVIEWHIGHT-44, KScreenW, 44)];
+    UIView *attendGrounpView = [[UIView alloc]initWithFrame:CGRectMake(0, HEADERBGVIEWHIGHT-44-20, KScreenW, 44)];
     attendGrounpView.backgroundColor = [UIColor colorWithHexString:@"#f2f2f2"];
     [headerBgView addSubview:attendGrounpView];
 
@@ -426,8 +427,6 @@
 -(NSString *) dateWithString:(NSDate *)date{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-//    //解决8小时时间差问题
-//    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
     NSString *strDate = [dateFormatter stringFromDate:date];
     return strDate;
 }
@@ -450,7 +449,6 @@
     }
     return _calendarDict;
 }
-
 //设置navi
 -(void) createNavi{
     self.customNavBar.title = @"考勤记录";
@@ -490,7 +488,6 @@
     param[@"unitId"] = [SDUserInfo obtainWithUniId];
     param[@"userId"] = [SDUserInfo obtainWithUserId];
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_APPUSERDAYSATTENDACEGROUINFO_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
-        
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
@@ -514,12 +511,9 @@
                 }
                 [self.recordTableView reloadData];
             }
-            
         }
-        
     }];
-    
-    
+
 }
 
 

@@ -47,7 +47,10 @@
 + (UIColor *) colorLineGreyColor{
      return [UIColor colorWithHexString:@"#eaeaea"];
 }
-
+//常用背景灰
++ (UIColor *) colorCommonf2GreyColor{
+    return [UIColor colorWithHexString:@"#f2f2f2"];
+}
 
 
 

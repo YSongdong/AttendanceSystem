@@ -134,6 +134,13 @@ UITableViewDataSource
             //删除用户信息
             [SDUserInfo delUserInfo];
             
+            //退出的时候删除别名
+            [JPUSHService deleteAlias:^(NSInteger iResCode, NSString *iAlias, NSInteger seq) {
+                if (iResCode == 0) {
+                    NSLog(@"删除别名成功");
+                }
+            } seq:1];
+            
             SDLoginController *loginVC = [[SDLoginController alloc]init];
             [weakSelf.navigationController pushViewController:loginVC animated:YES];
         };
@@ -150,6 +157,7 @@ UITableViewDataSource
         return cell;
     }
 }
+
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     if (section == 0) {
         return 0.01;
@@ -236,7 +244,8 @@ UITableViewDataSource
         NSString *isBindPhoneStr = [NSString stringWithFormat:@"%@",showdata[@"isBindPhone"]];
         //判断手机绑定状态
         NSString *phoneStr=[isBindPhoneStr isEqualToString:@"2"] ? @"未绑定":[SDUserInfo obtainWithPhone];
-        //修改用户列表
+        
+        //修改用户列
         //头像
         NSArray *headerArr = @[@{@"name":@"用户头像",@"desc":showdata[@"photo"],@"photoStatus":showdata[@"photoStatus"]}];
         NSArray *infoArr = @[@{@"name":@"真实姓名",@"desc":showdata[@"realName"],@"photoStatus":showdata[@"sex"]},
