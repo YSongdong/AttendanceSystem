@@ -214,7 +214,6 @@
 -(void)updateBtnAction:(UIButton *) sender{
     self.updateBlock();
 }
-
 //0: 未上传 1:未审核 2:未通过 3:已审核'
 -(void) upatePhotoViewStatu:(NSString *)statu{
     if ([statu isEqualToString:@"1"]) {
@@ -291,7 +290,6 @@
         [attributeStr1 insertAttributedString:attributeStr2 atIndex:0];
         
         self.headerMarkLab.attributedText = attributeStr1;
-    
     }
     
     

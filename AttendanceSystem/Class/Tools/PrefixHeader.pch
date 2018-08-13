@@ -96,6 +96,12 @@
 // 如果需要使用idfa功能所需要引入的头文件（可选）
 #import <AdSupport/AdSupport.h>
 
+//相机和相册权限
+#import <Photos/Photos.h>
+#import <AVFoundation/AVCaptureDevice.h>
+#import <AVFoundation/AVMediaFormat.h>
+
+
 /*****************自己定义类***************************/
 #import "KRMainNetTool.h"
 #import "SDAttendanceSystemAPI.h"

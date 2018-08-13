@@ -26,6 +26,7 @@
 #import "ShowUnkownPhotoPromtView.h"
 #import "SDIdentityTestView.h"
 
+
 #import "AttendCardTableViewCell.h"
 #define ATTENDCARDTABLEVIEW_CELL  @"AttendCardTableViewCell"
 
@@ -98,8 +99,7 @@ AMapLocationManagerDelegate
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorTextWhiteColor];
     [self createNavi];
-   // [self createTableView];
-    [self createPromentView];
+    [self createTableView];
     self.isTureAgainFace = NO;
     self.selectCalendarStr = @"";
 }
@@ -267,7 +267,13 @@ AMapLocationManagerDelegate
             };
             //打卡
             cell.selectCardBlcok = ^(NSDictionary *addressDict) {
-                
+                //判断有没有开启定位权限
+                 if ([CLLocationManager authorizationStatus] ==kCLAuthorizationStatusDenied) {
+                    //不可用
+                     //用户拒绝开启用户权限
+                     [weakSelf.view addSubview:weakSelf.showLocatView];
+                     return ;
+                }
                 //判断是否开启人脸识别
                 if ([dict[@"faceStatus"] isEqualToString:@"1"]) {
                     //判断是否有留底
@@ -296,6 +302,13 @@ AMapLocationManagerDelegate
                 NSString *abnormalCoordinateIsStr = addressDict[@"abnormalCoordinateIs"];
                 if ([dict[@"faceStatus"] isEqualToString:@"1"]) {
                     //开启
+                    AVAuthorizationStatus authStatus =  [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+                    if (authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied)
+                    {
+                        [SDShowSystemPrompView showSystemPrompStr:@"您还没有开启相机权限"];
+                        return ;
+                    }
+                    
                     [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.testView];
                     [weakSelf.testView.beginTestBtn addTarget:weakSelf action:@selector(selectFaceAction:) forControlEvents:UIControlEventTouchUpInside];
                 
@@ -412,27 +425,6 @@ AMapLocationManagerDelegate
         }else{
             return 44;
         }
-    }
-}
-#pragma mark ---提示-----
--(void) createPromentView{
-    //判断定位是否开启
-    if ([CLLocationManager locationServicesEnabled])
-    {
-        //  判断用户是否允许程序获取位置权限
-        if ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedWhenInUse||[CLLocationManager authorizationStatus]==kCLAuthorizationStatusAuthorizedAlways)
-        {
-            //用户允许获取位置权限
-             [self createTableView];
-        }else
-        {
-            //用户拒绝开启用户权限
-           [self.view addSubview:self.showLocatView];
-        }
-    }
-    else
-    {
-       [self.view addSubview:self.showLocatView];
     }
 }
 -(void)selectUPdataPhoto:(UIButton *)sender{
@@ -569,9 +561,45 @@ AMapLocationManagerDelegate
         }
     }
 }
-//定位失败时
-- (void)amapLocationManager:(AMapLocationManager *)manager didFailWithError:(NSError *)error{
-  //  [self.view addSubview:self.showLocatErrorView];
+//监控用户会否授权
+- (void)amapLocationManager:(AMapLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    switch (status) {
+        case kCLAuthorizationStatusNotDetermined:
+        {
+            //  NSLog(@"用户还未决定授权");
+            break;
+        }
+        case kCLAuthorizationStatusRestricted:
+        {
+            //   NSLog(@"访问受限");
+            break;
+        }
+        case kCLAuthorizationStatusDenied:
+        {
+            // 类方法，判断是否开启定位服务
+            if ([CLLocationManager locationServicesEnabled]) {
+                //   NSLog(@"定位服务开启，被拒绝");
+                //用户拒绝开启用户权限
+                [self.view addSubview:self.showLocatView];
+            } else {
+                //  NSLog(@"定位服务关闭，不可用");
+            }
+            break;
+        }
+        case kCLAuthorizationStatusAuthorizedAlways:
+        {
+            NSLog(@"获得前后台授权");
+            break;
+        }
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+        {
+            //NSLog(@"获得前台授权");
+            break;
+        }
+        default:
+            break;
+    }
 }
 #pragma mark ---时间选择器-----
 -(void)selectTimeAction:(UIButton *) sender{

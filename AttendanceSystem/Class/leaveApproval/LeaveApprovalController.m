@@ -162,14 +162,16 @@ UIImagePickerControllerDelegate
         typeStr = @"1";
     }else if ([cell.showLeaveTypeLab.text isEqualToString:@"事假"]){
          typeStr = @"2";
-    }else if ([cell.showLeaveTypeLab.text isEqualToString:@"调休"]){
-        typeStr = @"3";
+    }else if ([cell.showLeaveTypeLab.text isEqualToString:@"护理假"]){
+        typeStr = @"7";
     }else if ([cell.showLeaveTypeLab.text isEqualToString:@"产假"]){
         typeStr = @"4";
     }else if ([cell.showLeaveTypeLab.text isEqualToString:@"婚假"]){
         typeStr = @"5";
     }else if ([cell.showLeaveTypeLab.text isEqualToString:@"丧假"]){
         typeStr = @"6";
+    } else if ([cell.showLeaveTypeLab.text isEqualToString:@"病假"]){
+        typeStr = @"8";
     }
     weaSelf.dataDcit[@"type"] =typeStr;
     //事由
@@ -282,7 +284,7 @@ UIImagePickerControllerDelegate
 -(void)createHPPickView{
     _hpPickerView = [[HQPickerView alloc]initWithFrame:self.view.bounds];
     _hpPickerView.delegate = self ;
-    _hpPickerView.customArr = @[@"年假",@"事假",@"调休",@"产假",@"婚假",@"丧假"];
+    _hpPickerView.customArr = @[@"年假",@"事假",@"产假",@"婚假",@"丧假",@"护理假",@"病假"];
     [self.view addSubview:self.hpPickerView];
 }
 #pragma mark -----懒加载--------

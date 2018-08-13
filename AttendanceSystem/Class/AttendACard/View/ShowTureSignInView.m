@@ -139,9 +139,9 @@ UITextViewDelegate
     [addressConcetView addSubview:timeImageV];
     timeImageV.image = [UIImage imageNamed:@"qrxx_ico_time"];
     [timeImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(addressConcetView).offset(15);
-        make.width.equalTo(@12);
-        make.top.equalTo(addressConcetView).offset(24);
+        make.left.equalTo(addressConcetView).offset(KSIphonScreenW(15));
+        make.width.equalTo(@(KSIphonScreenW(12)));
+        make.top.equalTo(addressConcetView).offset(KSIphonScreenH(24));
     }];
     
     UILabel *showTimeLab = [[UILabel alloc]init];
@@ -158,7 +158,7 @@ UITextViewDelegate
     [addressConcetView addSubview:addressImageV];
     addressImageV.image = [UIImage imageNamed:@"qrxx_ico_dw"];
     [addressImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(timeImageV.mas_bottom).offset(12);
+        make.top.equalTo(timeImageV.mas_bottom).offset(KSIphonScreenH(12));
         make.left.equalTo(timeImageV.mas_left);
     }];
     
@@ -170,7 +170,7 @@ UITextViewDelegate
     [self.cardAddressLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(showTimeLab.mas_left);
         make.centerY.equalTo(addressImageV.mas_centerY);
-        make.right.equalTo(addressConcetView).offset(-15);
+        make.right.equalTo(addressConcetView).offset(-KSIphonScreenW(15));
     }];
     
     //开启验证
@@ -222,7 +222,7 @@ UITextViewDelegate
     [markView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(addressConcetView.mas_bottom).offset(1);
         make.right.left.equalTo(samilView);
-        make.height.equalTo(@139);
+        make.height.equalTo(@(KSIphonScreenH(139)));
         make.left.equalTo(addressConcetView.mas_left);
         make.centerX.equalTo(addressConcetView.mas_centerX);
     }];
@@ -233,8 +233,8 @@ UITextViewDelegate
     self.placeStrLab.font = Font(12);
     self.placeStrLab.textColor = [UIColor colorWithHexString:@"#aaaaaa"];
     [self.placeStrLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(markView).offset(20);
-        make.left.equalTo(markView).offset(15);
+        make.top.equalTo(markView).offset(KSIphonScreenH(20));
+        make.left.equalTo(markView).offset(KSIphonScreenW(15));
     }];
     
     self.markTeView = [[UITextView alloc]init];
@@ -242,10 +242,10 @@ UITextViewDelegate
     self.markTeView.font =Font(12);
     self.markTeView.delegate = self;
     [self.markTeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(markView).offset(14);
-        make.left.equalTo(markView).offset(15);
-        make.right.equalTo(markView).offset(-15);
-        make.height.equalTo(@50);
+        make.top.equalTo(markView).offset(KSIphonScreenH(14));
+        make.left.equalTo(markView).offset(KSIphonScreenW(15));
+        make.right.equalTo(markView).offset(-KSIphonScreenW(15));
+        make.height.equalTo(@(KSIphonScreenH(50)));
     }];
     
      _imageArr  =[NSMutableArray array];
@@ -257,9 +257,9 @@ UITextViewDelegate
         imageV.image = self.imageArr[i];
         imageV.tag =  200+i;
         [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(markView).offset(15+i*54+i*10);
-            make.bottom.equalTo(markView.mas_bottom).offset(-10);
-            make.width.height.equalTo(@54);
+            make.left.equalTo(markView).offset(KSIphonScreenW(15)+i*KSIphonScreenW(54)+i*KSIphonScreenW(10));
+            make.bottom.equalTo(markView.mas_bottom).offset(-KSIphonScreenW(10));
+            make.width.height.equalTo(@(KSIphonScreenH(54)));
         }];
         imageV.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addImageAciton:)];
@@ -365,7 +365,6 @@ UITextViewDelegate
     
     self.trueInfoBlock(param.copy);
 }
-
 //更新UI
 -(void)updateUI{
     UIView *markView =  [self viewWithTag:300];
@@ -375,9 +374,9 @@ UITextViewDelegate
         imageV.image = self.imageArr[i];
         imageV.tag =  200+i;
         [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(markView).offset(15+i*54+i*10);
-            make.bottom.equalTo(markView.mas_bottom).offset(-10);
-            make.width.height.equalTo(@54);
+            make.left.equalTo(markView).offset(KSIphonScreenW(15)+i*KSIphonScreenW(54)+i*KSIphonScreenW(10));
+            make.bottom.equalTo(markView.mas_bottom).offset(-KSIphonScreenW(10));
+            make.width.height.equalTo(@(KSIphonScreenH(54)));
         }];
         imageV.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addImageAciton:)];

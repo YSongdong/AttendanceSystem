@@ -255,6 +255,7 @@
 //暂不绑定手机
 -(void)selectdUbindAction:(UIButton *) sender{
     AlterPassNumberController *passVC = [[AlterPassNumberController alloc]init];
+    passVC.isMine = self.isMine;
     [self.navigationController pushViewController:passVC animated:YES];
 }
 //发送验证码

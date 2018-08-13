@@ -78,6 +78,12 @@ FVAppSdkControllerDelegate
     self.photoView.beginBlock = ^{
         if (!weakSelf.isUpdatePhoto) {
             //获取照片
+            AVAuthorizationStatus authStatus =  [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+            if (authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied)
+            {
+                [SDShowSystemPrompView showSystemPrompStr:@"您还没有开启相机权限"];
+                return ;
+            }
             [[FVAppSdk sharedManager]gatherWithParentController:weakSelf];
             [FVAppSdk sharedManager].fvLanderDelegate =  weakSelf;
         }else{
@@ -115,9 +121,11 @@ FVAppSdkControllerDelegate
         self.photoView.headerImageV.image = image;
         //显示立即上传按钮
         self.photoView.updataBtn.hidden = NO;
+        self.photoView.chenkStatuImageV.image = [UIImage imageNamed:@""];
+        self.photoView.headerMarkLab.text =  @"用户留底照片采集";
+        self.photoView.headerMarkLab.textColor = [UIColor colorTextBg28BlackColor];
     }
 }
-
 -(void)setIsMine:(BOOL)isMine{
     _isMine = isMine;
 }

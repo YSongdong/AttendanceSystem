@@ -17,6 +17,7 @@
 //是否在范围
 @property (weak, nonatomic) IBOutlet UILabel *scopeLab;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftImageVConstranHeight;
 @end
 
 @implementation AtttendScopeTableViewCell
@@ -30,7 +31,8 @@
     _dict =  dict;
     self.statuImageV.hidden = NO;
     self.leftImageV.hidden = NO;
-    
+    __weak typeof(self) weakSelf = self;
+
     if ([dict[@"isScope"] isEqualToString:@"1"]) {
         self.leftImageV.hidden = NO;
         self.scopeLab.text = @"在范围内";
@@ -50,20 +52,21 @@
         //正常
         self.statuImageV.hidden = YES;
         
-//        [self.addressLab mas_remakeConstraints:^(MASConstraintMaker *make) {
-//            make.left.equalTo(weakSelf.leftImageV.mas_right).offset(8);
-//            make.centerY.equalTo(weakSelf.leftImageV.mas_centerY);
-//        }];
-
+        self.leftImageVConstranHeight.constant = 0;
+        
     }else if ([isGoStr isEqualToString:@"2"]){
         //外勤
         self.statuImageV.hidden = NO;
         self.statuImageV.image = [UIImage imageNamed:@"pic_wq"];
         
+        self.leftImageVConstranHeight.constant = 30;
+        
     }else if([isGoStr isEqualToString:@"3"]){
         //公共
         self.statuImageV.hidden = NO;
         self.statuImageV.image = [UIImage imageNamed:@"pic_GG"];
+        
+        self.leftImageVConstranHeight.constant = 30;
     }
     self.addressLab.text = dict[@"title"];
 

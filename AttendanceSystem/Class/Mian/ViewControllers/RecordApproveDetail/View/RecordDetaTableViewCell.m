@@ -259,7 +259,8 @@
         
         //主管view
         samilView.hidden = NO;
-        self.showLevelLab.text = [NSString stringWithFormat:@"第%@级主管",levelStr];
+       // self.showLevelLab.text = [NSString stringWithFormat:@"第%@级主管",levelStr];
+        self.showLevelLab.text = dict[@"levelName"];
     }
     
 }

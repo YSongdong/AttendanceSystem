@@ -11,6 +11,7 @@
 #import "MapSearchHeaderView.h"
 #import "POIAnnotation.h"
 #import "SearchSpaceView.h"
+#import "ShowLocatPromentView.h"
 
 #import "SearchTableViewCell.h"
 #define SEARCHTABLEVIEW_CELL @"SearchTableViewCell"
@@ -26,6 +27,8 @@ AMapSearchDelegate
 >
 //搜索view
 @property (nonatomic,strong) MapSearchHeaderView *searchHeaderView;
+//提示权限view
+@property (nonatomic,strong) ShowLocatPromentView *showLocatView;
 //
 @property (nonatomic,strong) UITableView *searchTableView;
 //数据源
@@ -137,6 +140,47 @@ AMapSearchDelegate
         }
         self.userLocation = location;
         [self.mapView addAnnotation:_pointAnnotaiton];
+    }
+     [self.mapView setCenterCoordinate:location.coordinate];
+}
+//监控用户会否授权
+- (void)amapLocationManager:(AMapLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    switch (status) {
+        case kCLAuthorizationStatusNotDetermined:
+        {
+            //  NSLog(@"用户还未决定授权");
+            break;
+        }
+        case kCLAuthorizationStatusRestricted:
+        {
+            //   NSLog(@"访问受限");
+            break;
+        }
+        case kCLAuthorizationStatusDenied:
+        {
+            // 类方法，判断是否开启定位服务
+            if ([CLLocationManager locationServicesEnabled]) {
+                //   NSLog(@"定位服务开启，被拒绝");
+                //用户拒绝开启用户权限
+                [self.view addSubview:self.showLocatView];
+            } else {
+                //  NSLog(@"定位服务关闭，不可用");
+            }
+            break;
+        }
+        case kCLAuthorizationStatusAuthorizedAlways:
+        {
+            NSLog(@"获得前后台授权");
+            break;
+        }
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+        {
+            //NSLog(@"获得前台授权");
+            break;
+        }
+        default:
+            break;
     }
 }
 #pragma mark  -----点击事件------
@@ -317,6 +361,12 @@ AMapSearchDelegate
         _pointAnnotaiton  =[[MAPointAnnotation alloc]init];
     }
     return _pointAnnotaiton;
+}
+-(ShowLocatPromentView *)showLocatView{
+    if (!_showLocatView) {
+        _showLocatView  = [[ShowLocatPromentView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
+    }
+    return _showLocatView;
 }
 //创建Navi
 -(void) createNavi{

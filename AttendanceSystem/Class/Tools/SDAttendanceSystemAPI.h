@@ -103,7 +103,6 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 
 
 
-
 FT_INLINE  NSString  * getRequestPath(NSString *op) {
     return [PUBLISH_DIMAIN_URL stringByAppendingFormat:@"%@",op];
 }

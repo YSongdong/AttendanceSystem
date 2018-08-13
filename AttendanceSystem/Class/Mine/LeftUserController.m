@@ -106,7 +106,10 @@
     }];
     UIImage *img ;
     NSString *sexStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithSex]];
-    if ([sexStr isEqualToString:@"1"]) {
+    if ([sexStr isEqualToString:@"0"]) {
+        //未填写身份证
+         img  = [UIImage imageNamed:@""];
+    }else if ([sexStr isEqualToString:@"1"]) {
         //女
         img  = [UIImage imageNamed:@"grzx_pic_ns"];
     }else if ([sexStr isEqualToString:@"2"]){
@@ -138,12 +141,12 @@
         make.centerX.equalTo(weakSelf.nameLab.mas_centerX);
     }];
     NSString *cardStr = [SDUserInfo obtainWithidcard];
-    if (![cardStr isEqualToString:@"无身份证"]) {
+    if (![cardStr isEqualToString:@""]) {
         NSRange range = NSMakeRange(3, 11);
         cardStr =  [cardStr stringByReplacingCharactersInRange:range withString:@"*******"];
         self.idCardLab.text = [NSString stringWithFormat:@"身份证号:%@",cardStr];
     }else{
-        self.idCardLab.text =[NSString stringWithFormat:@"身份证号:%@",cardStr];
+        self.idCardLab.text =[NSString stringWithFormat:@"身份证号:未完善"];
     }
     
     //所属部门
@@ -163,7 +166,6 @@
         make.right.left.top.equalTo(weakSelf.view);
         make.bottom.equalTo(weakSelf.departNameLab.mas_bottom).offset(KSIphonScreenH(74));
     }];
-    
     
     UIView *lineView = [[UIView alloc]init];
     [self.view addSubview:lineView];
@@ -277,14 +279,13 @@
     
     //身份证号
     NSString *cardStr = [SDUserInfo obtainWithidcard];
-    if (![cardStr isEqualToString:@"无身份证"]) {
+    if (![cardStr isEqualToString:@""]) {
         NSRange range = NSMakeRange(3, 11);
         cardStr =  [cardStr stringByReplacingCharactersInRange:range withString:@"*******"];
         self.idCardLab.text = [NSString stringWithFormat:@"身份证号:%@",cardStr];
     }else{
-        self.idCardLab.text =[NSString stringWithFormat:@"身份证号:%@",cardStr];
+        self.idCardLab.text =[NSString stringWithFormat:@"身份证号:未完善"];
     }
-    
     //部门
     self.departNameLab.text = [NSString stringWithFormat:@"所属部门:%@",[SDUserInfo obtainWithDepartmentName]];
 }

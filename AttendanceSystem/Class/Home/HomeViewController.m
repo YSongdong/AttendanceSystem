@@ -43,6 +43,8 @@ SGAdvertScrollViewDelegate
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *headerImageVHeight;
 
+@property (weak, nonatomic) IBOutlet UIImageView *meChankReightImageV;
+
 @property (weak, nonatomic) IBOutlet UIImageView *NaviBgImageV;
 
 //头像背景view
@@ -103,10 +105,12 @@ SGAdvertScrollViewDelegate
         weakSelf.meExamBtn.hidden = YES;
         weakSelf.meExamImageV.hidden = YES;
         weakSelf.meExamLab.hidden = YES;
+        weakSelf.meChankReightImageV.hidden = YES;
     }else{
         weakSelf.meExamBtn.hidden = NO;
         weakSelf.meExamImageV.hidden = NO;
         weakSelf.meExamLab.hidden = NO;
+        weakSelf.meChankReightImageV.hidden = NO;
     }
 }
 //更新ui
@@ -210,16 +214,31 @@ SGAdvertScrollViewDelegate
 /*********审批中心************/
 //外出
 - (IBAction)goOutAction:(UIButton *)sender {
+    NSString *outgoStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithOutGo]];
+    if ([outgoStr isEqualToString:@"2"]) {
+        [SDShowSystemPrompView showSystemPrompStr:@"请先联系管理员设置审批规则"];
+        return;
+    }
     GoOutApprovalController *goOutVC = [[GoOutApprovalController alloc]init];
     [self.navigationController pushViewController:goOutVC animated:YES];
 }
 //请假
 - (IBAction)leaveBtnAction:(UIButton *)sender {
+    NSString *leaveStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithLeave]];
+    if ([leaveStr isEqualToString:@"2"]) {
+        [SDShowSystemPrompView showSystemPrompStr:@"请先联系管理员设置审批规则"];
+        return;
+    }
     LeaveApprovalController *leaveVC = [[LeaveApprovalController alloc]init];
     [self.navigationController pushViewController:leaveVC animated:YES];
 }
 //补卡
 - (IBAction)supplemCardAction:(UIButton *)sender {
+    NSString *recardStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithRecard]];
+    if ([recardStr isEqualToString:@"2"]) {
+        [SDShowSystemPrompView showSystemPrompStr:@"请先联系管理员设置审批规则"];
+        return;
+    }
     AttendRecordController *recordVC = [[AttendRecordController alloc]init];
     [self.navigationController pushViewController:recordVC animated:YES];
 }

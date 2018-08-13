@@ -14,6 +14,7 @@
 #import "SDIdentityTestView.h"
 #import "ShowTureSignInView.h"
 #import "ShowLocatErrorView.h"
+#import "ShowLocatPromentView.h"
 
 #import "FVAppSdk.h"
 
@@ -36,6 +37,8 @@ UIImagePickerControllerDelegate
 >
 //toolview
 @property (nonatomic,strong) LocatToolView *toolView;
+//提示权限view
+@property (nonatomic,strong) ShowLocatPromentView *showLocatView;
 //打卡确认view
 @property (nonatomic,strong)ShowTureSignInView *showTureSingInView;
 //定位失败view
@@ -98,6 +101,15 @@ UIImagePickerControllerDelegate
     };
     //打卡
     self.toolView.cardBtnBlock = ^{
+        
+        //判断有没有开启定位权限
+        if ([CLLocationManager authorizationStatus] ==kCLAuthorizationStatusDenied) {
+            //不可用
+            //用户拒绝开启用户权限
+            [weakSelf.view addSubview:weakSelf.showLocatView];
+            return ;
+        }
+    
         //判断是否开启人脸识别
         if ([weakSelf.dict[@"faceStatus"] isEqualToString:@"1"]) {
             //判断是否有留底
@@ -145,6 +157,7 @@ UIImagePickerControllerDelegate
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
     self.mapView.distanceFilter = 10.f;
+    [self.mapView setZoomLevel:16.1 animated:NO];
     ///如果您需要进入地图就显示定位小蓝点，则需要下面两行代码
     self.mapView.showsUserLocation = YES;
     self.mapView.userTrackingMode = MAUserTrackingModeFollow;
@@ -212,7 +225,6 @@ UIImagePickerControllerDelegate
         //在地图上添加圆
         [_mapView addOverlay: circle];
     }
-
 }
 #pragma mark - MAMapViewDelegate
 - (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id <MAOverlay>)overlay
@@ -220,7 +232,6 @@ UIImagePickerControllerDelegate
     if ([overlay isKindOfClass:[MACircle class]])
     {
         MACircleRenderer *circleRenderer = [[MACircleRenderer alloc] initWithCircle:overlay];
-        
         circleRenderer.lineWidth    = 1.f;
         circleRenderer.strokeColor  = [UIColor colorCommonGreenColor];
         circleRenderer.fillColor    = [UIColor colorWithHexString:@"#01d397" alpha:0.1f];
@@ -265,10 +276,7 @@ UIImagePickerControllerDelegate
     }
     self.userLocation = location;
     
-    [self.mapView setCenterCoordinate:location.coordinate];
-    
-    [self.mapView setZoomLevel:16.1 animated:NO];
-    
+//    [self.mapView setCenterCoordinate:location.coordinate];
     //移除所以数据
     [self.scopeDataArr removeAllObjects];
     //测量距离
@@ -473,6 +481,12 @@ UIImagePickerControllerDelegate
 }
 -(void)setFaceTypeStr:(NSString *)faceTypeStr {
     _faceTypeStr = faceTypeStr;
+}
+-(ShowLocatPromentView *)showLocatView{
+    if (!_showLocatView) {
+        _showLocatView  = [[ShowLocatPromentView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
+    }
+    return _showLocatView;
 }
 -(LocatToolView *)toolView{
     if (!_toolView) {

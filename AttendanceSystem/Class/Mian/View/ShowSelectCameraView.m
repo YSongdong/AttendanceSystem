@@ -8,6 +8,11 @@
 
 #import "ShowSelectCameraView.h"
 
+#import <Photos/Photos.h>
+#import <AVFoundation/AVCaptureDevice.h>
+#import <AVFoundation/AVMediaFormat.h>
+
+
 @implementation ShowSelectCameraView
 
 -(instancetype)initWithFrame:(CGRect)frame{
@@ -85,10 +90,22 @@
     [self removeFromSuperview];
 }
 -(void)selectCameraAction:(UIButton *) sender{
-    
+    AVAuthorizationStatus authStatus =  [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    if (authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied)
+    {
+        //无权限
+        [SDShowSystemPrompView showSystemPrompStr:@"您还没有开启相机权限"];
+        return ;
+    }
     self.cameraBlock();
 }
 -(void)selectPhotoAction:(UIButton *) sender{
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusRestricted ||
+        status == PHAuthorizationStatusDenied) {
+        [SDShowSystemPrompView showSystemPrompStr:@"您还没有开启相册权限"];
+        return ;
+    }
     self.photoBlock();
 }
 

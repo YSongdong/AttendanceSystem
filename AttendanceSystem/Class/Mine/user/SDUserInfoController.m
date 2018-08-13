@@ -36,7 +36,6 @@ UITableViewDataSource
 @property (nonatomic,assign) BOOL isShowPlatform;
 //记录删除平台的indexPath
 @property (nonatomic,strong) NSIndexPath *delIndexPath;
-
 //审核失败原因
 @property (nonatomic,strong) NSString *chenkErrorStr;
 
@@ -78,6 +77,12 @@ UITableViewDataSource
     NSString *isBindPhoneStr = [SDUserInfo obtainWithPotoStatus];
     //判断手机绑定状态
     NSString *phoneStr=[isBindPhoneStr isEqualToString:@"2"] ? @"未绑定":[SDUserInfo obtainWithPhone];
+    
+    NSString *idcard = [SDUserInfo obtainWithidcard];
+    NSString *idcardStr;
+    if ([idcard isEqualToString:@""]) {
+        idcardStr = @"未完善";
+    }
     //头像
     NSArray *headerArr = @[@{@"name":@"用户头像",@"desc":[SDUserInfo obtainWithPhoto],@"photoStatus":[SDUserInfo obtainWithPotoStatus]}];
     NSArray *infoArr = @[@{@"name":@"真实姓名",@"desc":[SDUserInfo obtainWithRealName],@"photoStatus":[SDUserInfo obtainWithSex]},
@@ -117,7 +122,6 @@ UITableViewDataSource
     }
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    
     return self.dataArr.count;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -125,22 +129,22 @@ UITableViewDataSource
     return arr.count;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-
     __weak typeof(self) weakSelf = self;
+
     if (indexPath.section == self.dataArr.count-1) {
         SDUserLeaveTableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:SDUERINFOLEAVE_CELL forIndexPath:indexPath];
         //退出按钮
         cell.leaveBtnBlock = ^{
             //删除用户信息
             [SDUserInfo delUserInfo];
-            
+
             //退出的时候删除别名
             [JPUSHService deleteAlias:^(NSInteger iResCode, NSString *iAlias, NSInteger seq) {
                 if (iResCode == 0) {
                     NSLog(@"删除别名成功");
                 }
             } seq:1];
-            
+
             SDLoginController *loginVC = [[SDLoginController alloc]init];
             [weakSelf.navigationController pushViewController:loginVC animated:YES];
         };
@@ -150,7 +154,7 @@ UITableViewDataSource
         SDUserInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SDUSERINFOTABLEVIEW_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         NSArray *arr = self.dataArr[indexPath.section];
-        
+
         cell.isShowPlatform = self.isShowPlatform;
         cell.indexPath =  indexPath;
         cell.dict = arr[indexPath.row];
@@ -233,33 +237,42 @@ UITableViewDataSource
             [self loadData];
             return ;
         }
-        //修改用户保存信息
-        [SDUserInfo alterUserInfo:showdata];
-        if ([showdata[@"photoStatus"] isEqualToString:@"2"]) {
-            self.chenkErrorStr =  showdata[@"photoInfo"];
+        if ([showdata isKindOfClass:[NSDictionary class]]) {
+            //修改用户保存信息
+            [SDUserInfo alterUserInfo:showdata];
+    
+            if ([showdata[@"photoStatus"] isEqualToString:@"2"]) {
+                self.chenkErrorStr =  showdata[@"photoInfo"];
+            }
+            //移除当前data信息
+            [self.dataArr removeAllObjects];
+    
+            NSString *isBindPhoneStr = [NSString stringWithFormat:@"%@",showdata[@"isBindPhone"]];
+            //判断手机绑定状态
+            NSString *phoneStr=[isBindPhoneStr isEqualToString:@"2"] ? @"未绑定":[SDUserInfo obtainWithPhone];
+    
+            NSString *idcardStr;
+            if ([showdata[@"idcard"] isEqualToString:@""]) {
+                idcardStr = @"未完善";
+            }else{
+                idcardStr = showdata[@"idcard"];
+            }
+            //修改用户列
+            //头像
+            NSArray *headerArr = @[@{@"name":@"用户头像",@"desc":showdata[@"photo"],@"photoStatus":showdata[@"photoStatus"]}];
+            NSArray *infoArr = @[@{@"name":@"真实姓名",@"desc":showdata[@"realName"],@"photoStatus":showdata[@"sex"]},
+                                 @{@"name":@"身份证号",@"desc":idcardStr},
+                                 @{@"name":@"所属部门",@"desc":showdata[@"departmentName"]},
+                                 @{@"name":@"员工职位",@"desc":showdata[@"positionName"]},
+                                 @{@"name":@"员工工号",@"desc":showdata[@"jobnumber"]},
+                                 @{@"name":@"手机号码",@"desc":phoneStr},
+                                 @{@"name":@"修改登录密码",@"desc":@""}];
+            [self.dataArr addObject:headerArr];
+            [self.dataArr addObject:infoArr];
+            [self.dataArr addObject:@[@{}]];
+    
+            [self.userTableView reloadData];
         }
-        //移除当前data信息
-        [self.dataArr removeAllObjects];
-        
-        NSString *isBindPhoneStr = [NSString stringWithFormat:@"%@",showdata[@"isBindPhone"]];
-        //判断手机绑定状态
-        NSString *phoneStr=[isBindPhoneStr isEqualToString:@"2"] ? @"未绑定":[SDUserInfo obtainWithPhone];
-        
-        //修改用户列
-        //头像
-        NSArray *headerArr = @[@{@"name":@"用户头像",@"desc":showdata[@"photo"],@"photoStatus":showdata[@"photoStatus"]}];
-        NSArray *infoArr = @[@{@"name":@"真实姓名",@"desc":showdata[@"realName"],@"photoStatus":showdata[@"sex"]},
-                             @{@"name":@"身份证号",@"desc":showdata[@"idcard"]},
-                             @{@"name":@"所属部门",@"desc":showdata[@"departmentName"]},
-                             @{@"name":@"员工职位",@"desc":showdata[@"positionName"]},
-                             @{@"name":@"员工工号",@"desc":showdata[@"jobnumber"]},
-                             @{@"name":@"手机号码",@"desc":phoneStr},
-                             @{@"name":@"修改登录密码",@"desc":@""}];
-        [self.dataArr addObject:headerArr];
-        [self.dataArr addObject:infoArr];
-        [self.dataArr addObject:@[@{}]];
-        
-        [self.userTableView reloadData];
     }];
 }
 

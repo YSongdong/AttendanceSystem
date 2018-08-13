@@ -120,6 +120,9 @@
     mutableDict[@"unitId"] = dict[@"unitId"];
     mutableDict[@"userId"] = dict[@"userId"];
     mutableDict[@"userName"] = dict[@"userName"];
+    mutableDict[@"outgo"] = dict[@"outgo"];
+    mutableDict[@"recard"] = dict[@"recard"];
+    mutableDict[@"leave"] = dict[@"leave"];
     [SDUserInfo saveUserData:mutableDict.copy];
 }
 // -----------------取出数据---------
@@ -234,8 +237,24 @@
     NSDictionary *dict = [userD objectForKey:@"Login"];
     return dict[@"isCharge"];
 }
-
-
+//获取 recard  1：有补卡流程 2：没有补卡流程
++(NSString *) obtainWithRecard{
+    NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict = [userD objectForKey:@"Login"];
+    return dict[@"recard"];
+}
+//获取  leave  1:有请假流程 2：没有
++(NSString *) obtainWithLeave{
+    NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict = [userD objectForKey:@"Login"];
+    return dict[@"leave"];
+}
+//获取  outgo  1：有外出流程 2：没有
++(NSString *) obtainWithOutGo{
+    NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict = [userD objectForKey:@"Login"];
+    return dict[@"outgo"];
+}
 
 
 @end

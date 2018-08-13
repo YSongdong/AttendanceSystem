@@ -20,7 +20,6 @@
 +(BOOL) passLoginData;
 
 // ----------------修改数据----------
-
 //修改UserID和identity_id
 +(void) alterUserID:(NSDictionary *)dict;
 //加入平台修改信息
@@ -63,7 +62,6 @@
 +(NSString *) obtainWithPositionName;
 //获取departmentName  部门名称
 +(NSString *) obtainWithDepartmentName;
-
 //获取plaformId
 +(NSString *) obtainWithPlafrmId;
 //获取unitId
@@ -72,9 +70,14 @@
 +(NSString *) obtainWithProGroupId;
 //获取proGroupName
 +(NSString *) obtainWithProGroupName;
-
 //获取 isCharge  是不是主管
 +(NSString *) obtainWithIsCharge;
+//获取 recard  1：有补卡流程 2：没有补卡流程
++(NSString *) obtainWithRecard;
+//获取  leave  1:有请假流程 2：没有
++(NSString *) obtainWithLeave;
+//获取  outgo  1：有外出流程 2：没有
++(NSString *) obtainWithOutGo;
 
 
 @end

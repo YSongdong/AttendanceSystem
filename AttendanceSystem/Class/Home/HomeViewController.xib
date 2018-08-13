@@ -23,6 +23,7 @@
                 <outlet property="headerBgView" destination="Bbq-73-Cqn" id="02r-pW-4G7"/>
                 <outlet property="headerImageV" destination="Nrl-pg-XGR" id="hXb-ps-flB"/>
                 <outlet property="headerImageVHeight" destination="f3S-fO-g5g" id="oyl-LQ-0yR"/>
+                <outlet property="meChankReightImageV" destination="nZr-hv-9G0" id="f8L-ri-7iZ"/>
                 <outlet property="meExamBtn" destination="h1w-Vc-OJJ" id="wkH-5j-YdP"/>
                 <outlet property="meExamConstrainHeight" destination="Uf6-hR-88w" id="R1l-GU-oTz"/>
                 <outlet property="meExamImageV" destination="7If-HW-xCj" id="kbh-qx-pKj"/>
@@ -211,8 +212,8 @@
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_qj" translatesAutoresizingMaskIntoConstraints="NO" id="fyi-ij-npq">
                             <rect key="frame" x="232" y="375" width="31" height="30"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_kqdk" translatesAutoresizingMaskIntoConstraints="NO" id="Dnz-g3-G79">
-                            <rect key="frame" x="391" y="375.5" width="24" height="30"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_bk" translatesAutoresizingMaskIntoConstraints="NO" id="Dnz-g3-G79">
+                            <rect key="frame" x="388" y="377.5" width="30" height="26"/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="外出" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pnd-jF-Uf4">
                             <rect key="frame" x="77.5" y="418.5" width="25" height="14.5"/>
@@ -276,6 +277,12 @@
                                 <constraint firstAttribute="width" constant="15" id="LDe-PE-trY"/>
                             </constraints>
                         </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_list_enter" translatesAutoresizingMaskIntoConstraints="NO" id="Zvy-Ro-65h">
+                            <rect key="frame" x="439" y="490.5" width="9" height="14"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_list_enter" translatesAutoresizingMaskIntoConstraints="NO" id="nZr-hv-9G0">
+                            <rect key="frame" x="439" y="558" width="9" height="14"/>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -288,6 +295,8 @@
                         <constraint firstItem="QRu-e9-Uwr" firstAttribute="centerY" secondItem="TJr-QR-6o3" secondAttribute="centerY" id="5y3-rG-p1G"/>
                         <constraint firstItem="OJ0-PQ-WrZ" firstAttribute="centerX" secondItem="Dnz-g3-G79" secondAttribute="centerX" id="72b-Yd-zFd"/>
                         <constraint firstItem="Cry-iI-Xzt" firstAttribute="width" secondItem="QN3-UR-n4U" secondAttribute="width" id="758-Ap-sNY"/>
+                        <constraint firstItem="nZr-hv-9G0" firstAttribute="trailing" secondItem="Zvy-Ro-65h" secondAttribute="trailing" id="7Ya-Wx-nAM"/>
+                        <constraint firstItem="Zvy-Ro-65h" firstAttribute="centerY" secondItem="TJr-QR-6o3" secondAttribute="centerY" id="9Oz-r6-pe3"/>
                         <constraint firstItem="OJ0-PQ-WrZ" firstAttribute="centerY" secondItem="qJM-Ka-QWc" secondAttribute="centerY" id="9Ud-Fe-53d"/>
                         <constraint firstAttribute="trailing" secondItem="2uY-c6-iqi" secondAttribute="trailing" constant="17" id="9eQ-L2-2TE"/>
                         <constraint firstItem="Cry-iI-Xzt" firstAttribute="centerY" secondItem="QN3-UR-n4U" secondAttribute="centerY" id="AdT-r0-Jt9"/>
@@ -303,6 +312,7 @@
                         <constraint firstItem="pnd-jF-Uf4" firstAttribute="centerX" secondItem="aM6-cl-CVY" secondAttribute="centerX" id="QYs-hv-EMF"/>
                         <constraint firstItem="wCI-NQ-Ai8" firstAttribute="trailing" secondItem="1YY-7T-SBy" secondAttribute="trailing" id="Qls-BM-bRC"/>
                         <constraint firstItem="bRy-If-eA2" firstAttribute="leading" secondItem="QRu-e9-Uwr" secondAttribute="trailing" constant="22" id="RNI-P9-Tuv"/>
+                        <constraint firstItem="Zvy-Ro-65h" firstAttribute="trailing" secondItem="TJr-QR-6o3" secondAttribute="trailing" constant="-25" id="Rir-rs-NdC"/>
                         <constraint firstItem="TJr-QR-6o3" firstAttribute="top" secondItem="QN3-UR-n4U" secondAttribute="bottom" constant="18" id="T6E-at-Uyi"/>
                         <constraint firstItem="qJM-Ka-QWc" firstAttribute="centerX" secondItem="fyi-ij-npq" secondAttribute="centerX" id="UAT-s6-DTR"/>
                         <constraint firstItem="QRu-e9-Uwr" firstAttribute="leading" secondItem="TJr-QR-6o3" secondAttribute="leading" constant="22" id="UQc-GZ-def"/>
@@ -336,6 +346,7 @@
                         <constraint firstItem="pJ2-yi-ZEz" firstAttribute="leading" secondItem="Oy9-eC-Ltp" secondAttribute="leading" constant="30" id="vkb-KE-bKf"/>
                         <constraint firstItem="wCI-NQ-Ai8" firstAttribute="centerY" secondItem="Cry-iI-Xzt" secondAttribute="centerY" id="wSP-yt-iPr"/>
                         <constraint firstItem="GR9-Uh-cPI" firstAttribute="centerY" secondItem="7If-HW-xCj" secondAttribute="centerY" id="yaD-YQ-XKi"/>
+                        <constraint firstItem="nZr-hv-9G0" firstAttribute="centerY" secondItem="h1w-Vc-OJJ" secondAttribute="centerY" id="z4x-4z-Oha"/>
                     </constraints>
                 </view>
             </subviews>
@@ -5729,6 +5740,7 @@ iAAEx5UABMeYAATHpQAEx6oABMeyAATHtQAEx7oABMfCAATHxQAEx9cABMfaAATH3wAAAAAAAAQBAAAA
 AAAAAFkAAAAAAAAAAAAAAAAABMfhA
 </mutableData>
         </image>
+        <image name="sy_ico_bk" width="30" height="26"/>
         <image name="sy_ico_dspd" width="20" height="23"/>
         <image name="sy_ico_kqdk" width="24" height="30"/>
         <image name="sy_ico_kqjl" width="28" height="30"/>
@@ -5737,6 +5749,7 @@ AAAAAFkAAAAAAAAAAAAAAAAABMfhA
         <image name="sy_ico_wc" width="29" height="31"/>
         <image name="sy_ico_wfqd" width="23" height="23"/>
         <image name="sy_kqzq_bg" width="351" height="136"/>
+        <image name="sy_list_enter" width="9" height="14"/>
         <image name="sy_spzx_bg" width="115" height="115"/>
         <image name="sy_wfqd_bg" width="351" height="59"/>
     </resources>

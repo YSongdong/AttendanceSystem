@@ -10,7 +10,8 @@
 
 #import "HWWeakTimer.h"
 #import "SDPassWordLookForController.h"
-
+#import "BindingPhoneController.h"
+#import "AlterPassNumberController.h"
 
 #import "SDPhotoCollectController.h"
 #import "SDRootNavigationController.h"
@@ -519,8 +520,25 @@ typedef enum {
 //判断是否是首次登录
 -(void) passHome:(NSString *)photoStatusStr{
     if ([photoStatusStr isEqualToString:@"1"]) {
-        SDPhotoCollectController *photoVC = [[SDPhotoCollectController alloc]init];
-        [self.navigationController pushViewController:photoVC animated:YES];
+        NSString *photoStatusStr = [SDUserInfo obtainWithPotoStatus];
+        if ([photoStatusStr isEqualToString:@"4"]) {
+             //未上传照片
+            SDPhotoCollectController *photoVC = [[SDPhotoCollectController alloc]init];
+            [self.navigationController pushViewController:photoVC animated:YES];
+            return ;
+        }
+        NSString *isBindPhoneStr = [SDUserInfo obtainWithBindPhone];
+        if ([isBindPhoneStr isEqualToString:@"2"]) {
+            //未绑定手机号
+            BindingPhoneController *bindVC = [[BindingPhoneController alloc]init];
+            bindVC.isMine = NO;
+            [self.navigationController pushViewController:bindVC animated:YES];
+            return ;
+        }
+        AlterPassNumberController *passVC = [[AlterPassNumberController alloc]init];
+        passVC.isMine =  NO;
+        [self.navigationController pushViewController:passVC animated:YES];
+        
     }else{
         //否则直接进入应用
         SDRootNavigationController *leftVC = [[SDRootNavigationController alloc]initWithRootViewController:[LeftUserController new]];
@@ -556,10 +574,10 @@ typedef enum {
                 [SDShowSystemPrompView showSystemPrompStr:error];
                 return ;
             }
-                //删除用户信息
-                [SDUserInfo delUserInfo];
-                // 保存用户信息
-                [SDUserInfo saveUserData:showdata];
+            //删除用户信息
+            [SDUserInfo delUserInfo];
+            // 保存用户信息
+            [SDUserInfo saveUserData:showdata];
 
             //设置极光推送别名
             NSString *aliasStr ;

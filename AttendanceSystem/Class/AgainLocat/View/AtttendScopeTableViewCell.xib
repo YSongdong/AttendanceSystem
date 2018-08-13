@@ -63,6 +63,7 @@
             <connections>
                 <outlet property="addressLab" destination="j9B-cl-v6h" id="kxS-we-UuS"/>
                 <outlet property="leftImageV" destination="FvG-Bb-OPi" id="bgj-Lx-FDm"/>
+                <outlet property="leftImageVConstranHeight" destination="tdE-Cw-gbg" id="eqH-SW-50i"/>
                 <outlet property="scopeLab" destination="xhV-Az-49f" id="LsY-QE-Es9"/>
                 <outlet property="statuImageV" destination="Dla-AA-8jw" id="LNv-y0-jFk"/>
             </connections>

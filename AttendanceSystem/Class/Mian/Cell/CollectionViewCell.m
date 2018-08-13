@@ -39,7 +39,8 @@
 -(void)setDict:(NSDictionary *)dict{
     _dict = dict;
     //主管
-    self.showLevelLab.text = [NSString stringWithFormat:@"第%@级主管",dict[@"level"]];
+   // self.showLevelLab.text = [NSString stringWithFormat:@"第%@级主管",dict[@"level"]];
+    self.showLevelLab.text = dict[@"levelName"];
     
     NSArray *arr = dict[@"user"];
     if (arr.count == 1) {

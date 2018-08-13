@@ -231,7 +231,7 @@
     self.timeNumberLab.font = Font(12);
     self.timeNumberLab.textColor = [UIColor colorTextBg28BlackColor];
     [self.timeNumberLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(showTimeNumberLab.mas_right).offset(28);
+        make.left.equalTo(weakSelf.approveNumberLab.mas_left);
         make.centerY.equalTo(showTimeNumberLab.mas_centerY);
     }];
     
@@ -252,7 +252,7 @@
     self.incidentReaSonLab.numberOfLines = 0;
     self.incidentReaSonLab.textColor = [UIColor colorTextBg28BlackColor];
     [self.incidentReaSonLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf.showIncidentTypenLab.mas_right).offset(28);
+        make.left.equalTo(weakSelf.approveNumberLab.mas_left);
         make.top.equalTo(weakSelf.showIncidentTypenLab.mas_top);
         make.width.equalTo(@278);
     }];
@@ -274,7 +274,7 @@
     self.addressLab.numberOfLines = 0;
     self.addressLab.textColor = [UIColor colorCommonGreenColor];
     [self.addressLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf.showAddressLab.mas_right).offset(28);
+        make.left.equalTo(weakSelf.approveNumberLab.mas_left);
         make.top.equalTo(weakSelf.showAddressLab.mas_top);
     }];
     self.addressLab.userInteractionEnabled = YES;

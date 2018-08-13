@@ -102,12 +102,14 @@
         NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
         if( [[UIApplication sharedApplication]canOpenURL:url] ) {
             [[UIApplication sharedApplication] openURL:url];
+            [self removeFromSuperview];
         }
     }else {
         //跳转到定位开关界面
         NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
         if( [[UIApplication sharedApplication]canOpenURL:url] ) {
             [[UIApplication sharedApplication] openURL:url];
+            [self removeFromSuperview];
         }
     }
 }

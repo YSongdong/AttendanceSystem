@@ -35,7 +35,7 @@
 
 -(void)setDict:(NSDictionary *)dict{
     _dict =  dict;
-    
+
     self.tittleLab.text = dict[@"name"];
 
     [UIImageView sd_setImageView:self.reihtImageV WithURL:dict[@"desc"]];
@@ -69,15 +69,20 @@
     }
     if (self.indexPath.section == 1 && self.indexPath.row == 0) {
         NSString *photoStatu = [NSString stringWithFormat:@"%@",dict[@"photoStatus"]];
-        if ([photoStatu isEqualToString:@"1"]) {
+        if ([photoStatu isEqualToString:@"0"]) {
+           //未填写身份证
+            self.sixImageV.hidden = YES;
+        }else  if ([photoStatu isEqualToString:@"1"]) {
+             self.sixImageV.hidden = NO;
             //女
             self.sixImageV.image = [UIImage imageNamed:@"grzx_pic_ns"];
-        }else{
+        }else  if ([photoStatu isEqualToString:@"2"]) {
+             self.sixImageV.hidden = NO;
             //男
             self.sixImageV.image = [UIImage imageNamed:@"grzx_pic_nh"];
         }
     }
-    
+   
 }
 -(void)setIsShowPlatform:(BOOL)isShowPlatform{
     _isShowPlatform = isShowPlatform;
@@ -85,7 +90,6 @@
 
 -(void)setIndexPath:(NSIndexPath *)indexPath{
     _indexPath = indexPath;
-    
     //头像
     if (indexPath.section == 0 && indexPath.row == 0) {
         self.reihtImageV.hidden =  NO;
