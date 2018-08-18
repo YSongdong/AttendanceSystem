@@ -36,8 +36,8 @@
     UILabel *showNameLab  = [[UILabel alloc]init];
     [self addSubview:showNameLab];
     [showNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf).offset(12);
-        make.top.equalTo(weakSelf).offset(18);
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(12));
+        make.top.equalTo(weakSelf).offset(KSIphonScreenH(18));
     }];
     showNameLab.text = @"我的位置";
     showNameLab.font = BFont(18);
@@ -72,8 +72,8 @@
     self.addressLab.textColor = [UIColor colorTextBg98BlackColor];
     [self.addressLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(showNameLab.mas_left);
-        make.top.equalTo(showNameLab.mas_bottom).offset(8);
-        make.right.equalTo(weakSelf).offset(-12);
+        make.top.equalTo(showNameLab.mas_bottom).offset(KSIphonScreenH(8));
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(12));
     }];
   
     UIView *lineView = [[UIView alloc]init];
@@ -82,7 +82,7 @@
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(weakSelf);
         make.height.equalTo(@1);
-        make.bottom.equalTo(weakSelf).offset(-65);
+        make.bottom.equalTo(weakSelf).offset(-KSIphonScreenH(65));
     }];
     
     self.cardBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -91,11 +91,11 @@
     [self.cardBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
     self.cardBtn.titleLabel.font = Font(16);
     [self.cardBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(weakSelf).offset(-14);
-        make.left.equalTo(weakSelf).offset(25);
-        make.right.equalTo(weakSelf).offset(-25);
+        make.bottom.equalTo(weakSelf).offset(-KSIphonScreenH(14));
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(25));
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(25));
         make.centerX.equalTo(weakSelf.mas_centerX);
-        make.height.equalTo(@40);
+        make.height.equalTo(@(KSIphonScreenH(40)));
     }];
     [self.cardBtn addTarget:self action:@selector(selectCardAction:) forControlEvents:UIControlEventTouchUpInside];
     //开启时间

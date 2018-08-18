@@ -51,7 +51,6 @@ singleton_implementation(KRMainNetTool)
    [manager POST:url parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         //请求成功，隐藏HUD并销毁
         dispatch_async(dispatch_get_main_queue(), ^{
-            
             [HUD hideAnimated:YES];
         });
        
@@ -209,7 +208,9 @@ singleton_implementation(KRMainNetTool)
 
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         //请求成功，隐藏HUD并销毁
-        [HUD hideAnimated:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [HUD hideAnimated:YES];
+        });
         NSNumber *num = responseObject[@"code"];
         //判断返回的状态，200即为服务器查询成功，500服务器查询失败
         if ([num longLongValue] == 200) {
@@ -220,7 +221,9 @@ singleton_implementation(KRMainNetTool)
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"%@",error);
         //网络请求失败，隐藏HUD，服务器响应失败。网络问题 或者服务器崩溃
-        [HUD hideAnimated:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [HUD hideAnimated:YES];
+        });
         complet(nil,@"网络错误");
     }];
 }

@@ -41,6 +41,10 @@
 @property (nonatomic,strong) UIImageView *addressImageV;
 //图片view
 @property (nonatomic,strong) UIView *ImageArrView;
+//显示请假类型
+@property (nonatomic,strong) UILabel *showLeaveLab;
+//请假类型
+@property (nonatomic,strong) UILabel *leaveLab;
 
 @end
 
@@ -154,6 +158,7 @@
     UILabel *showDepartmentNameLab = [[UILabel alloc]init];
     [self addSubview:showDepartmentNameLab];
     showDepartmentNameLab.text = @"所属部门";
+    showDepartmentNameLab.tag = 500;
     showDepartmentNameLab.font = Font(12);
     showDepartmentNameLab.textColor = [UIColor colorTextBg98BlackColor];
     [showDepartmentNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -171,6 +176,26 @@
         make.centerY.equalTo(showDepartmentNameLab.mas_centerY);
     }];
     
+    self.showLeaveLab = [[UILabel alloc]init];
+    [self addSubview:self.showLeaveLab];
+    self.showLeaveLab.text = @"请假类型";
+    self.showLeaveLab.font = Font(12);
+    self.showLeaveLab.textColor = [UIColor colorTextBg98BlackColor];
+    [self.showLeaveLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(showDepartmentNameLab.mas_bottom).offset(16);
+        make.left.equalTo(showDepartmentNameLab.mas_left);
+    }];
+    
+    self.leaveLab = [[UILabel alloc]init];
+    [self addSubview:self.leaveLab];
+    self.leaveLab.text =@"";
+    self.leaveLab.font = Font(12);
+    self.leaveLab.textColor = [UIColor colorTextBg28BlackColor];
+    [self.leaveLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(weakSelf.showLeaveLab.mas_right).offset(28);
+        make.centerY.equalTo(weakSelf.showLeaveLab.mas_centerY);
+    }];
+    
     UILabel *showBeginTimeLab = [[UILabel alloc]init];
     [self addSubview:showBeginTimeLab];
     showBeginTimeLab.tag = 300;
@@ -178,8 +203,8 @@
     showBeginTimeLab.font = Font(12);
     showBeginTimeLab.textColor = [UIColor colorTextBg98BlackColor];
     [showBeginTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(showDepartmentNameLab.mas_bottom).offset(16);
-        make.left.equalTo(showDepartmentNameLab.mas_left);
+        make.top.equalTo(weakSelf.showLeaveLab.mas_bottom).offset(16);
+        make.left.equalTo(weakSelf.showLeaveLab.mas_left);
     }];
     
     self.beginTimeLab = [[UILabel alloc]init];
@@ -326,6 +351,7 @@
     UILabel *showBeginTimeLab =  [self viewWithTag:300];
     UILabel *showEndTimeLab =  [self viewWithTag:301];
     UILabel *showTimeNumberLab = [self viewWithTag:302];
+    UILabel *showDepartmentNameLab = [self viewWithTag:500];
     showBeginTimeLab.text = @"开始时间";
     showEndTimeLab.hidden = NO;
     showTimeNumberLab.hidden = NO;
@@ -399,7 +425,14 @@
     
     __weak typeof(self) weakSelf = self;
     if (_headerType == RecordDetailHeaderGoOutType) {
-       
+        //隐藏请假类型
+        self.showLeaveLab.hidden = YES;
+        self.leaveLab.hidden = YES;
+        [showBeginTimeLab mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(showDepartmentNameLab.mas_bottom).offset(16);
+            make.left.equalTo(showDepartmentNameLab.mas_left);
+        }];
+        
         //开始时间
         self.beginTimeLab.text =dict[@"startTime"];
         //结束时间
@@ -450,6 +483,23 @@
             }
         }
     }else if (_headerType == RecordDetailHeaderLeaveType){
+        //请假类型
+        NSString *leaveTypeStr = [NSString stringWithFormat:@"%@",dict[@"leaveType"]];
+        if ([leaveTypeStr isEqualToString:@"1"]) {
+            self.leaveLab.text = @"年假";
+        }else if ([leaveTypeStr isEqualToString:@"2"]){
+            self.leaveLab.text = @"事假";
+        }else if ([leaveTypeStr isEqualToString:@"4"]){
+            self.leaveLab.text = @"产假";
+        }else if ([leaveTypeStr isEqualToString:@"5"]){
+            self.leaveLab.text = @"婚假";
+        }else if ([leaveTypeStr isEqualToString:@"6"]){
+            self.leaveLab.text = @"丧假";
+        }else if ([leaveTypeStr isEqualToString:@"7"]){
+            self.leaveLab.text = @"护理假";
+        }else if ([leaveTypeStr isEqualToString:@"8"]){
+            self.leaveLab.text = @"病假";
+        }
         
         //开始时间
         self.beginTimeLab.text =dict[@"startTime"];
@@ -503,6 +553,13 @@
         }
         
     }else if (_headerType == RecordDetailHeaderCardType){
+        //隐藏请假类型
+        self.showLeaveLab.hidden = YES;
+        self.leaveLab.hidden = YES;
+        [showBeginTimeLab mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(showDepartmentNameLab.mas_bottom).offset(16);
+            make.left.equalTo(showDepartmentNameLab.mas_left);
+        }];
          //补卡
         //结束时间
         self.endTimeLab.hidden =YES;
@@ -607,7 +664,7 @@
             outGoHeig += 52;
         }
         
-        return outGoHeig + 290;
+        return outGoHeig + 320;
     }else if ([headerType isEqualToString:@"3"]){
         //计算请假事由高度
         NSString *leaveInfoStr = dict[@"reason"];

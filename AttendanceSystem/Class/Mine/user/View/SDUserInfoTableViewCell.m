@@ -70,8 +70,9 @@
     if (self.indexPath.section == 1 && self.indexPath.row == 0) {
         NSString *photoStatu = [NSString stringWithFormat:@"%@",dict[@"photoStatus"]];
         if ([photoStatu isEqualToString:@"0"]) {
-           //未填写身份证
-            self.sixImageV.hidden = YES;
+            //未知
+            self.sixImageV.hidden = NO;
+            self.sixImageV.image = [UIImage imageNamed:@"grzx_ico_wz"];
         }else  if ([photoStatu isEqualToString:@"1"]) {
              self.sixImageV.hidden = NO;
             //女

@@ -69,6 +69,7 @@ FVAppSdkControllerDelegate
     self.photoView = [[PhotoCollectView alloc]initWithFrame:CGRectMake(0, -20, KScreenW, 760)];
     [scrollView addSubview:self.photoView];
     
+    self.photoView.chenkErrorStr = self.chenkErrorStr;
     [self.photoView upatePhotoViewStatu:_chenkStatu];
     
     scrollView.contentSize = CGSizeMake(KScreenW, 760);
@@ -134,7 +135,6 @@ FVAppSdkControllerDelegate
 }
 -(void)setChenkErrorStr:(NSString *)chenkErrorStr{
     _chenkErrorStr = chenkErrorStr;
-    self.photoView.errorLab.text = [NSString stringWithFormat:@"失败原因：%@",chenkErrorStr];
 }
 -(void)selectBackAction:(UIButton *) sender{
     [self.navigationController popViewControllerAnimated:YES];

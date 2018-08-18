@@ -77,7 +77,10 @@ UIImagePickerControllerDelegate
 @property (nonatomic,strong) NSMutableDictionary *cardDataDict;
 //确认信息重新验证人脸
 @property (nonatomic,assign) BOOL isTureAgainFace;
-
+//记录face 第几次打卡
+@property (nonatomic,assign) NSInteger faceClockinNum;
+//记录face 1上班 2下班
+@property (nonatomic,assign) NSInteger faceClockinType;
 @end
 
 @implementation SDAgainLocatController
@@ -140,8 +143,14 @@ UIImagePickerControllerDelegate
             //开启
             [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.testView];
             [weakSelf.testView.beginTestBtn addTarget:weakSelf action:@selector(selectFaceAction:) forControlEvents:UIControlEventTouchUpInside];
+            //记录face 第几次打卡
+            NSString *clockinNumStr = [NSString stringWithFormat:@"%@",weakSelf.dict[@"clockinNum"]];
+            weakSelf.faceClockinNum = [clockinNumStr integerValue];
+            //记录face 1上班 2下班
+            NSString *clockinTypeStr = [NSString stringWithFormat:@"%@",weakSelf.dict[@"clockinType"]];
+            weakSelf.faceClockinType = [clockinTypeStr integerValue];
         }else{
-            if (![weakSelf.dict[@"abnormalCoordinateIs"] isEqualToString:@"1"] ||[abnormalCoordinateIsStr isEqualToString:@"2"] ) {
+            if ([abnormalCoordinateIsStr isEqualToString:@"2"] ) {
                 weakSelf.cardDataDict[@"abnormalIdentityIs"] =[NSNumber numberWithInteger:3];
                 [weakSelf showTureSingView:nil];
                 return ;
@@ -276,7 +285,7 @@ UIImagePickerControllerDelegate
     }
     self.userLocation = location;
     
-//    [self.mapView setCenterCoordinate:location.coordinate];
+    [self.mapView setCenterCoordinate:location.coordinate];
     //移除所以数据
     [self.scopeDataArr removeAllObjects];
     //测量距离
@@ -342,10 +351,13 @@ UIImagePickerControllerDelegate
         [self.testView removeFromSuperview];
         //获取照片
         [[FVAppSdk sharedManager]gatherWithParentController:self];
+        [FVAppSdk sharedManager].fvLanderDelegate= self;
     }else{
         //眨眼
         [[FVAppSdk sharedManager]livingWithParentController:self mode:FVAppLivingFastMode level:FVAppLivingSafeMiddleMode];
+        [FVAppSdk sharedManager].fvLanderDelegate= self;
     }
+    
 }
 #pragma mark -----人脸-----
 /*
@@ -427,7 +439,6 @@ UIImagePickerControllerDelegate
         weakSelf.isTureAgainFace = YES;
         //隐藏
         weakSelf.showTureSingInView.hidden = YES;
-        
         [weakSelf selectFaceAction:nil];
     };
 }
@@ -537,10 +548,11 @@ UIImagePickerControllerDelegate
     param[@"photo"] = [SDUserInfo obtainWithPhoto];
     param[@"agName"] = [SDUserInfo obtainWithPositionName];
     param[@"agId"] = [SDUserInfo obtainWithProGroupId];
+    param[@"clockinNum"] = [NSNumber numberWithInteger:self.faceClockinNum];
+    param[@"clockinType"] = [NSNumber numberWithInteger:self.faceClockinType];
     NSMutableArray *dataArr= [NSMutableArray array];
     //图片旋转90度
     [dataArr addObject:[self.faceImage fixOrientation]];
-   
     [[KRMainNetTool sharedKRMainNetTool] upLoadData:HTTP_APPATTENDFACERECOGNITION_URL params:param.copy andData:dataArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
        
         if (error) {
@@ -588,6 +600,10 @@ UIImagePickerControllerDelegate
     mutableDict[@"Childcoordinate"] =coordinateDict;
     mutableDict[@"deviation"] = nowDict[@"coordinate"][@"deviation"];
     mutableDict[@"title"] = self.reGeocode.formattedAddress;
+    if ([mutableDict[@"title"] isEqualToString:@""]) {
+        [SDShowSystemPrompView showSystemPrompStr:@"还未获取到定位信息"];
+        return ;
+    }
     self.cardDataDict[@"coordinate"] = [SDTool convertToJsonData:mutableDict];
     if ([nowDict[@"isScope"] isEqualToString:@"1"]) {
          self.cardDataDict[@"abnormalCoordinateIs"] = [NSNumber numberWithInteger:1];

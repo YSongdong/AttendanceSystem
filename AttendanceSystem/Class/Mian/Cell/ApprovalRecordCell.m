@@ -39,7 +39,9 @@
 -(void)setCellType:(RecordCellType)cellType{
     _cellType = cellType;
 }
-
+-(void)setCutTypeStr:(NSString *)cutTypeStr{
+    _cutTypeStr= cutTypeStr;
+}
 -(void)setDict:(NSDictionary *)dict{
     _dict = dict;
     self.cellReasonLab.hidden=  NO;
@@ -61,13 +63,16 @@
         self.chenkStatuLab.textColor = [UIColor colorWithHexString:@"#aaaaaa"];
     }else if ([statusStr isEqualToString:@"1"]){
         //审核中
-        NSArray *arr = dict[@"approvalUser"];
-        NSMutableString *mutaleStr = [NSMutableString new];
-        if (arr.count > 0) {
-            for (int i=0; i< arr.count; i++) {
-                if ([arr[i] isKindOfClass:[NSDictionary class]]) {
-                    NSDictionary *dic = arr[i];
-                    if ([[dict allKeys] containsObject:@"realName"]) {
+        if ([self.cutTypeStr  isEqualToString:@"1"]) {
+            self.chenkStatuLab.text = [NSString stringWithFormat:@"等待我审批"];
+            self.chenkStatuLab.textColor = [UIColor colorWithHexString:@"#ffb046"];
+        }else{
+            NSArray *arr = dict[@"approvalUser"];
+            NSMutableString *mutaleStr = [NSMutableString new];
+            if (arr.count > 0) {
+                for (int i=0; i< arr.count; i++) {
+                    if ([arr[i] isKindOfClass:[NSDictionary class]]) {
+                        NSDictionary *dic = arr[i];
                         NSString *str =dic[@"realName"];
                         [mutaleStr appendString:str];
                         if (i!=arr.count-1) {
@@ -76,9 +81,10 @@
                     }
                 }
             }
+            self.chenkStatuLab.text = [NSString stringWithFormat:@"等待%@审批",mutaleStr];
+            self.chenkStatuLab.textColor = [UIColor colorWithHexString:@"#ffb046"];
         }
-        self.chenkStatuLab.text = [NSString stringWithFormat:@"等待%@审批",mutaleStr];
-        self.chenkStatuLab.textColor = [UIColor colorWithHexString:@"#ffb046"];
+    
     }
     //显示时间
     self.showTimeLab.text = dict[@"createTime"];
@@ -204,7 +210,6 @@
         }
     }
 }
-
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

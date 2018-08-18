@@ -128,6 +128,13 @@
 		15D74D7F2111E4CF00B2FCB5 /* CollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15D74D7D2111E4CF00B2FCB5 /* CollectionViewCell.xib */; };
 		15E93A7321030CCB002C70DB /* ShowTwoTimeDifferBigView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15E93A7221030CCB002C70DB /* ShowTwoTimeDifferBigView.m */; };
 		15E93A762103246A002C70DB /* ShowTureSignInView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15E93A752103246A002C70DB /* ShowTureSignInView.m */; };
+		15ECBFBE21265C700088DE82 /* AnnouncentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ECBFBD21265C700088DE82 /* AnnouncentViewController.m */; };
+		15ECBFC621265F740088DE82 /* AnnouncentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ECBFC421265F740088DE82 /* AnnouncentTableViewCell.m */; };
+		15ECBFC721265F740088DE82 /* AnnouncentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ECBFC521265F740088DE82 /* AnnouncentTableViewCell.xib */; };
+		15ECBFCB21267D8E0088DE82 /* AttendCountController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ECBFCA21267D8E0088DE82 /* AttendCountController.m */; };
+		15ECBFCF212699590088DE82 /* CountGroupHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ECBFCE212699590088DE82 /* CountGroupHeaderView.m */; };
+		15ECBFD321269C860088DE82 /* AttendCountTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ECBFD121269C860088DE82 /* AttendCountTableViewCell.m */; };
+		15ECBFD421269C860088DE82 /* AttendCountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ECBFD221269C860088DE82 /* AttendCountTableViewCell.xib */; };
 		15FD66BE211939B9009A132B /* ShowPromptMsgView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FD66BD211939B9009A132B /* ShowPromptMsgView.m */; };
 		42D592191F5874AE11635113 /* libPods-AttendanceSystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9DA8F321790FBC85F87A355 /* libPods-AttendanceSystem.a */; };
 /* End PBXBuildFile section */
@@ -383,6 +390,18 @@
 		15E93A7221030CCB002C70DB /* ShowTwoTimeDifferBigView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowTwoTimeDifferBigView.m; sourceTree = "<group>"; };
 		15E93A742103246A002C70DB /* ShowTureSignInView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowTureSignInView.h; sourceTree = "<group>"; };
 		15E93A752103246A002C70DB /* ShowTureSignInView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowTureSignInView.m; sourceTree = "<group>"; };
+		15ECBFBC21265C700088DE82 /* AnnouncentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnnouncentViewController.h; sourceTree = "<group>"; };
+		15ECBFBD21265C700088DE82 /* AnnouncentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnnouncentViewController.m; sourceTree = "<group>"; };
+		15ECBFC321265F740088DE82 /* AnnouncentTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnnouncentTableViewCell.h; sourceTree = "<group>"; };
+		15ECBFC421265F740088DE82 /* AnnouncentTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnnouncentTableViewCell.m; sourceTree = "<group>"; };
+		15ECBFC521265F740088DE82 /* AnnouncentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AnnouncentTableViewCell.xib; sourceTree = "<group>"; };
+		15ECBFC921267D8E0088DE82 /* AttendCountController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttendCountController.h; sourceTree = "<group>"; };
+		15ECBFCA21267D8E0088DE82 /* AttendCountController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttendCountController.m; sourceTree = "<group>"; };
+		15ECBFCD212699590088DE82 /* CountGroupHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CountGroupHeaderView.h; sourceTree = "<group>"; };
+		15ECBFCE212699590088DE82 /* CountGroupHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CountGroupHeaderView.m; sourceTree = "<group>"; };
+		15ECBFD021269C860088DE82 /* AttendCountTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttendCountTableViewCell.h; sourceTree = "<group>"; };
+		15ECBFD121269C860088DE82 /* AttendCountTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttendCountTableViewCell.m; sourceTree = "<group>"; };
+		15ECBFD221269C860088DE82 /* AttendCountTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttendCountTableViewCell.xib; sourceTree = "<group>"; };
 		15FD66BC211939B9009A132B /* ShowPromptMsgView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowPromptMsgView.h; sourceTree = "<group>"; };
 		15FD66BD211939B9009A132B /* ShowPromptMsgView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowPromptMsgView.m; sourceTree = "<group>"; };
 		51FBDEB42E43FD287D8D4510 /* Pods-AttendanceSystem.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AttendanceSystem.release.xcconfig"; path = "Pods/Target Support Files/Pods-AttendanceSystem/Pods-AttendanceSystem.release.xcconfig"; sourceTree = "<group>"; };
@@ -805,12 +824,14 @@
 				15B4FC6120FF0B7D001F6366 /* AttendACard */,
 				150C0DB22100241200A18C41 /* AgainLocat */,
 				15C8332D2104571200075204 /* AttendRecord */,
+				15ECBFC821267D680088DE82 /* AttendCount */,
 				15018915210EA488005673FF /* GoOutApproval */,
 				15018936210EF662005673FF /* leaveApproval */,
 				15018951210F1627005673FF /* SupplementCard */,
 				1509AEFB2110443800D45EE3 /* InitiateApplyfor */,
 				1509AEFF211045BB00D45EE3 /* MineChenkApplyFor */,
 				15A6761C211BE27900686B9E /* MessageCentre */,
+				15ECBFBB21265C280088DE82 /* Announcement */,
 				15D747F120FAFDA200B7CF14 /* Login */,
 			);
 			path = Class;
@@ -1144,6 +1165,48 @@
 			path = HQPickerView;
 			sourceTree = "<group>";
 		};
+		15ECBFBB21265C280088DE82 /* Announcement */ = {
+			isa = PBXGroup;
+			children = (
+				15ECBFBF21265D8C0088DE82 /* View */,
+				15ECBFBC21265C700088DE82 /* AnnouncentViewController.h */,
+				15ECBFBD21265C700088DE82 /* AnnouncentViewController.m */,
+			);
+			path = Announcement;
+			sourceTree = "<group>";
+		};
+		15ECBFBF21265D8C0088DE82 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				15ECBFC321265F740088DE82 /* AnnouncentTableViewCell.h */,
+				15ECBFC421265F740088DE82 /* AnnouncentTableViewCell.m */,
+				15ECBFC521265F740088DE82 /* AnnouncentTableViewCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		15ECBFC821267D680088DE82 /* AttendCount */ = {
+			isa = PBXGroup;
+			children = (
+				15ECBFCC21267D990088DE82 /* View */,
+				15ECBFC921267D8E0088DE82 /* AttendCountController.h */,
+				15ECBFCA21267D8E0088DE82 /* AttendCountController.m */,
+			);
+			path = AttendCount;
+			sourceTree = "<group>";
+		};
+		15ECBFCC21267D990088DE82 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				15ECBFCD212699590088DE82 /* CountGroupHeaderView.h */,
+				15ECBFCE212699590088DE82 /* CountGroupHeaderView.m */,
+				15ECBFD021269C860088DE82 /* AttendCountTableViewCell.h */,
+				15ECBFD121269C860088DE82 /* AttendCountTableViewCell.m */,
+				15ECBFD221269C860088DE82 /* AttendCountTableViewCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		33CB08BBE55F3387F7EE86F0 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1280,12 +1343,14 @@
 				1501891E210EA84C005673FF /* SelectLeaveInTimeCell.xib in Resources */,
 				155CEC1F20F9A2A400066FDD /* SDUserLeaveTableViewCell.xib in Resources */,
 				15018929210EB3E6005673FF /* LeaveInDestinAddressCell.xib in Resources */,
+				15ECBFC721265F740088DE82 /* AnnouncentTableViewCell.xib in Resources */,
 				155CEC2120F9A2A400066FDD /* SDUserInfoTableViewCell.xib in Resources */,
 				15018924210EB090005673FF /* ApprovarReasonCell.xib in Resources */,
 				152DEC652119975000E9BB67 /* Media.xcassets in Resources */,
 				15018950210F11AF005673FF /* ApprovalRecordCell.xib in Resources */,
 				150C0DC121003EEB00A18C41 /* AtttendScopeTableViewCell.xib in Resources */,
 				1501895A210F16B7005673FF /* SupplementCardTimeCell.xib in Resources */,
+				15ECBFD421269C860088DE82 /* AttendCountTableViewCell.xib in Resources */,
 				15D74D7F2111E4CF00B2FCB5 /* CollectionViewCell.xib in Resources */,
 				1509AEF42110090100D45EE3 /* SearchTableViewCell.xib in Resources */,
 			);
@@ -1362,6 +1427,7 @@
 				15018962210F2D3E005673FF /* RecordSiftCollectionViewCell.m in Sources */,
 				15018965210F3480005673FF /* CollectionHeaderView.m in Sources */,
 				151ACDB3210185A2004405D9 /* CustomAnnotationView.m in Sources */,
+				15ECBFC621265F740088DE82 /* AnnouncentTableViewCell.m in Sources */,
 				1517DEAE20F738F50003710A /* SDPhotoCollectController.mm in Sources */,
 				1503F28620F8BEF600B9CDAA /* WRCustomNavigationBar.m in Sources */,
 				15B4FC5D20FEDF0F001F6366 /* XWScanImage.m in Sources */,
@@ -1376,6 +1442,7 @@
 				151F7266210809B50005FDCB /* ShowUnPunchCardCell.m in Sources */,
 				150C0DC421005D0300A18C41 /* ShowPunchCardCell.m in Sources */,
 				155CEC2220F9A2A400066FDD /* SDUserLeaveTableViewCell.m in Sources */,
+				15ECBFBE21265C700088DE82 /* AnnouncentViewController.m in Sources */,
 				155CEC2C20F9DB7B00066FDD /* HWWeakTimer.m in Sources */,
 				1509AF062110483600D45EE3 /* ChenkHeaderView.m in Sources */,
 				1509AEEF210FFE1600D45EE3 /* MapSearchHeaderView.m in Sources */,
@@ -1416,6 +1483,7 @@
 				155900B82113227C00244956 /* ShowRefuseReasonView.m in Sources */,
 				155900BB2113329A00244956 /* ShowBlankSpaceView.m in Sources */,
 				15721B2120F5D892001E1DBB /* UIImageView+Change.m in Sources */,
+				15ECBFD321269C860088DE82 /* AttendCountTableViewCell.m in Sources */,
 				151F726C2108794D0005FDCB /* AttendFutureTimeCell.m in Sources */,
 				15D747F420FAFDBD00B7CF14 /* SDLoginController.m in Sources */,
 				1501892F210EBE5E005673FF /* ApprovalSubintCell.m in Sources */,
@@ -1424,6 +1492,7 @@
 				155CEC3320F9EB2E00066FDD /* AlterPhoneNumberController.m in Sources */,
 				155CEC3620F9FD1A00066FDD /* SDTool.m in Sources */,
 				15721B2720F5D892001E1DBB /* UILabel+SDChangLineSpace.m in Sources */,
+				15ECBFCB21267D8E0088DE82 /* AttendCountController.m in Sources */,
 				151F726921081B500005FDCB /* ShowMarkView.m in Sources */,
 				151ACDB021018288004405D9 /* CustomCalloutView.m in Sources */,
 				150C0DBC21003A9600A18C41 /* ShowAtttendScopeView.m in Sources */,
@@ -1432,6 +1501,7 @@
 				156AAA5D20FC445000514F6C /* SDShowSystemPrompView.m in Sources */,
 				15D74D7E2111E4CF00B2FCB5 /* CollectionViewCell.m in Sources */,
 				15018928210EB3E6005673FF /* LeaveInDestinAddressCell.m in Sources */,
+				15ECBFCF212699590088DE82 /* CountGroupHeaderView.m in Sources */,
 				1509AEF72110330B00D45EE3 /* POIAnnotation.m in Sources */,
 				156AAA6A20FC932500514F6C /* SDPassWordLookForController.m in Sources */,
 				15B4FC6B20FF1A8F001F6366 /* AttendCardTableViewCell.m in Sources */,
@@ -1628,7 +1698,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = AttendanceSystem/AttendanceSystem.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1674,8 +1744,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "bea01ce7-bb31-4209-bfbf-2b39a22e5391";
+				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1688,7 +1758,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = AttendanceSystem/AttendanceSystem.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1734,8 +1804,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "bea01ce7-bb31-4209-bfbf-2b39a22e5391";
+				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -22,14 +22,13 @@ typedef  enum{
 - (void)selectSiftArr:(NSArray *)arr;
 
 @end
-
 @interface ApprovalRecordSiftController : SDBaseController
 
 @property (nonatomic,weak) id<ApprovalRecordSiftControllerDelegate> delegate;
-
 //筛选类型
 @property (nonatomic,assign)RecordSiftType siftType;
 
-
+//选中筛选条件
+@property (nonatomic,strong) NSArray *selelctSiftArr;
 
 @end

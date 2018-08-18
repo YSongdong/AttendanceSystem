@@ -28,6 +28,7 @@ typedef  enum{
 
 @property (nonatomic,strong) NSDictionary *dict;
 
-
+//
+@property (nonatomic,strong) NSString  *cutTypeStr;
 
 @end

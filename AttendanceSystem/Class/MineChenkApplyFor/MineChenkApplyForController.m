@@ -44,6 +44,9 @@ ApprovalRecordSiftControllerDelegate
 @property (nonatomic,assign) NSInteger page;
 //状态
 @property (nonatomic,strong) NSString *statuStr;
+//选中筛选条件
+@property (nonatomic,strong) NSArray *selelctSiftArr;
+
 @end
 
 @implementation MineChenkApplyForController
@@ -95,6 +98,7 @@ ApprovalRecordSiftControllerDelegate
     self.page = 1;
     [self.dataArr removeAllObjects];
     [self requestDataList];
+    self.selelctSiftArr = arr;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.dataArr.count;
@@ -112,6 +116,7 @@ ApprovalRecordSiftControllerDelegate
     }else if ([typeStr isEqualToString:@"3"]){
         cell.cellType = RecordCellCardType;
     }
+    cell.cutTypeStr = self.cutTypeStr;
     cell.dict =dict;
     return cell;
 }
@@ -241,11 +246,12 @@ ApprovalRecordSiftControllerDelegate
         
         ApprovalRecordSiftController *siftVC = [[ApprovalRecordSiftController alloc]init];
         if ([weakSelf.cutTypeStr isEqualToString:@"1"]) {
-            siftVC.siftType = RecordTypeSiftType;
+           siftVC.siftType = RecordTypeSiftType;
         }else{
            siftVC.siftType = RecordApplyForSiftType;
         }
         siftVC.delegate = weakSelf;
+        siftVC.selelctSiftArr =  weakSelf.selelctSiftArr;
         [weakSelf.navigationController pushViewController:siftVC animated:YES];
     };
 }

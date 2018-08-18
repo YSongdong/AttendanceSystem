@@ -53,11 +53,15 @@ UIImagePickerControllerDelegate
 
 @property (nonatomic,strong)NSString *beginTimeStr;
 @property (nonatomic,strong)NSString *endTimeStr;
+//外出原因
+@property (nonatomic,strong) NSString *leaveReasonStr;
 
 //请求参数数据
 @property (nonatomic,strong) NSMutableDictionary *dataDcit;
 //接受选择外出地点
 @property (nonatomic,strong) NSMutableDictionary *addressDict;
+//审批人数据源
+@property (nonatomic,strong) NSMutableArray *approvalArr;
 
 @end
 
@@ -66,6 +70,9 @@ UIImagePickerControllerDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorTextWhiteColor];
+    self.endTimeStr = @"";
+    self.beginTimeStr = @"";
+    self.leaveReasonStr = @"";
     [self createNavi];
     [self createTableView];
     [self requestApprovalMemberData];
@@ -80,12 +87,20 @@ UIImagePickerControllerDelegate
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         //开始时间
         cell.beginTimeBlock = ^{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+            ApprovarReasonCell *cell = [weakSelf.leaveTableView cellForRowAtIndexPath:indexPath];
+            [cell.cellTextView resignFirstResponder];
+            
             weakSelf.selectTimeType = @"1";
             [weakSelf.view addSubview:weakSelf.datePickerView];
             [weakSelf.datePickerView showDateTimePickerView];
         };
         //结束时间
         cell.endTimeBlock = ^{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+            ApprovarReasonCell *cell = [weakSelf.leaveTableView cellForRowAtIndexPath:indexPath];
+            [cell.cellTextView resignFirstResponder];
+            
             weakSelf.selectTimeType = @"2";
             [weakSelf.view addSubview:weakSelf.datePickerView];
             [weakSelf.datePickerView showDateTimePickerView];
@@ -94,6 +109,9 @@ UIImagePickerControllerDelegate
     }else if (indexPath.row ==1){
         ApprovarReasonCell *cell = [tableView dequeueReusableCellWithIdentifier:APPROVALREASON_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.reasonBlock = ^(NSString *reasonStr) {
+            weakSelf.leaveReasonStr = reasonStr;
+        };
         return cell;
     }else if (indexPath.row ==2){
         LeaveInDestinAddressCell *cell = [tableView dequeueReusableCellWithIdentifier:LEAVEINDESTIONADDRESS_CELL forIndexPath:indexPath];
@@ -124,6 +142,7 @@ UIImagePickerControllerDelegate
     }else if (indexPath.row == 4){
         ApprovalPersonCell *cell = [tableView dequeueReusableCellWithIdentifier:APPROVALPERSON_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell updateCellUINSArr:self.approvalArr];
         return cell;
     }else{
         ApprovalSubintCell *cell  = [tableView dequeueReusableCellWithIdentifier:APPROVALSUBINT_CELL forIndexPath:indexPath];
@@ -152,24 +171,28 @@ UIImagePickerControllerDelegate
 }
 -(void) getSubmitData{
     __weak typeof(self) weaSelf= self;
-    if (weaSelf.beginTimeStr == nil) {
+    if ([weaSelf.beginTimeStr isEqualToString:@""]) {
         [SDShowSystemPrompView showSystemPrompStr:@"请选择开始时间"];
         return;
     }
-    if (weaSelf.endTimeStr == nil) {
+    if ([weaSelf.endTimeStr isEqualToString:@""]) {
         [SDShowSystemPrompView showSystemPrompStr:@"请选择结束时间"];
         return;
     }
     CGFloat timeLong = [SDTool calculateWithStartTime:weaSelf.beginTimeStr endTime:weaSelf.endTimeStr];
+    if (timeLong < 0 ) {
+        [SDShowSystemPrompView showSystemPrompStr:@"结束时间小于开始时间"];
+        return;
+    }
     weaSelf.dataDcit[@"startTime"] = [weaSelf.beginTimeStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     weaSelf.dataDcit[@"endTime"] =[weaSelf.endTimeStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     weaSelf.dataDcit[@"numbers"] = [NSString stringWithFormat:@"%.2f",timeLong];
     //事由
-    NSIndexPath *reasonIndexPath = [NSIndexPath indexPathForRow:1 inSection:0];
-    ApprovarReasonCell *reasonCell =[self.leaveTableView cellForRowAtIndexPath:reasonIndexPath];
-    if (reasonCell.cellTextView.text != nil) {
-       weaSelf.dataDcit[@"outGo"] = reasonCell.cellTextView.text;
+    if ([weaSelf.leaveReasonStr isEqualToString:@""]) {
+        [SDShowSystemPrompView showSystemPrompStr:@"请输入外出事由"];
+        return;
     }
+    weaSelf.dataDcit[@"outGo"] = weaSelf.leaveReasonStr;
     //地址
     NSIndexPath *addressIndexPath = [NSIndexPath indexPathForRow:2 inSection:0];
     LeaveInDestinAddressCell *addressCell = [self.leaveTableView cellForRowAtIndexPath:addressIndexPath];
@@ -255,7 +278,7 @@ UIImagePickerControllerDelegate
     self.leaveTableView.dataSource = self;
     self.leaveTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.leaveTableView.tableFooterView  =[[UIView alloc]initWithFrame:CGRectZero];
-    self.leaveTableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+   // self.leaveTableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     
     [self.leaveTableView registerNib:[UINib nibWithNibName:SELECTLEAVEINTIME_CELL bundle:nil] forCellReuseIdentifier:SELECTLEAVEINTIME_CELL];
     [self.leaveTableView registerNib:[UINib nibWithNibName:APPROVALREASON_CELL bundle:nil] forCellReuseIdentifier:APPROVALREASON_CELL];
@@ -299,6 +322,7 @@ UIImagePickerControllerDelegate
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
     ApprovarReasonCell *cell = [self.leaveTableView cellForRowAtIndexPath:indexPath];
     [cell.cellTextView resignFirstResponder];
+    self.leaveReasonStr = cell.cellTextView.text;
 }
 #pragma mark --------懒加载------
 -(ShowSelectCameraView *)showSelectCameraView{
@@ -327,6 +351,13 @@ UIImagePickerControllerDelegate
     }
     return _addressDict;
 }
+-(NSMutableArray *)approvalArr{
+    if (!_approvalArr) {
+        _approvalArr =[NSMutableArray array];
+    }
+    return _approvalArr;
+}
+
 #pragma  mark ------数据相关------
 //申请页审批流程
 -(void)requestApprovalMemberData{
@@ -343,9 +374,10 @@ UIImagePickerControllerDelegate
             return ;
         }
         if ([showdata isKindOfClass:[NSArray class]]) {
+            self.approvalArr = [NSMutableArray arrayWithArray:showdata];
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:4 inSection:0];
             ApprovalPersonCell *cell =[self.leaveTableView cellForRowAtIndexPath:indexPath];
-            [cell updateCellUINSArr:showdata];
+            [cell updateCellUINSArr:self.approvalArr];
         }
     }];
 }

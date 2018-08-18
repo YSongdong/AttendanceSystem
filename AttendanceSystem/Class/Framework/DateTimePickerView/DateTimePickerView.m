@@ -84,7 +84,6 @@
             make.centerY.equalTo(upVeiw.mas_centerY);
         }];
         
-        
         //右边的确定按钮
         chooseButton = [UIButton buttonWithType:UIButtonTypeCustom];
         chooseButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 52, 0, 40, 40);
@@ -120,7 +119,6 @@
     return self;
 }
 
-
 #pragma mark -- UIPickerViewDataSource
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
@@ -130,10 +128,11 @@
         return 3;
     }else if (self.pickerViewMode == DatePickerViewTimeMode){
         return 2;
+    }else if (self.pickerViewMode == DatePickerViewDateYMode){
+        return 2;
     }
     return 0;
 }
-
 
 //确定每一列返回的东西
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
@@ -207,6 +206,23 @@
             default:
                 break;
         }
+    }else if (self.pickerViewMode == DatePickerViewDateYMode){
+        switch (component) {
+                
+            case 0:
+            {
+                return yearRange;
+            }
+                break;
+            case 1:
+            {
+                return 12;
+            }
+                break;
+                
+            default:
+                break;
+        }
     }
     
     return 0;
@@ -263,6 +279,13 @@
         
         [self pickerView:self.pickerView didSelectRow:hour inComponent:0];
         [self pickerView:self.pickerView didSelectRow:minute inComponent:1];
+    }else if (self.pickerViewMode == DatePickerViewTimeMode){
+        [self.pickerView selectRow:year-startYear inComponent:0 animated:NO];
+        [self.pickerView selectRow:month-1 inComponent:1 animated:NO];
+       
+        [self pickerView:self.pickerView didSelectRow:year-startYear inComponent:0];
+        [self pickerView:self.pickerView didSelectRow:month-1 inComponent:1];
+      
     }
 
     [self.pickerView reloadAllComponents];
@@ -355,6 +378,22 @@
             default:
                 break;
         }
+    }else if (self.pickerViewMode == DatePickerViewDateYMode){
+        switch (component) {
+            case 0:
+            {
+                label.text=[NSString stringWithFormat:@"%ld年",(long)(startYear + row)];
+            }
+                break;
+            case 1:
+            {
+                label.text=[NSString stringWithFormat:@"%ld月",(long)row+1];
+            }
+                break;
+                
+            default:
+                break;
+        }
     }
     
     return label;
@@ -365,6 +404,8 @@
     }else if (self.pickerViewMode == DatePickerViewDateMode){
         return ([UIScreen mainScreen].bounds.size.width-40)/3;
     }else if (self.pickerViewMode == DatePickerViewTimeMode){
+        return ([UIScreen mainScreen].bounds.size.width-40)/2;
+    }else if (self.pickerViewMode == DatePickerViewDateYMode){
         return ([UIScreen mainScreen].bounds.size.width-40)/2;
     }
     return 0;
@@ -460,8 +501,27 @@
         
         _string =[NSString stringWithFormat:@"%.2ld:%.2ld",selectedHour,selectedMinute];
         timeLab.text = _string;
+    }else if (self.pickerViewMode == DatePickerViewDateYMode){
+        switch (component) {
+            case 0:
+            {
+                selectedYear=startYear + row;
+               
+            }
+                break;
+            case 1:
+            {
+                selectedMonth=row+1;
+            }
+                break;
+                
+            default:
+                break;
+        }
+        
+        _string =[NSString stringWithFormat:@"%ld.%.2ld",selectedYear,selectedMonth];
+        timeLab.text = _string;
     }
-    
 }
 #pragma mark -- show and hidden
 - (void)showDateTimePickerView{

@@ -31,9 +31,9 @@
     [self addSubview:samilView];
     samilView.backgroundColor = [UIColor blackColor];
     [samilView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf).offset(65);
-        make.right.equalTo(weakSelf).offset(-65);
-        make.height.equalTo(@50);
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(65));
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(65));
+        make.height.equalTo(@(KSIphonScreenH(50)));
         make.centerX.equalTo(weakSelf.mas_centerX);
         make.centerY.equalTo(weakSelf.mas_centerY);
     }];

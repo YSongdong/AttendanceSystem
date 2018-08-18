@@ -16,7 +16,7 @@
 @property (nonatomic,copy) void(^markBlock)(void);
 //请假
 @property (nonatomic,copy) void(^askForLeaveBlock)(void);
-//外勤补卡通过
+//补卡通过
 @property (nonatomic,copy) void(^leaveInBuCardSucceBlock)(void);
 //外勤通过
 @property (nonatomic,copy) void(^leaveInWorkSuccesBlock)(void);

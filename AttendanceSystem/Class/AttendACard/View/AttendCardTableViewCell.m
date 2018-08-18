@@ -69,14 +69,14 @@ AMapSearchDelegate
     self.showWorkTimeLab.textColor = [UIColor colorTextBg65BlackColor];
     [self.showWorkTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf);
-        make.left.equalTo(weakSelf).offset(35);
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(35));
     }];
     
     self.leftImageV =[[UIImageView alloc]init];
     [self addSubview:self.leftImageV];
     self.leftImageV.image = [UIImage imageNamed:@"pic_site_sel"];
     [self.leftImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf).offset(9);
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(9));
         make.centerY.equalTo(weakSelf.showWorkTimeLab.mas_centerY);
     }];
     
@@ -95,7 +95,7 @@ AMapSearchDelegate
     [self addSubview:self.punchCardBtn];
     [self.punchCardBtn setBackgroundImage:[UIImage imageNamed:@"ico_sbdk"] forState:UIControlStateNormal];
     [self.punchCardBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.showWorkTimeLab.mas_bottom).offset(27);
+        make.top.equalTo(weakSelf.showWorkTimeLab.mas_bottom).offset(KSIphonScreenH(27));
         make.centerX.equalTo(weakSelf.mas_centerX);
     }];
     [self.punchCardBtn addTarget:self action:@selector(selctPunchBtnAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -108,7 +108,7 @@ AMapSearchDelegate
     self.punchCardTypeLab.textColor = [UIColor colorTextWhiteColor];
     self.punchCardTypeLab.font =  Font(18);
     [self.punchCardTypeLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.punchCardBtn.mas_top).offset(45);
+        make.top.equalTo(weakSelf.punchCardBtn.mas_top).offset(KSIphonScreenH(45));
         make.centerX.equalTo(weakSelf.punchCardBtn.mas_centerX);
     }];
 
@@ -121,17 +121,17 @@ AMapSearchDelegate
     self.showTimeLab.textColor = [UIColor colorTextWhiteColor];
     self.showTimeLab.font = Font(13);
     [self.showTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.punchCardTypeLab.mas_bottom).offset(11);
+        make.top.equalTo(weakSelf.punchCardTypeLab.mas_bottom).offset(KSIphonScreenH(11));
         make.centerX.equalTo(weakSelf.punchCardTypeLab.mas_centerX);
     }];
     
     UIView *addressView = [[UIView alloc]init];
     [self addSubview:addressView];
     [addressView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.punchCardBtn.mas_bottom).offset(18);
-        make.left.equalTo(weakSelf).offset(45);
-        make.right.equalTo(weakSelf).offset(-45);
-        make.height.equalTo(@30);
+        make.top.equalTo(weakSelf.punchCardBtn.mas_bottom).offset(KSIphonScreenH(18));
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(45));
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(45));
+        make.height.equalTo(@(KSIphonScreenH(30)));
         make.centerX.equalTo(weakSelf.punchCardBtn.mas_centerX);
     }];
     
@@ -154,7 +154,7 @@ AMapSearchDelegate
     self.addressLab.textAlignment = NSTextAlignmentCenter;
     self.addressLab.textColor = [UIColor colorTextBg65BlackColor];
     [self.addressLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(weakSelf.againLocateBtn.mas_left).offset(-12);
+        make.right.equalTo(weakSelf.againLocateBtn.mas_left).offset(-KSIphonScreenW(12));
         make.centerY.equalTo(weakSelf.againLocateBtn.mas_centerY);
     }];
  
@@ -165,7 +165,7 @@ AMapSearchDelegate
     self.normalAddressLab.textAlignment = NSTextAlignmentCenter;
     self.normalAddressLab.textColor = [UIColor colorTextBg65BlackColor];
     [self.normalAddressLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(weakSelf.addressLab.mas_left).offset(-9);
+        make.right.equalTo(weakSelf.addressLab.mas_left).offset(-KSIphonScreenW(9));
         make.centerY.equalTo(weakSelf.addressLab.mas_centerY);
     }];
     
@@ -173,7 +173,7 @@ AMapSearchDelegate
     [addressView addSubview:leftImageV];
     leftImageV.image = [UIImage imageNamed:@"qrxx_ico_dw"];
     [leftImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(weakSelf.normalAddressLab.mas_left).offset(-5);
+        make.right.equalTo(weakSelf.normalAddressLab.mas_left).offset(-KSIphonScreenW(5));
         make.left.equalTo(addressView.mas_left);
         make.centerY.equalTo(weakSelf.normalAddressLab.mas_centerY);
     }];
@@ -231,7 +231,7 @@ AMapSearchDelegate
     ChildcoordinateDict[@"lng"] = [NSString stringWithFormat:@"%f",self.userLocation.coordinate.longitude];
     coordinateDict[@"Childcoordinate"] = ChildcoordinateDict;
     coordinateDict[@"abnormalCoordinateIs"] =  [NSString stringWithFormat:@"%ld",(long)self.cardAddressStatu];
-    coordinateDict[@"title"] = self.addressLab.text;
+    coordinateDict[@"title"] = self.addressLab.text.length == 0 ? @"": self.addressLab.text ;
     coordinateDict[@"deviation"] =deviationStr;
     self.selectCardBlcok(coordinateDict.copy);
 }

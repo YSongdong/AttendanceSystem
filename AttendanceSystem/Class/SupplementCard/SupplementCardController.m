@@ -45,7 +45,12 @@ UIImagePickerControllerDelegate
 @property (nonatomic,strong)NSMutableDictionary *dataDcit;
 //补卡信息数据源
 @property (nonatomic,strong) NSMutableDictionary *cardDict;
-
+//选择时间Str
+@property (nonatomic,strong)NSString *timeStr;
+//审批人数据源
+@property (nonatomic,strong) NSMutableArray *approvalArr;
+//补卡原因
+@property (nonatomic,strong) NSString *leaveReasonStr;
 @end
 
 @implementation SupplementCardController
@@ -53,6 +58,8 @@ UIImagePickerControllerDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorTextWhiteColor];
+    self.timeStr = @"";
+    self.leaveReasonStr = @"";
     [self createNavi];
     [self createTableView];
     [self requesRepairCardInfo];
@@ -68,6 +75,10 @@ UIImagePickerControllerDelegate
         SupplementCardTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:SUPPLEMENTCARDTIME_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.cardTimeBlock = ^{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+            ApprovarReasonCell *cell = [weakSelf.cardTableView cellForRowAtIndexPath:indexPath];
+            [cell.cellTextView resignFirstResponder];
+    
             [weakSelf.view addSubview:weakSelf.datePickerView];
             [weakSelf.datePickerView showDateTimePickerView];
         };
@@ -77,6 +88,9 @@ UIImagePickerControllerDelegate
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.showReasonLab.text =@"缺卡原因";
         cell.showPropentReasonLab.text =@"请输入缺卡事由";
+        cell.reasonBlock = ^(NSString *reasonStr) {
+            weakSelf.leaveReasonStr = reasonStr;
+        };
         return cell;
     }else if (indexPath.row ==2){
         ApprovalSelectPhotoCell *cell = [tableView dequeueReusableCellWithIdentifier:APPROVALSELECTPHONE_CELL forIndexPath:indexPath];
@@ -97,6 +111,7 @@ UIImagePickerControllerDelegate
     }else if (indexPath.row == 3){
         ApprovalPersonCell *cell = [tableView dequeueReusableCellWithIdentifier:APPROVALPERSON_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell updateCellUINSArr:self.approvalArr];
         return cell;
     }else{
         ApprovalSubintCell *cell = [tableView dequeueReusableCellWithIdentifier:APPOVALSUBIMT_CELL forIndexPath:indexPath];
@@ -123,21 +138,18 @@ UIImagePickerControllerDelegate
 }
 -(void) getSubmitData{
     __weak typeof(self) weakSelf = self;
-    NSIndexPath *cardIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    SupplementCardTimeCell *cardCell =[self.cardTableView cellForRowAtIndexPath:cardIndexPath];
-    NSString *timeStr =cardCell.showCardTimeLab.text;
-    if ([timeStr isEqualToString:@"请选择"]) {
+    if ([self.timeStr isEqualToString:@""]) {
         [SDShowSystemPrompView showSystemPrompStr:@"请选择补卡时间"];
         return;
     }
-    weakSelf.dataDcit[@"cardTime"] =[timeStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
+    weakSelf.dataDcit[@"cardTime"] =[self.timeStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     //事由
-    NSIndexPath *reasonIndexPath = [NSIndexPath indexPathForRow:1 inSection:0];
-    ApprovarReasonCell *reasonCell =[self.cardTableView cellForRowAtIndexPath:reasonIndexPath];
-    if (reasonCell.cellTextView.text != nil) {
-        weakSelf.dataDcit[@"reason"] = reasonCell.cellTextView.text;
+    if ([weakSelf.leaveReasonStr isEqualToString:@""]) {
+        [SDShowSystemPrompView showSystemPrompStr:@"请输入缺卡事由"];
+        return;
     }
-
+    weakSelf.dataDcit[@"reason"] = weakSelf.leaveReasonStr;
+    
     weakSelf.dataDcit[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
     weakSelf.dataDcit[@"token"] = [SDTool getNewToken];
     weakSelf.dataDcit[@"unitId"] = [SDUserInfo obtainWithUniId];
@@ -187,6 +199,7 @@ UIImagePickerControllerDelegate
     SupplementCardTimeCell *cell  = [self.cardTableView cellForRowAtIndexPath:indexPath];
     NSString *timeStr = [NSString stringWithFormat:@"%@ %@",[[self requestDateFormatter]stringFromDate:[NSDate date]],date];
     cell.showCardTimeLab.text = timeStr;
+    self.timeStr = timeStr;
     cell.showCardTimeLab.textColor = [UIColor colorTextBg28BlackColor];
 }
 -(void) createTableView{
@@ -231,6 +244,7 @@ UIImagePickerControllerDelegate
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
     ApprovarReasonCell *cell = [self.cardTableView cellForRowAtIndexPath:indexPath];
     [cell.cellTextView resignFirstResponder];
+    self.leaveReasonStr = cell.cellTextView.text;
 }
 #pragma mark --------懒加载------
 -(ShowSelectCameraView *)showSelectCameraView{
@@ -259,6 +273,12 @@ UIImagePickerControllerDelegate
     }
     return _dataDcit;
 }
+-(NSMutableArray *)approvalArr{
+    if (!_approvalArr) {
+        _approvalArr =[NSMutableArray array];
+    }
+    return _approvalArr;
+}
 -(void)setRecordIdStr:(NSString *)recordIdStr{
     _recordIdStr = recordIdStr;
 }
@@ -285,9 +305,10 @@ UIImagePickerControllerDelegate
             return ;
         }
         if ([showdata isKindOfClass:[NSArray class]]) {
+            self.approvalArr = [NSMutableArray arrayWithArray:showdata];
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
             ApprovalPersonCell *cell =[self.cardTableView cellForRowAtIndexPath:indexPath];
-            [cell updateCellUINSArr:showdata];
+            [cell updateCellUINSArr:self.approvalArr];
         }
     }];
 }

@@ -27,7 +27,6 @@ UITextViewDelegate
 
 @end
 
-
 @implementation ShowMarkView
 
 -(instancetype)initWithFrame:(CGRect)frame{
@@ -71,7 +70,7 @@ UITextViewDelegate
     titleView.backgroundColor = [UIColor colorTextWhiteColor];
     [titleView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.right.left.equalTo(samilView);
-        make.height.equalTo(@45);
+        make.height.equalTo(@(KSIphonScreenH(45)));
     }];
     
     UILabel *showTitleLab  =[[UILabel alloc]init];
@@ -89,7 +88,7 @@ UITextViewDelegate
     bottomView.backgroundColor = [UIColor colorTextWhiteColor];
     [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(samilView);
-        make.height.equalTo(@53);
+        make.height.equalTo(@(KSIphonScreenH(53)));
     }];
     
     self.trueSubmitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -111,7 +110,7 @@ UITextViewDelegate
     [addressConcetView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(titleView.mas_bottom).offset(1);
         make.left.right.equalTo(samilView);
-        make.height.equalTo(@100);
+        make.height.equalTo(@(KSIphonScreenH(100)));
         make.centerX.equalTo(titleView);
     }];
     
@@ -119,9 +118,9 @@ UITextViewDelegate
     [addressConcetView addSubview:timeImageV];
     timeImageV.image = [UIImage imageNamed:@"qrxx_ico_time"];
     [timeImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(addressConcetView).offset(15);
-        make.width.equalTo(@12);
-        make.top.equalTo(addressConcetView).offset(24);
+        make.left.equalTo(addressConcetView).offset(KSIphonScreenW(15));
+        make.width.equalTo(@(KSIphonScreenW(12)));
+        make.top.equalTo(addressConcetView).offset(KSIphonScreenH(24));
     }];
     
     self.showTimeLab = [[UILabel alloc]init];
@@ -129,7 +128,7 @@ UITextViewDelegate
     self.showTimeLab.font = Font(12);
     self.showTimeLab.textColor = [UIColor colorTextBg65BlackColor];
     [self.showTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(timeImageV.mas_right).offset(7);
+        make.left.equalTo(timeImageV.mas_right).offset(KSIphonScreenW(7));
         make.centerY.equalTo(timeImageV.mas_centerY);
     }];
     self.showTimeLab.text = [NSString stringWithFormat:@"打卡时间 08:30"];
@@ -138,7 +137,7 @@ UITextViewDelegate
     [addressConcetView addSubview:addressImageV];
     addressImageV.image = [UIImage imageNamed:@"qrxx_ico_dw"];
     [addressImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(timeImageV.mas_bottom).offset(12);
+        make.top.equalTo(timeImageV.mas_bottom).offset(KSIphonScreenH(12));
         make.left.equalTo(timeImageV.mas_left);
     }];
     
@@ -150,7 +149,7 @@ UITextViewDelegate
     [self.cardAddressLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(weakSelf.showTimeLab.mas_left);
         make.centerY.equalTo(addressImageV.mas_centerY);
-        make.right.equalTo(addressConcetView).offset(-15);
+        make.right.equalTo(addressConcetView).offset(-KSIphonScreenW(15));
     }];
     
     //开启验证
@@ -159,7 +158,7 @@ UITextViewDelegate
     faceImageV.tag = 200;
     faceImageV.image = [UIImage imageNamed:@"qrxx_ico_sfyz"];
     [faceImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(addressImageV.mas_bottom).offset(12);
+        make.top.equalTo(addressImageV.mas_bottom).offset(KSIphonScreenH(12));
         make.left.equalTo(addressImageV.mas_left);
     }];
 
@@ -180,7 +179,7 @@ UITextViewDelegate
     self.faceStatuLab.font = Font(12);
     self.faceStatuLab.textColor = [UIColor colorWithHexString:@"#ffb046"];
     [self.faceStatuLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(showIdentTestLab.mas_right).offset(8);
+        make.left.equalTo(showIdentTestLab.mas_right).offset(KSIphonScreenW(8));
         make.centerY.equalTo(faceImageV.mas_centerY);
     }];
     
@@ -191,7 +190,7 @@ UITextViewDelegate
     [markView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(addressConcetView.mas_bottom).offset(1);
         make.right.left.equalTo(samilView);
-        make.height.equalTo(@139);
+        make.height.equalTo(@(KSIphonScreenH(139)));
         make.left.equalTo(addressConcetView.mas_left);
         make.centerX.equalTo(addressConcetView.mas_centerX);
     }];
@@ -202,8 +201,8 @@ UITextViewDelegate
     self.placeStrLab.font = Font(12);
     self.placeStrLab.textColor = [UIColor colorWithHexString:@"#aaaaaa"];
     [self.placeStrLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(markView).offset(20);
-        make.left.equalTo(markView).offset(15);
+        make.top.equalTo(markView).offset(KSIphonScreenH(20));
+        make.left.equalTo(markView).offset(KSIphonScreenW(15));
     }];
     
     self.markTeView = [[UITextView alloc]init];
@@ -212,10 +211,10 @@ UITextViewDelegate
     self.markTeView.delegate = self;
     self.markTeView.returnKeyType = UIReturnKeyDone;
     [self.markTeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(markView).offset(10);
-        make.left.equalTo(markView).offset(15);
-        make.right.equalTo(markView).offset(-15);
-        make.height.equalTo(@50);
+        make.top.equalTo(markView).offset(KSIphonScreenH(10));
+        make.left.equalTo(markView).offset(KSIphonScreenH(15));
+        make.right.equalTo(markView).offset(-KSIphonScreenW(15));
+        make.height.equalTo(@(KSIphonScreenH(50)));
     }];
     
     for (int i=0; i<3; i++) {
@@ -223,9 +222,9 @@ UITextViewDelegate
         [markView addSubview:imageV];
         imageV.tag =  400+i;
         [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(markView).offset(15+i*54+i*10);
-            make.bottom.equalTo(markView.mas_bottom).offset(-10);
-            make.width.height.equalTo(@54);
+            make.left.equalTo(markView).offset(KSIphonScreenW(15)+i*KSIphonScreenH(54)+i*KSIphonScreenW(10));
+            make.bottom.equalTo(markView.mas_bottom).offset(-KSIphonScreenW(10));
+            make.width.height.equalTo(@(KSIphonScreenH(54)));
         }];
         imageV.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(chenkImageAciton:)];
@@ -296,6 +295,7 @@ UITextViewDelegate
     NSString *faceStatuStr = [NSString stringWithFormat:@"%@",dict[@"faceStatus"]];
     UIImageView *faceImageV  = [self viewWithTag:200];
     UILabel *showIdentTestLab = [self viewWithTag:201];
+    UIView *markView = [self viewWithTag:300];
     if ([faceStatuStr isEqualToString:@"2"]) {
         faceImageV.image = [UIImage imageNamed:@""];
         showIdentTestLab.hidden = YES;
@@ -313,8 +313,13 @@ UITextViewDelegate
             self.faceStatuLab.textColor = [UIColor colorCommonGreenColor];
         }
     }
-   
     //照片
+    //移除imageV 的内容
+    for (int i=0; i<3; i++) {
+        UIImageView *imageV = [self viewWithTag:(400+i)];
+        imageV.image = nil;
+    }
+    
     NSArray *photoArr = dict[@"photo"];
     if (photoArr.count != 0) {
         for (int i=0; i<photoArr.count; i++) {
@@ -324,7 +329,7 @@ UITextViewDelegate
         }
     }else{
         for (int i=0; i<3; i++) {
-             UIImageView *imageV = [self viewWithTag:(400+i)];
+            UIImageView *imageV = [self viewWithTag:(400+i)];
             imageV.image = nil;
         }
     }
@@ -332,23 +337,63 @@ UITextViewDelegate
     self.markTeView.text = @"";
     self.markTeView.editable = YES;
     NSString *markStr = dict[@"remark"];
+    
+    for (int i=0; i<3; i++) {
+        UIImageView *imageV = [self viewWithTag:(400+i)];
+        [imageV mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(markView).offset(KSIphonScreenW(15)+i*KSIphonScreenH(54)+i*KSIphonScreenW(10));
+            make.bottom.equalTo(markView.mas_bottom).offset(-KSIphonScreenW(10));
+            make.width.height.equalTo(@(KSIphonScreenH(54)));
+        }];
+    }
+    
+    [self.markTeView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(markView).offset(KSIphonScreenH(10));
+        make.left.equalTo(markView).offset(KSIphonScreenH(15));
+        make.right.equalTo(markView).offset(-KSIphonScreenW(15));
+        make.height.equalTo(@(KSIphonScreenH(50)));
+    }];
+    
     if (![markStr isEqualToString:@""] || photoArr.count > 0) {
         //查看备注
         self.placeStrLab.hidden = YES;
         
         self.markTeView.text = dict[@"remark"];
         self.markTeView.editable = NO;
-        
+      
+//        if ([markStr isEqualToString:@""]) {
+//            for (int i=0; i<3; i++) {
+//                UIImageView *imageV = [self viewWithTag:(400+i)];
+//                [imageV mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.left.equalTo(markView).offset(KSIphonScreenW(10)+i*KSIphonScreenH(80)+i*KSIphonScreenW(10));
+//                    make.centerY.equalTo(markView.mas_centerY);
+//                    make.width.height.equalTo(@(KSIphonScreenH(80)));
+//                }];
+//            }
+//        }
+
         for (int i=0; i<3; i++) {
             UIImageView *imageV = [self viewWithTag:(400+i)];
             if (photoArr.count > 0) {
                imageV.userInteractionEnabled = YES;
             }else{
-               imageV.userInteractionEnabled = NO;
+                imageV.userInteractionEnabled = NO;
+//                [imageV mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.height.width.equalTo(@0);
+//                }];
+//                imageV.image = nil;
+//                [self.markTeView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.top.equalTo(markView).offset(KSIphonScreenH(10));
+//                    make.left.equalTo(markView).offset(KSIphonScreenW(15));
+//                    make.right.equalTo(markView).offset(-KSIphonScreenW(15));
+//                    make.bottom.equalTo(markView).offset(-KSIphonScreenH(10));
+//                }];
+//               imageV.userInteractionEnabled = NO;
             }
         }
         [self.trueSubmitBtn setTitle:@"关闭" forState:UIControlStateNormal];
         [self.trueSubmitBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+    
     }else{
         
         for (int i=0; i<3; i++) {

@@ -48,6 +48,14 @@ UIImagePickerControllerDelegate
 @property (nonatomic,strong)NSString *selectTimeType;
 //请求参数数据
 @property (nonatomic,strong) NSMutableDictionary *dataDcit;
+
+@property (nonatomic,strong)NSString *leaveTypeStr;
+@property (nonatomic,strong)NSString *beginTimeStr;
+@property (nonatomic,strong)NSString *endTimeStr;
+//审批人数据源
+@property (nonatomic,strong) NSMutableArray *approvalArr;
+//请假原因
+@property (nonatomic,strong) NSString *leaveReasonStr;
 @end
 
 @implementation LeaveApprovalController
@@ -55,6 +63,9 @@ UIImagePickerControllerDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorTextWhiteColor];
+    self.endTimeStr = @"";
+    self.beginTimeStr = @"";
+    self.leaveReasonStr = @"";
     [self createNavi];
     [self createTableView];
     [self requestApprovalMemberData];
@@ -68,16 +79,25 @@ UIImagePickerControllerDelegate
         SelectTimeTypeCell *cell = [tableView dequeueReusableCellWithIdentifier:SELECTTIMETYPE_CELL forIndexPath:indexPath];
         //请假类型
         cell.leaveTypeBlock = ^{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+            ApprovarReasonCell *cell = [weakSelf.leaveTableView cellForRowAtIndexPath:indexPath];
+            [cell.cellTextView resignFirstResponder];
             [weakSelf createHPPickView];
         };
         //开始时间
         cell.beginTimeBlock = ^{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+            ApprovarReasonCell *cell = [weakSelf.leaveTableView cellForRowAtIndexPath:indexPath];
+            [cell.cellTextView resignFirstResponder];
              weakSelf.selectTimeType = @"1";
             [weakSelf.view addSubview:weakSelf.datePickerView];
             [weakSelf.datePickerView showDateTimePickerView];
         };
         //结束时间
         cell.endTimeBlock = ^{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+            ApprovarReasonCell *cell = [weakSelf.leaveTableView cellForRowAtIndexPath:indexPath];
+            [cell.cellTextView resignFirstResponder];
              weakSelf.selectTimeType = @"2";
             [weakSelf.view addSubview:weakSelf.datePickerView];
             [weakSelf.datePickerView showDateTimePickerView];
@@ -90,6 +110,9 @@ UIImagePickerControllerDelegate
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.showReasonLab.text = @"请假事由";
         cell.showPropentReasonLab.text = @"请输入请假事由";
+        cell.reasonBlock = ^(NSString *reasonStr) {
+            weakSelf.leaveReasonStr = reasonStr;
+        };
         return cell;
     }else if (indexPath.row ==2){
         ApprovalSelectPhotoCell *cell = [tableView dequeueReusableCellWithIdentifier:APPROVALSELECTPHONE_CELL forIndexPath:indexPath];
@@ -110,6 +133,7 @@ UIImagePickerControllerDelegate
     }else if (indexPath.row == 3){
         ApprovalPersonCell *cell = [tableView dequeueReusableCellWithIdentifier:APPROVALPERSON_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell updateCellUINSArr:self.approvalArr];
         return cell;
     }else{
         ApprovalSubintCell *cell = [tableView dequeueReusableCellWithIdentifier:APPOVALSUBIMT_CELL forIndexPath:indexPath];
@@ -136,50 +160,49 @@ UIImagePickerControllerDelegate
 }
 -(void) getSubmitData{
     __weak typeof(self) weaSelf= self;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    SelectTimeTypeCell *cell  = [self.leaveTableView cellForRowAtIndexPath:indexPath];
-   
-    if ([cell.showBeginTimeLab.text isEqualToString:@"请选择"]) {
+    if ([weaSelf.beginTimeStr isEqualToString:@""]) {
         [SDShowSystemPrompView showSystemPrompStr:@"请选择开始时间"];
         return;
     }
-    
-    if ([cell.showEndTimeLab.text isEqualToString:@"请选择"]) {
+    if ([weaSelf.endTimeStr isEqualToString:@""]) {
         [SDShowSystemPrompView showSystemPrompStr:@"请选择结束时间"];
         return;
     }
-    
-    NSString *endStr =cell.showEndTimeLab.text;
-    weaSelf.dataDcit[@"endTime"] =[endStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
-    NSString *beginStr =cell.showBeginTimeLab.text;
-    weaSelf.dataDcit[@"startTime"] =[beginStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
-    weaSelf.dataDcit[@"numbers"] = cell.showTimeLongLab.text;
+    CGFloat timeLong = [SDTool calculateWithStartTime:weaSelf.beginTimeStr endTime:weaSelf.endTimeStr];
+    if (timeLong < 0 ) {
+        [SDShowSystemPrompView showSystemPrompStr:@"结束时间小于开始时间"];
+        return;
+    }
+    weaSelf.dataDcit[@"startTime"] = [weaSelf.beginTimeStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
+    weaSelf.dataDcit[@"endTime"] =[weaSelf.endTimeStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
+    weaSelf.dataDcit[@"numbers"] = [NSString stringWithFormat:@"%.2f",timeLong];
     //请假类型
     NSString *typeStr;
-    if ([cell.showLeaveTypeLab.text isEqualToString:@"请选择"]) {
-      typeStr = @"0";
-    }else if ([cell.showLeaveTypeLab.text isEqualToString:@"年假"]) {
+    if ([self.leaveTypeStr isEqualToString:@"请选择"]) {
+        [SDShowSystemPrompView showSystemPrompStr:@"请假类型是必选类型"];
+        return;
+    }else if ([self.leaveTypeStr isEqualToString:@"年假"]) {
         typeStr = @"1";
-    }else if ([cell.showLeaveTypeLab.text isEqualToString:@"事假"]){
+    }else if ([self.leaveTypeStr isEqualToString:@"事假"]){
          typeStr = @"2";
-    }else if ([cell.showLeaveTypeLab.text isEqualToString:@"护理假"]){
+    }else if ([self.leaveTypeStr isEqualToString:@"护理假"]){
         typeStr = @"7";
-    }else if ([cell.showLeaveTypeLab.text isEqualToString:@"产假"]){
+    }else if ([self.leaveTypeStr isEqualToString:@"产假"]){
         typeStr = @"4";
-    }else if ([cell.showLeaveTypeLab.text isEqualToString:@"婚假"]){
+    }else if ([self.leaveTypeStr isEqualToString:@"婚假"]){
         typeStr = @"5";
-    }else if ([cell.showLeaveTypeLab.text isEqualToString:@"丧假"]){
+    }else if ([self.leaveTypeStr isEqualToString:@"丧假"]){
         typeStr = @"6";
-    } else if ([cell.showLeaveTypeLab.text isEqualToString:@"病假"]){
+    } else if ([self.leaveTypeStr isEqualToString:@"病假"]){
         typeStr = @"8";
     }
     weaSelf.dataDcit[@"type"] =typeStr;
     //事由
-    NSIndexPath *reasonIndexPath = [NSIndexPath indexPathForRow:1 inSection:0];
-    ApprovarReasonCell *reasonCell =[self.leaveTableView cellForRowAtIndexPath:reasonIndexPath];
-    if (reasonCell.cellTextView.text != nil) {
-        weaSelf.dataDcit[@"leave"] = reasonCell.cellTextView.text;
+    if ([weaSelf.leaveReasonStr isEqualToString:@""]) {
+        [SDShowSystemPrompView showSystemPrompStr:@"请输入请假事由"];
+        return;
     }
+     weaSelf.dataDcit[@"leave"] = weaSelf.leaveReasonStr;
     weaSelf.dataDcit[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
     weaSelf.dataDcit[@"token"] = [SDTool getNewToken];
     weaSelf.dataDcit[@"unitId"] = [SDUserInfo obtainWithUniId];
@@ -229,9 +252,15 @@ UIImagePickerControllerDelegate
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
     ApprovarReasonCell *cell = [self.leaveTableView cellForRowAtIndexPath:indexPath];
     [cell.cellTextView resignFirstResponder];
+    self.leaveReasonStr = cell.cellTextView.text;
 }
 #pragma mark -----时间选择器 ---- delegate------
 - (void)didClickFinishDateTimePickerView:(NSString *)date{
+    if ([self.selectTimeType isEqualToString:@"1"]) {
+        self.beginTimeStr = date;
+    }else{
+        self.endTimeStr = date;
+    }
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     SelectTimeTypeCell *cell  = [self.leaveTableView cellForRowAtIndexPath:indexPath];
     [cell updateTimeType:self.selectTimeType andTimeStr:date];
@@ -240,6 +269,7 @@ UIImagePickerControllerDelegate
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     SelectTimeTypeCell *cell  = [self.leaveTableView cellForRowAtIndexPath:indexPath];
     cell.showLeaveTypeLab.text = text;
+    self.leaveTypeStr = text;
     cell.showLeaveTypeLab.textColor = [UIColor colorTextBg65BlackColor];
 }
 -(void) createTableView{
@@ -251,8 +281,7 @@ UIImagePickerControllerDelegate
     
     self.leaveTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.leaveTableView.tableFooterView  =[[UIView alloc]initWithFrame:CGRectZero];
-    self.leaveTableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-    
+   
     [self.leaveTableView registerNib:[UINib nibWithNibName:SELECTTIMETYPE_CELL bundle:nil] forCellReuseIdentifier:SELECTTIMETYPE_CELL];
     [self.leaveTableView registerNib:[UINib nibWithNibName:APPROVARREASON_CELL bundle:nil] forCellReuseIdentifier:APPROVARREASON_CELL];
     [self.leaveTableView registerClass:[ApprovalSelectPhotoCell class] forCellReuseIdentifier:APPROVALSELECTPHONE_CELL];
@@ -308,6 +337,12 @@ UIImagePickerControllerDelegate
     }
     return _dataDcit;
 }
+-(NSMutableArray *)approvalArr{
+    if (!_approvalArr) {
+        _approvalArr =[NSMutableArray array];
+    }
+    return _approvalArr;
+}
 #pragma mark ----数据相关-----
 //申请页审批流程
 -(void)requestApprovalMemberData{
@@ -325,9 +360,10 @@ UIImagePickerControllerDelegate
         }
       
         if ([showdata isKindOfClass:[NSArray class]]) {
+            self.approvalArr = [NSMutableArray arrayWithArray:showdata];
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
             ApprovalPersonCell *cell =[self.leaveTableView cellForRowAtIndexPath:indexPath];
-            [cell updateCellUINSArr:showdata];
+            [cell updateCellUINSArr:self.approvalArr];
         }
     }];
 }

@@ -90,6 +90,10 @@ AMapLocationManagerDelegate
 @property (nonatomic,assign) BOOL isTureAgainFace;
 //记录要打卡的indexPath
 @property (nonatomic,strong) NSIndexPath *attendCardIndexPath;
+//记录face 第几次打卡
+@property (nonatomic,assign) NSInteger faceClockinNum;
+//记录face 1上班 2下班
+@property (nonatomic,assign) NSInteger faceClockinType;
 
 @end
 
@@ -110,6 +114,7 @@ AMapLocationManagerDelegate
     //请求当天的日期
     NSString *dateStr = [[self requestDateFormatter]stringFromDate:[NSDate date]];
     self.selectCalendarStr = dateStr;
+    [self.headerView.selectBtn setTitle:dateStr forState:UIControlStateNormal];
     [self requestAttendInfo:self.selectCalendarStr];
 }
 //设置navi
@@ -237,6 +242,11 @@ AMapLocationManagerDelegate
         };
         //申请补卡
         cell.timeUnusualUFaceBuCardBlock = ^{
+            NSString *recardStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithRecard]];
+            if ([recardStr isEqualToString:@"2"]) {
+                [SDShowSystemPrompView showSystemPrompStr:@"请先联系管理员设置审批规则"];
+                return;
+            }
             NSString *recordIdStr =dict[@"Id"];
             SupplementCardController *supplementVC = [[SupplementCardController alloc]init];
             supplementVC.recordIdStr =recordIdStr;
@@ -283,6 +293,10 @@ AMapLocationManagerDelegate
                         return ;
                     }
                 }
+                if ([addressDict[@"title"] isEqualToString:@""]) {
+                    [SDShowSystemPrompView showSystemPrompStr:@"还未获取到定位信息"];
+                    return ;
+                }
                 weakSelf.cardDataDict = [NSMutableDictionary dictionary];
                 weakSelf.cardDataDict[@"abnormalCoordinateIs"] = [NSNumber numberWithInteger:[addressDict[@"abnormalCoordinateIs"] integerValue]];
                 weakSelf.cardDataDict[@"coordinate"] = [SDTool convertToJsonData:addressDict];
@@ -308,12 +322,16 @@ AMapLocationManagerDelegate
                         [SDShowSystemPrompView showSystemPrompStr:@"您还没有开启相机权限"];
                         return ;
                     }
-                    
                     [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.testView];
                     [weakSelf.testView.beginTestBtn addTarget:weakSelf action:@selector(selectFaceAction:) forControlEvents:UIControlEventTouchUpInside];
-                
+                    //记录face 第几次打卡
+                    NSString *clockinNumStr = [NSString stringWithFormat:@"%@",dict[@"clockinNum"]];
+                    weakSelf.faceClockinNum = [clockinNumStr integerValue];
+                    //记录face 1上班 2下班
+                    NSString *clockinTypeStr = [NSString stringWithFormat:@"%@",dict[@"clockinType"]];
+                    weakSelf.faceClockinType = [clockinTypeStr integerValue];
                 }else{
-                    if (![dict[@"abnormalCoordinateIs"] isEqualToString:@"1"] ||[abnormalCoordinateIsStr isEqualToString:@"2"] ) {
+                    if ([abnormalCoordinateIsStr isEqualToString:@"2"] ) {
                         weakSelf.cardDataDict[@"abnormalIdentityIs"] =[NSNumber numberWithInteger:3];
                         [weakSelf showTureSingView:nil];
                         return ;
@@ -390,6 +408,11 @@ AMapLocationManagerDelegate
             };
             //申请补卡
             cell.timeUnusualUFaceBuCardBlock = ^{
+                NSString *recardStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithRecard]];
+                if ([recardStr isEqualToString:@"2"]) {
+                    [SDShowSystemPrompView showSystemPrompStr:@"请先联系管理员设置审批规则"];
+                    return;
+                }
                 NSString *recordIdStr =dict[@"Id"];
                 SupplementCardController *supplementVC = [[SupplementCardController alloc]init];
                 supplementVC.recordIdStr =recordIdStr;
@@ -789,6 +812,8 @@ AMapLocationManagerDelegate
     param[@"photo"] = [SDUserInfo obtainWithPhoto];
     param[@"agName"] = [SDUserInfo obtainWithPositionName];
     param[@"agId"] = [SDUserInfo obtainWithProGroupId];
+    param[@"clockinNum"] = [NSNumber numberWithInteger:self.faceClockinNum];
+    param[@"clockinType"] = [NSNumber numberWithInteger:self.faceClockinType];
     NSMutableArray *dataArr= [NSMutableArray array];
     //图片旋转90度
     [dataArr addObject:[self.faceImage fixOrientation]];

@@ -36,8 +36,8 @@
     bgView.backgroundColor  =[UIColor colorTextWhiteColor];
     [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
        // make.height.equalTo(@337);
-        make.right.equalTo(weakSelf).offset(-42);
-        make.left.equalTo(weakSelf).offset(42);
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(42));
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(42));
         make.centerX.equalTo(weakSelf.mas_centerX);
         make.centerY.equalTo(weakSelf.mas_centerY);
     }];
@@ -50,7 +50,7 @@
     subLab.textColor = [UIColor colorTextBg28BlackColor];
     subLab.font = [UIFont systemFontOfSize:19];
     [subLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(bgView).offset(21);
+        make.top.equalTo(bgView).offset(KSIphonScreenH(21));
         make.centerX.equalTo(bgView.mas_centerX);
     }];
  
@@ -58,7 +58,7 @@
     [bgView addSubview:self.testImageV];
     self.testImageV.image = [UIImage imageNamed:@"ico_sfyz"];
     [self.testImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(subLab.mas_bottom).offset(24);
+        make.top.equalTo(subLab.mas_bottom).offset(KSIphonScreenH(24));
         make.centerX.equalTo(subLab.mas_centerX);
     }];
     
@@ -69,9 +69,9 @@
     self.beginTestLab.textColor = [UIColor colorWithHexString:@"#aaaaaa"];
     self.beginTestLab.textAlignment = NSTextAlignmentCenter;
     [self.beginTestLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.testImageV.mas_bottom).offset(32);
-        make.left.equalTo(bgView).offset(12);
-        make.right.equalTo(bgView).offset(-12);
+        make.top.equalTo(weakSelf.testImageV.mas_bottom).offset(KSIphonScreenH(32));
+        make.left.equalTo(bgView).offset(KSIphonScreenW(12));
+        make.right.equalTo(bgView).offset(-KSIphonScreenW(12));
         make.centerX.equalTo(weakSelf.testImageV.mas_centerX);
     }];
     
@@ -82,9 +82,9 @@
     self.errorLab.font = [UIFont systemFontOfSize:16];
     self.errorLab.textAlignment = NSTextAlignmentCenter;
     [self.errorLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.testImageV.mas_bottom).offset(29);
-        make.left.equalTo(bgView).offset(12);
-        make.right.equalTo(bgView).offset(-12);
+        make.top.equalTo(weakSelf.testImageV.mas_bottom).offset(KSIphonScreenH(29));
+        make.left.equalTo(bgView).offset(KSIphonScreenW(12));
+        make.right.equalTo(bgView).offset(-KSIphonScreenW(12));
         make.centerX.equalTo(weakSelf.testImageV.mas_centerX);
     }];
     self.errorLab.hidden = YES;
@@ -96,9 +96,9 @@
     self.showErrorLab.textColor = [UIColor colorWithHexString:@"#aaaaaa"];
     self.showErrorLab.textAlignment = NSTextAlignmentCenter;
     [self.showErrorLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.errorLab.mas_bottom).offset(6);
-        make.left.equalTo(bgView).offset(12);
-        make.right.equalTo(bgView).offset(-12);
+        make.top.equalTo(weakSelf.errorLab.mas_bottom).offset(KSIphonScreenH(6));
+        make.left.equalTo(bgView).offset(KSIphonScreenW(12));
+        make.right.equalTo(bgView).offset(-KSIphonScreenW(12));
         make.centerX.equalTo(weakSelf.errorLab.mas_centerX);
     }];
     self.showErrorLab.hidden = YES;
@@ -110,9 +110,9 @@
     [self.beginTestBtn setBackgroundImage:[UIImage imageNamed:@"sfyz_btn_ksyz"] forState:UIControlStateNormal];;
     self.beginTestBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     [self.beginTestBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(@228);
-        make.height.equalTo(@33);
-        make.top.equalTo(weakSelf.beginTestLab.mas_bottom).offset(22);
+        make.width.equalTo(@(KSIphonScreenW(228)));
+        make.height.equalTo(@(KSIphonScreenH(33)));
+        make.top.equalTo(weakSelf.beginTestLab.mas_bottom).offset(KSIphonScreenH(22));
         make.centerX.equalTo(weakSelf.beginTestLab.mas_centerX);
     }];
     self.beginTestBtn.layer.cornerRadius =4;
@@ -125,9 +125,9 @@
     [self.cancelBtn setTitleColor:[UIColor colorWithHexString:@"#656565"] forState:UIControlStateNormal];
     self.cancelBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.beginTestBtn.mas_bottom).offset(15);
+        make.top.equalTo(weakSelf.beginTestBtn.mas_bottom).offset(KSIphonScreenH(15));
         make.centerX.equalTo(weakSelf.beginTestBtn.mas_centerX);
-        make.bottom.equalTo(bgView.mas_bottom).offset(-15);
+        make.bottom.equalTo(bgView.mas_bottom).offset(-KSIphonScreenH(15));
     }];
     [self.cancelBtn addTarget:self action:@selector(selectCancelBtn:) forControlEvents:UIControlEventTouchUpInside];
 }

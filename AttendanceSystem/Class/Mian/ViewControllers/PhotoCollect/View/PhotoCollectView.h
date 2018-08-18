@@ -31,6 +31,9 @@
 //立即上传
 @property (nonatomic,copy) void(^updateBlock)(void);
 
+//审核失败原因
+@property (nonatomic,strong) NSString *chenkErrorStr;
+
 //0: 未上传 1:未审核 2:未通过 3:已审核'
 - (void)upatePhotoViewStatu:(NSString *)statu;
 

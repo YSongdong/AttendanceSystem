@@ -37,6 +37,8 @@ ApprovalRecordSiftControllerDelegate
 @property (nonatomic,strong) NSString *likeTitleStr;
 //状态
 @property (nonatomic,strong) NSString *statuStr;
+//选中筛选条件
+@property (nonatomic,strong) NSMutableArray *selelctSiftArr;
 @end
 
 @implementation GoOutRecordController
@@ -70,6 +72,7 @@ ApprovalRecordSiftControllerDelegate
     }else if (self.recordType == ApporvalRecordCardType){
         cell.cellType = RecordCellCardType;
     }
+    cell.cutTypeStr = @"2";
     cell.dict = self.dataArr[indexPath.row];
     return cell;
 }
@@ -163,6 +166,7 @@ ApprovalRecordSiftControllerDelegate
         ApprovalRecordSiftController *siftVC = [[ApprovalRecordSiftController alloc]init];
         siftVC.siftType = RecordApproveSiftType;
         siftVC.delegate = weakSelf;
+        siftVC.selelctSiftArr = weakSelf.selelctSiftArr.copy;
         [weakSelf.navigationController pushViewController:siftVC animated:YES];
     };
 }
@@ -176,6 +180,7 @@ ApprovalRecordSiftControllerDelegate
         self.statuStr = dict[@"status"];
         self.headerSearchView.searchTextField.text = dict[@"content"];
     }
+    self.selelctSiftArr = [NSMutableArray arrayWithArray:arr];
 }
 -(void)setRecordType:(ApporvalRecordType)recordType{
     _recordType = recordType;

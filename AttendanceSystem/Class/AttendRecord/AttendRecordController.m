@@ -64,11 +64,22 @@
     [super viewWillAppear:animated];
     self.dataDict = nil;
     [self.dayArr removeAllObjects];
-    _dateSelected =[NSDate date];
-    //获取当月的数据
-    [self requestCalendarMondData:[[self requestDateFormatter]stringFromDate:[NSDate date]]];
-    //获取当天的数据
-    [self requestCalendarDayData:[[self requestDateFormatter]stringFromDate:[NSDate date]]];
+    if (self.selectDate == nil) {
+        _dateSelected =[NSDate date];
+        //获取当月的数据
+        [self requestCalendarMondData:[[self requestDateFormatter]stringFromDate:[NSDate date]]];
+        //获取当天的数据
+        [self requestCalendarDayData:[[self requestDateFormatter]stringFromDate:[NSDate date]]];
+    }else{
+        _dateSelected = [[self requestDateFormatter]dateFromString:self.selectDate];
+        //获取当月的数据
+        [self requestCalendarMondData:self.selectDate];
+        //获取当天的数据
+        [self requestCalendarDayData:self.selectDate];
+        
+    }
+    
+   
 }
 -(void) createView{
     __weak typeof(self) weakSelf = self;
@@ -217,7 +228,7 @@
             detaVC.chenkStatusStr = @"2";
             [weakSelf.navigationController pushViewController:detaVC animated:YES];
         };
-        //外勤补卡通过
+        //补卡通过
         cell.leaveInBuCardSucceBlock = ^{
             RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
             //补卡
@@ -247,6 +258,11 @@
         };
         //申请补卡
         cell.timeUnusualUFaceBuCardBlock = ^{
+            NSString *recardStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithRecard]];
+            if ([recardStr isEqualToString:@"2"]) {
+                [SDShowSystemPrompView showSystemPrompStr:@"请先联系管理员设置审批规则"];
+                return;
+            }
             NSString *recordIdStr =dict[@"Id"];
             SupplementCardController *supplementVC = [[SupplementCardController alloc]init];
             supplementVC.recordIdStr =recordIdStr;
@@ -458,6 +474,9 @@
         [weakSelf.navigationController popViewControllerAnimated:YES];
     };
 }
+-(void)setSelectDate:(NSString *)selectDate{
+    _selectDate = selectDate;
+}
 #pragma mark -----数据相关-----
 //获取一个月的数据
 -(void)requestCalendarMondData:(NSString *)date{
@@ -473,7 +492,6 @@
             return ;
         }
         if ([showdata isKindOfClass:[NSDictionary class]]) {
-            //self.calendarArr = [NSMutableArray arrayWithArray:showdata];
             self.calendarDict = [NSMutableDictionary dictionaryWithDictionary:showdata];
             [self.calendarManager reload];
         }

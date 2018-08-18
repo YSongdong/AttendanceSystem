@@ -60,6 +60,7 @@
     if (self.showSelectEndTimeLab.text.length != 0 && self.showSelectBeginTimeLab.text.length != 0) {
         CGFloat timeLong = [SDTool calculateWithStartTime:self.showSelectBeginTimeLab.text endTime:self.showSelectEndTimeLab.text];
         if (timeLong < 0 ) {
+            self.showTimeLongLab.text = @"--";
             [SDShowSystemPrompView showSystemPrompStr:@"结束时间小于开始时间"];
             return;
         }

@@ -20,8 +20,8 @@
 @property (nonatomic,strong) UIImageView *chenkImageV ;
 //姓名
 @property (nonatomic,strong) UILabel *nameLab;
-//身份证
-@property (nonatomic,strong) UILabel *idCardLab;
+//工号
+@property (nonatomic,strong) UILabel *jobnumberLab;
 //所属部门
 @property (nonatomic,strong) UILabel *departNameLab;
 
@@ -34,16 +34,14 @@
     self.view.backgroundColor = [UIColor colorTextWhiteColor];
     [self.customNavBar wr_setBackgroundAlpha:0];
     [self createHeaderView];
-  
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    //更新信息
-    [self updateUserInfo];
+    //加载数据源
+    [self requestUserInfoData];
 }
 -(void) createHeaderView{
     __weak typeof(self) weakSelf = self;
-
     UIView *bgView = [[UIView alloc]init];
     [self.view addSubview:bgView];
    
@@ -108,7 +106,7 @@
     NSString *sexStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithSex]];
     if ([sexStr isEqualToString:@"0"]) {
         //未填写身份证
-         img  = [UIImage imageNamed:@""];
+         img  = [UIImage imageNamed:@"grzx_ico_wz"];
     }else if ([sexStr isEqualToString:@"1"]) {
         //女
         img  = [UIImage imageNamed:@"grzx_pic_ns"];
@@ -128,27 +126,19 @@
     attach.bounds = CGRectMake(-5, -2, 12, 12);
     NSAttributedString *attributeStr2 = [NSAttributedString attributedStringWithAttachment:attach];
     [attributeStr1 insertAttributedString:attributeStr2 atIndex:0];
-    
     self.nameLab.attributedText = attributeStr1;
     
     //身份证
-    self.idCardLab  =[[UILabel alloc]init];
-    [bgView addSubview:self.idCardLab];
-    self.idCardLab.font = BFont(14);
-    self.idCardLab.textColor = [UIColor colorTextBg28BlackColor];
-    [self.idCardLab mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.jobnumberLab  =[[UILabel alloc]init];
+    [bgView addSubview:self.jobnumberLab];
+    self.jobnumberLab.font = BFont(14);
+    self.jobnumberLab.textColor = [UIColor colorTextBg28BlackColor];
+    [self.jobnumberLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf.nameLab.mas_bottom).offset(41);
         make.centerX.equalTo(weakSelf.nameLab.mas_centerX);
     }];
-    NSString *cardStr = [SDUserInfo obtainWithidcard];
-    if (![cardStr isEqualToString:@""]) {
-        NSRange range = NSMakeRange(3, 11);
-        cardStr =  [cardStr stringByReplacingCharactersInRange:range withString:@"*******"];
-        self.idCardLab.text = [NSString stringWithFormat:@"身份证号:%@",cardStr];
-    }else{
-        self.idCardLab.text =[NSString stringWithFormat:@"身份证号:未完善"];
-    }
-    
+    self.jobnumberLab.text =[NSString stringWithFormat:@"员工工号:%@",[SDUserInfo obtainWithJobNumber]];
+   
     //所属部门
     self.departNameLab = [[UILabel alloc]init];
     [bgView addSubview:self.departNameLab];
@@ -157,9 +147,10 @@
     self.departNameLab.textAlignment = NSTextAlignmentCenter;
     self.departNameLab.textColor = [UIColor colorTextBg98BlackColor];
     [self.departNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.idCardLab.mas_bottom).offset(KSIphonScreenH(18));
-        make.centerX.equalTo(weakSelf.idCardLab.mas_centerX);
-        make.width.equalTo(@(KSIphonScreenW(224)));
+        make.top.equalTo(weakSelf.jobnumberLab.mas_bottom).offset(KSIphonScreenH(18));
+        make.left.equalTo(weakSelf.view).offset(KSIphonScreenW(40));
+        make.right.equalTo(weakSelf.view).offset(-(KSIphonScreenW(40)));
+        make.centerX.equalTo(weakSelf.jobnumberLab.mas_centerX);
     }];
     
     [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -171,9 +162,9 @@
     [self.view addSubview:lineView];
     lineView.backgroundColor = [UIColor colorWithHexString:@"#e6e6e6"];
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(weakSelf.view).offset(-KSIphonScreenW(18));
         make.top.equalTo(weakSelf.departNameLab.mas_bottom).offset(KSIphonScreenH(75));
-        make.width.equalTo(@(KSIphonScreenW(223)));
+        make.left.equalTo(weakSelf.view).offset(KSIphonScreenW(20));
+        make.right.equalTo(weakSelf.view).offset(-(KSIphonScreenW(20)));
         make.height.equalTo(@1);
     }];
     
@@ -277,20 +268,27 @@
     [attributeStr1 insertAttributedString:attributeStr2 atIndex:0];
     self.nameLab.attributedText = attributeStr1;
     
-    //身份证号
-    NSString *cardStr = [SDUserInfo obtainWithidcard];
-    if (![cardStr isEqualToString:@""]) {
-        NSRange range = NSMakeRange(3, 11);
-        cardStr =  [cardStr stringByReplacingCharactersInRange:range withString:@"*******"];
-        self.idCardLab.text = [NSString stringWithFormat:@"身份证号:%@",cardStr];
-    }else{
-        self.idCardLab.text =[NSString stringWithFormat:@"身份证号:未完善"];
-    }
+    //员工工号
+    self.jobnumberLab.text =[NSString stringWithFormat:@"员工工号:%@",[SDUserInfo obtainWithJobNumber]];
     //部门
     self.departNameLab.text = [NSString stringWithFormat:@"所属部门:%@",[SDUserInfo obtainWithDepartmentName]];
 }
-
-
-
+#pragma mark ----数据相关-----
+-(void) requestUserInfoData{
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"userId"] =  [SDUserInfo obtainWithUserId];
+    param[@"token"] = [SDTool getNewToken];
+    [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTAPPUSERUSERINFO_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
+        if (error) {
+            return ;
+        }
+        if ([showdata isKindOfClass:[NSDictionary class]]) {
+            //修改用户保存信息
+            [SDUserInfo alterUserInfo:showdata];
+            //更新信息
+            [self updateUserInfo];
+        }
+    }];
+}
 
 @end

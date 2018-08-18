@@ -372,7 +372,7 @@ static NSString *const advertScrollViewMoreCell = @"advertScrollViewMoreCell";
     }
 
     NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];
-
+  
     // 3、通过动画滚动到下一个位置
     [self.collectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
 }

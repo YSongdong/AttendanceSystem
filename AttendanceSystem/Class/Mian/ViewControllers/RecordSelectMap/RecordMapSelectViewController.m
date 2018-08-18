@@ -194,6 +194,13 @@ AMapSearchDelegate
 }
 //重新定位
 -(void)selectPresentAction:(UIButton *)sender{
+    //判断有没有开启定位权限
+    if ([CLLocationManager authorizationStatus] ==kCLAuthorizationStatusDenied) {
+        //不可用
+        //用户拒绝开启用户权限
+        [self.view addSubview:self.showLocatView];
+        return ;
+    }
     self.mapView.showsUserLocation = YES;
     [self.mapView setCenterCoordinate:self.userLocation.coordinate animated:YES];
     [self.mapView removeAnnotation:_pointAnnotaiton];

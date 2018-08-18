@@ -46,8 +46,9 @@
     [self addSubview:self.backBtn];
     [self.backBtn setImage:[UIImage imageNamed:@"nav_ico_back"] forState:UIControlStateNormal];
     [self.backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf).offset(18);
+        make.left.equalTo(weakSelf).offset(5);
         make.centerY.equalTo(titleLab.mas_centerY);
+        make.width.height.equalTo(@44);
     }];
     
     UIView *headerView = [[UIView alloc]init];
@@ -81,12 +82,12 @@
     self.errorLab.font = Font(12);
     self.errorLab.textColor = [UIColor colorWithHexString:@"#989898"];
     self.errorLab.numberOfLines = 2;
+    self.errorLab.textAlignment = NSTextAlignmentCenter;
     [self.errorLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(headerView).offset(18);
         make.right.equalTo(headerView).offset(-18);
         make.top.equalTo(lineImageV.mas_bottom).offset(11);
     }];
-   // [UILabel changeLineSpaceForLabel:self.errorLab WithSpace:5];
     self.errorLab.hidden = YES;
     
     self.headerMarkLab = [[UILabel alloc]init];
@@ -214,6 +215,9 @@
 -(void)updateBtnAction:(UIButton *) sender{
     self.updateBlock();
 }
+-(void)setChenkErrorStr:(NSString *)chenkErrorStr{
+    _chenkErrorStr = chenkErrorStr;
+}
 //0: 未上传 1:未审核 2:未通过 3:已审核'
 -(void) upatePhotoViewStatu:(NSString *)statu{
     if ([statu isEqualToString:@"1"]) {
@@ -275,6 +279,8 @@
         
         //显示失败原因
         self.errorLab.hidden = NO;
+        
+         self.errorLab.text = [NSString stringWithFormat:@"失败原因：%@",self.chenkErrorStr];
         
         NSString *nameStr =@"用户留底照片认证未通过";
         //设置富文本

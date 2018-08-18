@@ -12,7 +12,9 @@
 @property (weak, nonatomic) IBOutlet UITextView *cellTextView;
 //显示原因lab'
 @property (weak, nonatomic) IBOutlet UILabel *showReasonLab;
-
 //显示提示原因
 @property (weak, nonatomic) IBOutlet UILabel *showPropentReasonLab;
+
+@property (nonatomic,copy) void(^reasonBlock)(NSString *reasonStr);
+
 @end

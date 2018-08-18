@@ -17,6 +17,11 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 #define PUBLISH_DIMAIN_URL @"http://kq.api.cqlanhui.com/"
 //#define PUBLISH_DIMAIN_URL @"http://192.168.2.56/"
 
+
+/*********公告***********/
+#define  HTTP_ATTADMINBULLETINAPPLIST_URL   getRequestPath(@"attendance/Att_Admin_Bulletin/appList")
+
+
 //---------------------------用户中心-----------------
 /*********身份证/手机号登录***********/
 #define  HTTP_ATTAPPUSERLOGIN_URL   getRequestPath(@"attendance/Att_app_user/userLogin")
@@ -49,6 +54,9 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 #define  HTTP_APPATTENDFACERRECORDREMARK_URL   getRequestPath(@"attendance/App_Attendance/sbqAppEditUserRecordRemark")
 /*********获取日历状态值返回接口***********/
 #define  HTTP_APPATTENDSTATUSLIST_URL   getRequestPath(@"attendance/App_Attendance/getCalendarStatusList")
+
+/*********人员考勤统计***********/
+#define  HTTP_APPATTENDACESTATISTIAPPGET_URL   getRequestPath(@"attendance/App_Attendance/statisticsAppGet")
 
 //---------------------------审批专区-----------------
 /*********申请页审批流程***********/

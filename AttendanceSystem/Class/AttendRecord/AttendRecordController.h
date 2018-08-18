@@ -11,4 +11,6 @@
 #import "SDBaseController.h"
 @interface AttendRecordController : SDBaseController
 
+@property (nonatomic,strong) NSString *selectDate;
+
 @end

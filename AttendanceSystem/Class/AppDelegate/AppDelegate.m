@@ -18,15 +18,18 @@
 #import "HomeViewController.h"
 #import "SDPhotoCollectController.h"
 
+#import "RecordApproveDetaController.h"
+
 #import "MessageCentreController.h"
 #import "RecordApproveDetaController.h"
+
+
 @interface AppDelegate ()<REFrostedViewControllerDelegate,JPUSHRegisterDelegate>
 
 
 @end
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
    
@@ -49,8 +52,17 @@
 
 - (void)networkDidReceiveMessage:(NSNotification *)notification {
     NSDictionary * userInfo = [notification userInfo];
-    NSDictionary *extrasDict = userInfo[@"extras"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ChenkMessage" object:nil userInfo:extrasDict];
+    NSDictionary *extrasDict = [userInfo valueForKey:@"content"];
+    
+//    RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
+//    detaVC.detaType = recordApproveCardDetaType;
+//    detaVC.titleStr = [NSString stringWithFormat:@"%@补卡申请",[SDUserInfo obtainWithRealName]];
+//    detaVC.typeStr = @"3";
+//    detaVC.isSkipGrade = YES;
+//    //审核中
+//    detaVC.chenkStatusStr = @"1";
+//   // detaVC.recordIdStr = showdata[@"id"];
+//    self.window.rootViewController =detaVC;
 }
 -(void) startRootView{
  
@@ -60,7 +72,6 @@
         UITabBarController *tarBarCtr=[[UITabBarController alloc]init];
         [tarBarCtr setViewControllers:[NSArray arrayWithObjects:rootVC, nil]];
         self.rootTabbarCtrV = tarBarCtr;
-        
         //侧边栏
         REFrostedViewController *rostedViewController = [[REFrostedViewController alloc] initWithContentViewController:tarBarCtr menuViewController:leftVC];
         rostedViewController.direction = REFrostedViewControllerDirectionLeft;
@@ -73,7 +84,6 @@
         
         self.window.rootViewController=rostedViewController;
     }else{
-        
          SDRootNavigationController *loginVC = [[SDRootNavigationController alloc]initWithRootViewController:[SDLoginController new]];
         self.window.rootViewController=loginVC;
     }
@@ -115,7 +125,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     [JPUSHService handleRemoteNotification:userInfo];
     NSLog(@"iOS7及以上系统，收到通知:%@", userInfo);
-    
     if ([[UIDevice currentDevice].systemVersion floatValue]<10.0 || application.applicationState>0) {
         
     }
@@ -126,7 +135,6 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // Required
     NSDictionary * userInfo = notification.request.content.userInfo;
   
-    
     if (@available(iOS 10.0, *)) {
         if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
             [JPUSHService handleRemoteNotification:userInfo];
@@ -151,7 +159,6 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     }
     completionHandler();  // 系统要求执行这个方法
 }
-
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // Required,For systems with less than or equal to iOS6
     [JPUSHService handleRemoteNotification:userInfo];
@@ -160,18 +167,14 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 - (void)applicationWillResignActive:(UIApplication *)application {
   
 }
-
-
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-   
+    [application setApplicationIconBadgeNumber:0];
+    [application cancelAllLocalNotifications];
 }
-
-
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-  
+    [application setApplicationIconBadgeNumber:0];
+    [application cancelAllLocalNotifications];
 }
-
-
 - (void)applicationDidBecomeActive:(UIApplication *)application {
   
 }

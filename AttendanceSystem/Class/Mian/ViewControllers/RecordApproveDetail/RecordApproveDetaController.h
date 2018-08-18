@@ -39,6 +39,6 @@ typedef  enum{
 @property (nonatomic,strong) NSString *chenkStatusStr;
 //是否要越级跳转  YES 是  NO 否
 @property (nonatomic,assign) BOOL isSkipGrade;
-
-
+//通知栏进入     YES 是  NO 否
+@property (nonatomic,assign) BOOL isAppDelegate;
 @end

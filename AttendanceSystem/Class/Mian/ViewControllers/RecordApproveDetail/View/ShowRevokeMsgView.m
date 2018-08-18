@@ -34,9 +34,9 @@
     [self addSubview:samilView];
     samilView.backgroundColor = [UIColor colorWithHexString:@"#e9e9e9"];
     [samilView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf).offset(65);
-        make.right.equalTo(weakSelf).offset(-65);
-        make.height.equalTo(@165);
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(65));
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(65));
+        make.height.equalTo(@(KSIphonScreenH(165)));
         make.centerX.equalTo(weakSelf.mas_centerX);
         make.centerY.equalTo(weakSelf.mas_centerY);
     }];
@@ -48,7 +48,7 @@
     subView.backgroundColor = [UIColor colorTextWhiteColor];
     [subView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(samilView);
-        make.height.equalTo(@40);
+        make.height.equalTo(@(KSIphonScreenH(40)));
         make.centerX.equalTo(samilView.mas_centerX);
     }];
     
@@ -68,7 +68,7 @@
     [concetView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(subView.mas_bottom).offset(1);
         make.left.right.equalTo(samilView);
-        make.bottom.equalTo(samilView).offset(-46);
+        make.bottom.equalTo(samilView).offset(-KSIphonScreenH(46));
     }];
     
     self.showLab = [[UILabel alloc]init];
@@ -78,8 +78,8 @@
     self.showLab.numberOfLines = 0;
     self.showLab.textColor = [UIColor colorTextBg65BlackColor];
     [self.showLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(concetView).offset(19);
-        make.right.equalTo(concetView).offset(-19);
+        make.left.equalTo(concetView).offset(KSIphonScreenW(19));
+        make.right.equalTo(concetView).offset(-KSIphonScreenW(19));
         make.centerX.equalTo(concetView.mas_centerX);
         make.centerY.equalTo(concetView.mas_centerY);
     }];

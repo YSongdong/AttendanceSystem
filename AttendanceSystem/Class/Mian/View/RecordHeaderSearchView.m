@@ -51,7 +51,7 @@
     self.searchTextField.textColor = [UIColor colorTextBg28BlackColor];
     self.searchTextField.returnKeyType = UIReturnKeySearch;
     self.searchTextField.clearButtonMode=UITextFieldViewModeAlways;
-    self.searchTextField.placeholder = @"请输入标题、编号、状态、正文内容";
+    self.searchTextField.placeholder = @"请输入编号、正文内容";
     [self.searchTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(searchImageV.mas_right).offset(10);
         make.top.bottom.right.equalTo(bgView);

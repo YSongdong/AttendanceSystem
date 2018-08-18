@@ -12,6 +12,7 @@
 typedef enum : NSUInteger {
     DatePickerViewDateTimeMode,//年月日,时分
     DatePickerViewDateMode,//年月日
+    DatePickerViewDateYMode,//年月
     DatePickerViewTimeMode//时分
 } DatePickerViewMode;
 

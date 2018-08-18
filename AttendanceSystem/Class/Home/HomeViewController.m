@@ -22,6 +22,8 @@
 #import "MineChenkApplyForController.h"
 
 #import "MessageCentreController.h"
+#import "AnnouncentViewController.h"
+#import "AttendCountController.h"
 
 @interface HomeViewController ()
 <
@@ -81,15 +83,17 @@ SGAdvertScrollViewDelegate
 
 @property (weak, nonatomic) IBOutlet UIButton *meExamBtn;
 @property (weak, nonatomic) IBOutlet UIImageView *meExamImageV;
-
 @property (weak, nonatomic) IBOutlet UILabel *meExamLab;
+
+//公告数据源
+@property (nonatomic,strong) NSMutableArray *titlsArr;
+
 @end
 
 @implementation HomeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
     //更新ui
     [self updateView];
     
@@ -101,17 +105,19 @@ SGAdvertScrollViewDelegate
     self.tabBarController.tabBar.hidden = YES;
     //请求数据
     [weakSelf requestUserInfoData];
-    if ([[SDUserInfo obtainWithIsCharge] isEqualToString:@"2"]) {
-        weakSelf.meExamBtn.hidden = YES;
-        weakSelf.meExamImageV.hidden = YES;
-        weakSelf.meExamLab.hidden = YES;
-        weakSelf.meChankReightImageV.hidden = YES;
-    }else{
-        weakSelf.meExamBtn.hidden = NO;
-        weakSelf.meExamImageV.hidden = NO;
-        weakSelf.meExamLab.hidden = NO;
-        weakSelf.meChankReightImageV.hidden = NO;
-    }
+    //请求公告
+    [weakSelf requestBulletinDataList];
+//    if ([[SDUserInfo obtainWithIsCharge] isEqualToString:@"2"]) {
+//        weakSelf.meExamBtn.hidden = YES;
+//        weakSelf.meExamImageV.hidden = YES;
+//        weakSelf.meExamLab.hidden = YES;
+//        weakSelf.meChankReightImageV.hidden = YES;
+//    }else{
+//        weakSelf.meExamBtn.hidden = NO;
+//        weakSelf.meExamImageV.hidden = NO;
+//        weakSelf.meExamLab.hidden = NO;
+//        weakSelf.meChankReightImageV.hidden = NO;
+//    }
 }
 //更新ui
 -(void) updateView{
@@ -165,17 +171,15 @@ SGAdvertScrollViewDelegate
 //    _advertView.titleFont = [UIFont systemFontOfSize:12];
 //    _advertView.delegate = self;
     
-    //隐藏广告
-    self.msgImageV.hidden = YES;
-    self.advertView.hidden = YES;
+//    //隐藏广告
+//    self.msgImageV.hidden = YES;
+//    self.advertView.hidden = YES;
     
     if (KIsiPhoneX) {
         self.NaviBgImageV.image = [UIImage imageNamed:@"sy_bg"];
     }else{
         self.NaviBgImageV.image = [UIImage imageNamed:@"sy_nav_bg"];
     }
-    
-  
     
 }
 //滑动显示侧边栏
@@ -185,7 +189,8 @@ SGAdvertScrollViewDelegate
 #pragma mark ----跑马灯代理方法----
 /// 代理方法
 - (void)advertScrollView:(SGAdvertScrollView *)advertScrollView didSelectedItemAtIndex:(NSInteger)index {
-    
+    AnnouncentViewController  *announcentVC = [[AnnouncentViewController alloc]init];
+    [self.navigationController pushViewController:announcentVC animated:YES];
 }
 /*********考勤专区************/
 //考勤专区
@@ -204,12 +209,14 @@ SGAdvertScrollViewDelegate
 }
 //考勤记录
 - (IBAction)attendCountAction:(UIButton *)sender {
-    //删除
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"暂无开放" preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }]];
-    [self presentViewController:alertController animated:YES completion:nil];
+//    //删除
+//    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"暂无开放" preferredStyle:UIAlertControllerStyleAlert];
+//    [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//    }]];
+//    [self presentViewController:alertController animated:YES completion:nil];
+    AttendCountController *countVC = [[AttendCountController alloc]init];
+    [self.navigationController pushViewController:countVC animated:YES];
 }
 /*********审批中心************/
 //外出
@@ -267,6 +274,35 @@ SGAdvertScrollViewDelegate
         [SDUserInfo alterUserInfo:showdata];
         
         [UIImageView sd_setImageView:self.headerImageV WithURL:[SDUserInfo obtainWithPhoto]];
+    }];
+}
+//请求公告
+-(void) requestBulletinDataList{
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"platformId"]= [SDUserInfo obtainWithPlafrmId];
+    param[@"userId"] =  [SDUserInfo obtainWithUserId];
+    param[@"token"] = [SDTool getNewToken];
+    
+    [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTADMINBULLETINAPPLIST_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
+        if (error) {
+            return ;
+        }
+        
+        if (![showdata isKindOfClass:[NSDictionary class]]) {
+            return;
+        }
+        
+        NSMutableArray *mutableArr = [NSMutableArray array];
+        NSArray *arr =  showdata[@"list"];
+        for (NSDictionary *dict in arr) {
+            [mutableArr  addObject:dict[@"content"]];
+        }
+        //跑马灯
+        self.advertView.titles = mutableArr;
+        self.advertView.titleColor = [UIColor whiteColor];
+        self.advertView.textAlignment = NSTextAlignmentLeft;
+        self.advertView.titleFont = [UIFont systemFontOfSize:12];
+        self.advertView.delegate = self;
     }];
 }
 

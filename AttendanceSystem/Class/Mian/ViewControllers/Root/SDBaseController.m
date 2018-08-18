@@ -40,7 +40,7 @@ UIGestureRecognizerDelegate
     // 设置自定义导航栏标题颜色
     self.customNavBar.titleLabelColor = [UIColor whiteColor];
     
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
 //    //右边
 //    [self.customNavBar wr_setRightButtonWithImage:[UIImage imageNamed:@"sy_nav_ico_news"]];
 //    self.customNavBar.onClickRightButton = ^{

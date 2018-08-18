@@ -34,6 +34,8 @@
         }else{
             self.showPropentReasonLab.hidden = YES;
         }
+        
+        self.reasonBlock(textView.text);
         return NO; //这里返回NO，就代表return键值失效，即页面上按下return，不会出现换行，如果为yes，则输入页面会换行
     }
 

@@ -157,7 +157,8 @@ UICollectionViewDelegateFlowLayout
 }
 -(void) loadData{
     [self.dataArr removeAllObjects];
-   
+    [self.selectIndexPathArr removeAllObjects];
+    
     if (_siftType == RecordApproveSiftType) {
         NSArray *arr =@[@"全部",@"审批完成",@"审批中",@"已撤销"];
         NSMutableArray *mutbleArr = [NSMutableArray array];
@@ -166,16 +167,31 @@ UICollectionViewDelegateFlowLayout
             dict[@"content"] = arr[i];
             dict[@"isSelect"] = @"2";
             dict[@"status"] = [NSString stringWithFormat:@"%d",i];
-            if (i == 0) {
-                //默认第一个选中
-                dict[@"isSelect"] = @"1";
+            if (self.selelctSiftArr == nil) {
+                if (i == 0) {
+                    //默认第一个选中
+                    dict[@"isSelect"] = @"1";
+                }
+            }else{
+                //选中
+                NSDictionary *selectDict = self.selelctSiftArr[0];
+                if ([arr[i] isEqualToString:selectDict[@"content"]]) {
+                   dict[@"isSelect"] = @"1";
+                }
             }
             [mutbleArr addObject:dict];
         }
         [self.dataArr addObject:mutbleArr];
         
-        NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [self.selectIndexPathArr addObject:nomalIndexPath];
+        if (self.selelctSiftArr == nil) {
+            NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            [self.selectIndexPathArr addObject:nomalIndexPath];
+        }else{
+            //选中
+            NSDictionary *selectDict = self.selelctSiftArr[0];
+            NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:[selectDict[@"status"]integerValue]inSection:0];
+            [self.selectIndexPathArr addObject:nomalIndexPath];
+        }
         
     }else if (_siftType == RecordApplyForSiftType) {
         NSArray *arr =@[@"全部",@"审批完成",@"审批中",@"已撤销"];
@@ -185,9 +201,17 @@ UICollectionViewDelegateFlowLayout
             dict[@"content"] = arr[i];
             dict[@"isSelect"] = @"2";
             dict[@"status"] = [NSString stringWithFormat:@"%d",i];
-            if (i == 0) {
-                //默认第一个选中
-                dict[@"isSelect"] = @"1";
+            if (self.selelctSiftArr == nil) {
+                if (i == 0) {
+                    //默认第一个选中
+                    dict[@"isSelect"] = @"1";
+                }
+            }else{
+                //选中
+                NSDictionary *selectDict = self.selelctSiftArr[0];
+                if ([arr[i] isEqualToString:selectDict[@"content"]]) {
+                    dict[@"isSelect"] = @"1";
+                }
             }
             [mutbleArr addObject:dict];
         }
@@ -201,19 +225,43 @@ UICollectionViewDelegateFlowLayout
             dict[@"content"] = typeArr[i];
             dict[@"isSelect"] = @"2";
             dict[@"type"] = [NSString stringWithFormat:@"%d",i];
-            if (i == 0) {
-                //默认第一个选中
-                dict[@"isSelect"] = @"1";
+            if (self.selelctSiftArr == nil) {
+                if (i == 0) {
+                    //默认第一个选中
+                    dict[@"isSelect"] = @"1";
+                }
+            }else{
+                //选中
+                NSDictionary *selectDict = self.selelctSiftArr[1];
+                if ([typeArr[i] isEqualToString:selectDict[@"content"]]) {
+                    dict[@"isSelect"] = @"1";
+                }
             }
             [mutbleTypeArr addObject:dict];
         }
         [self.dataArr addObject:mutbleTypeArr];
         
-        //选择默认第一个
-        for (int j=0 ; j<2; j++) {
-            NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:0 inSection:j];
-            [self.selectIndexPathArr addObject:nomalIndexPath];
+        if (self.selelctSiftArr == nil) {
+            //选择默认第一个
+            for (int j=0 ; j<2; j++) {
+                NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:0 inSection:j];
+                [self.selectIndexPathArr addObject:nomalIndexPath];
+            }
+        }else{
+            for (int j=0 ; j<2; j++) {
+                if (j==0) {
+                    NSDictionary *selecDict = self.selelctSiftArr[j];
+                    NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:[selecDict[@"status"]integerValue] inSection:j];
+                    [self.selectIndexPathArr addObject:nomalIndexPath];
+                }else{
+                    NSDictionary *selecDict = self.selelctSiftArr[j];
+                    NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:[selecDict[@"type"]integerValue] inSection:j];
+                    [self.selectIndexPathArr addObject:nomalIndexPath];
+                }
+               
+            }
         }
+        
     }else if (_siftType == RecordTypeSiftType){
         
         NSArray *typeArr =@[@"全部",@"请假",@"外出",@"补卡"];
@@ -223,18 +271,35 @@ UICollectionViewDelegateFlowLayout
             dict[@"content"] = typeArr[i];
             dict[@"isSelect"] = @"2";
             dict[@"type"] = [NSString stringWithFormat:@"%d",i];
-            if (i == 0) {
-                //默认第一个选中
-                dict[@"isSelect"] = @"1";
+            if (self.selelctSiftArr == nil) {
+                if (i == 0) {
+                    //默认第一个选中
+                    dict[@"isSelect"] = @"1";
+                }
+            }else{
+                //选中
+                NSDictionary *selectDict = self.selelctSiftArr[0];
+                if ([typeArr[i] isEqualToString:selectDict[@"content"]]) {
+                    dict[@"isSelect"] = @"1";
+                }
             }
             [mutbleTypeArr addObject:dict];
         }
         [self.dataArr addObject:mutbleTypeArr];
         
-        NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [self.selectIndexPathArr addObject:nomalIndexPath];
+        if (self.selelctSiftArr == nil) {
+            NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            [self.selectIndexPathArr addObject:nomalIndexPath];
+        }else{
+            //选中
+            NSDictionary *selectDict = self.selelctSiftArr[0];
+            NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:[selectDict[@"type"]integerValue]inSection:0];
+            [self.selectIndexPathArr addObject:nomalIndexPath];
+        }
     }
-    
+}
+-(void)setSelelctSiftArr:(NSArray *)selelctSiftArr{
+    _selelctSiftArr = selelctSiftArr;
 }
 -(void) createCollectView{
     self.bottomToolView = [[UIView alloc]init];

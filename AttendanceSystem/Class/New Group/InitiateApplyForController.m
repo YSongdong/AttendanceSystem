@@ -38,7 +38,8 @@ ApprovalRecordSiftControllerDelegate
 @property (nonatomic,strong) NSString *likeTitleStr;
 //分页
 @property (nonatomic,assign) NSInteger page;
-
+//选中筛选条件
+@property (nonatomic,strong) NSArray *selelctSiftArr;
 @end
 
 @implementation InitiateApplyForController
@@ -74,6 +75,7 @@ ApprovalRecordSiftControllerDelegate
     }else if ([typeStr isEqualToString:@"3"]){
         cell.cellType = RecordCellCardType;
     }
+    cell.cutTypeStr = @"2";
     cell.dict =dict;
     return cell;
 }
@@ -136,6 +138,7 @@ ApprovalRecordSiftControllerDelegate
     }
     self.headerSearchView.searchTextField.text = mutablStr.copy;
     
+    self.selelctSiftArr = arr;
 }
 -(void) createSearchView{
     __weak typeof(self) weakSelf = self;
@@ -193,6 +196,7 @@ ApprovalRecordSiftControllerDelegate
         ApprovalRecordSiftController *siftVC = [[ApprovalRecordSiftController alloc]init];
         siftVC.siftType = RecordApplyForSiftType;
         siftVC.delegate = weakSelf;
+        siftVC.selelctSiftArr = weakSelf.selelctSiftArr;
         [weakSelf.navigationController pushViewController:siftVC animated:YES];
     };
 }
