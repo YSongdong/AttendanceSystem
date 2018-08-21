@@ -133,6 +133,7 @@ UITableViewDataSource
 
     if (indexPath.section == self.dataArr.count-1) {
         SDUserLeaveTableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:SDUERINFOLEAVE_CELL forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         //退出按钮
         cell.leaveBtnBlock = ^{
             //删除用户信息
@@ -252,7 +253,7 @@ UITableViewDataSource
             NSString *phoneStr=[isBindPhoneStr isEqualToString:@"2"] ? @"未绑定":[SDUserInfo obtainWithPhone];
     
             NSString *idcardStr;
-            if ([showdata[@"idcard"] isEqualToString:@""]) {
+            if ([showdata[@"idcard"] isEqualToString:@""] ||showdata[@"idcard"] == nil ) {
                 idcardStr = @"未完善";
             }else{
                 idcardStr = showdata[@"idcard"];

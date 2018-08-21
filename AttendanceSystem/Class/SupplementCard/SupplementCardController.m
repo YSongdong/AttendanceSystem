@@ -51,6 +51,10 @@ UIImagePickerControllerDelegate
 @property (nonatomic,strong) NSMutableArray *approvalArr;
 //补卡原因
 @property (nonatomic,strong) NSString *leaveReasonStr;
+
+//补卡时间
+@property (nonatomic,strong) NSString *sureDateStr;
+
 @end
 
 @implementation SupplementCardController
@@ -78,7 +82,8 @@ UIImagePickerControllerDelegate
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
             ApprovarReasonCell *cell = [weakSelf.cardTableView cellForRowAtIndexPath:indexPath];
             [cell.cellTextView resignFirstResponder];
-    
+            weakSelf.leaveReasonStr = cell.cellTextView.text;
+            
             [weakSelf.view addSubview:weakSelf.datePickerView];
             [weakSelf.datePickerView showDateTimePickerView];
         };
@@ -197,7 +202,7 @@ UIImagePickerControllerDelegate
 - (void)didClickFinishDateTimePickerView:(NSString *)date{
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     SupplementCardTimeCell *cell  = [self.cardTableView cellForRowAtIndexPath:indexPath];
-    NSString *timeStr = [NSString stringWithFormat:@"%@ %@",[[self requestDateFormatter]stringFromDate:[NSDate date]],date];
+    NSString *timeStr = [NSString stringWithFormat:@"%@ %@",self.sureDateStr,date];
     cell.showCardTimeLab.text = timeStr;
     self.timeStr = timeStr;
     cell.showCardTimeLab.textColor = [UIColor colorTextBg28BlackColor];
@@ -329,6 +334,7 @@ UIImagePickerControllerDelegate
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
             SupplementCardTimeCell *cell =[self.cardTableView cellForRowAtIndexPath:indexPath];
             [cell updateTimeType:showdata];
+            self.sureDateStr = showdata[@"sureDate"];
         }
     }];
 }

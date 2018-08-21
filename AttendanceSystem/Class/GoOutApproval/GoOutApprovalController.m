@@ -90,6 +90,7 @@ UIImagePickerControllerDelegate
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
             ApprovarReasonCell *cell = [weakSelf.leaveTableView cellForRowAtIndexPath:indexPath];
             [cell.cellTextView resignFirstResponder];
+            weakSelf.leaveReasonStr = cell.cellTextView.text;
             
             weakSelf.selectTimeType = @"1";
             [weakSelf.view addSubview:weakSelf.datePickerView];
@@ -100,6 +101,7 @@ UIImagePickerControllerDelegate
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
             ApprovarReasonCell *cell = [weakSelf.leaveTableView cellForRowAtIndexPath:indexPath];
             [cell.cellTextView resignFirstResponder];
+            weakSelf.leaveReasonStr = cell.cellTextView.text;
             
             weakSelf.selectTimeType = @"2";
             [weakSelf.view addSubview:weakSelf.datePickerView];

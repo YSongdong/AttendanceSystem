@@ -102,7 +102,12 @@ UITableViewDataSource
     return 60;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 60;
+    NSDictionary *dict = self.dataArr[section];
+    if ([dict[@"type"] isEqualToString:@"missCard"] || [dict[@"type"] isEqualToString:@"onTime"] || [dict[@"type"] isEqualToString:@"abnormal"]) {
+       return 70;
+    }else{
+       return 60;
+    }
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 0.01;
@@ -153,6 +158,11 @@ UITableViewDataSource
     };
     
     [self.customNavBar wr_setRightButtonWithTitle:@"考勤记录" titleColor:[UIColor colorTextWhiteColor]];
+    self.customNavBar.onClickRightButton = ^{
+        AttendRecordController *recodVC =[[AttendRecordController alloc]init];
+        recodVC.selectDate = [[weakSelf showDateFormatter]stringFromDate:[NSDate date]];
+        [weakSelf.navigationController pushViewController:recodVC animated:YES];
+    };
 }
 #pragma mark ---懒加载-----
 -(AttendCardHeaderView *)headerView{

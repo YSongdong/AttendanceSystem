@@ -162,41 +162,52 @@
 }
 
 // 更新显示状态 1/正常 2异常
--(void) updateAddressStatu:(NSString *) statu address:(NSString *)address{
-     NSString *addressStr = [NSString stringWithFormat:@" %@",address];
-    if ([statu isEqualToString:@"1"]) {
+-(void) updateAddressStatu:(NSString *) statu address:(NSString *)address isGo:(NSString *)isGoStr{
+    
+    NSString *addressStr = [NSString stringWithFormat:@" %@",address];
+     //判断是否是外勤  1正常 2外勤 3公共
+    if ([isGoStr isEqualToString:@"2"]) {
         NSMutableAttributedString *AttributedStr1 = [[NSMutableAttributedString alloc]initWithString: addressStr];
         NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
-        textAttachment.image = [UIImage imageNamed:@"dqdw_ico_zc"]; //设置图片源
+        textAttachment.image = [UIImage imageNamed:@"dqdw_ico_wq"]; //设置图片源
         textAttachment.bounds = CGRectMake(0, -3, 30, 15);                 //设置图片位置和大小
         NSAttributedString *attrStr11 = [NSAttributedString attributedStringWithAttachment: textAttachment];
         [AttributedStr1 insertAttributedString: attrStr11 atIndex: 0]; //NSTextAttachment占用一个字符长度，插入后原字符串长度增加1
         self.addressLab.attributedText = AttributedStr1;
     }else{
-        NSMutableAttributedString *AttributedStr1 = [[NSMutableAttributedString alloc]initWithString: addressStr];
-        NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
-        textAttachment.image = [UIImage imageNamed:@"dqdw_ico_yc"]; //设置图片源
-        textAttachment.bounds = CGRectMake(0, 0, 30, 15);                 //设置图片位置和大小
-        NSAttributedString *attrStr11 = [NSAttributedString attributedStringWithAttachment: textAttachment];
-        [AttributedStr1 insertAttributedString: attrStr11 atIndex: 0]; //NSTextAttachment占用一个字符长度，插入后原字符串长度增加1
-        self.addressLab.attributedText = AttributedStr1;
-        
-        //距离最近的考勤范围
-        NSString *nameStr ;
-        if (self.minDistance > 1000) {
-           nameStr =[NSString stringWithFormat:@"(距最近的考勤范围%.1fkm)",self.minDistance/1000];
+        if ([statu isEqualToString:@"1"]) {
+            NSMutableAttributedString *AttributedStr1 = [[NSMutableAttributedString alloc]initWithString: addressStr];
+            NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
+            textAttachment.image = [UIImage imageNamed:@"dqdw_ico_zc"]; //设置图片源
+            textAttachment.bounds = CGRectMake(0, -3, 30, 15);                 //设置图片位置和大小
+            NSAttributedString *attrStr11 = [NSAttributedString attributedStringWithAttachment: textAttachment];
+            [AttributedStr1 insertAttributedString: attrStr11 atIndex: 0]; //NSTextAttachment占用一个字符长度，插入后原字符串长度增加1
+            self.addressLab.attributedText = AttributedStr1;
         }else{
-            nameStr =[NSString stringWithFormat:@"(距最近的考勤范围%.1fm)",self.minDistance];
+            NSMutableAttributedString *AttributedStr1 = [[NSMutableAttributedString alloc]initWithString: addressStr];
+            NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
+            textAttachment.image = [UIImage imageNamed:@"dqdw_ico_yc"]; //设置图片源
+            textAttachment.bounds = CGRectMake(0, 0, 30, 15);                 //设置图片位置和大小
+            NSAttributedString *attrStr11 = [NSAttributedString attributedStringWithAttachment: textAttachment];
+            [AttributedStr1 insertAttributedString: attrStr11 atIndex: 0]; //NSTextAttachment占用一个字符长度，插入后原字符串长度增加1
+            self.addressLab.attributedText = AttributedStr1;
+            
+            //距离最近的考勤范围
+            NSString *nameStr ;
+            if (self.minDistance > 1000) {
+                nameStr =[NSString stringWithFormat:@"(距最近的考勤范围%.1fkm)",self.minDistance/1000];
+            }else{
+                nameStr =[NSString stringWithFormat:@"(距最近的考勤范围%.1fm)",self.minDistance];
+            }
+            //设置富文本
+            NSMutableAttributedString *attributeStr = [[NSMutableAttributedString alloc] initWithString:nameStr];
+            [attributeStr addAttribute:NSForegroundColorAttributeName
+                                 value:[UIColor colorCommonGreenColor]
+                                 range:NSMakeRange(5, 4)];
+            self.pouncCardLab.attributedText = attributeStr;
+            
         }
-        //设置富文本
-        NSMutableAttributedString *attributeStr = [[NSMutableAttributedString alloc] initWithString:nameStr];
-        [attributeStr addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor colorCommonGreenColor]
-                             range:NSMakeRange(5, 4)];
-        self.pouncCardLab.attributedText = attributeStr;
-
     }
-   
 }
 
 

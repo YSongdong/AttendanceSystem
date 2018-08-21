@@ -225,9 +225,14 @@
             self.showStatusLab.textColor = [UIColor colorWithHexString:@"#f76254"];
             
             self.showNameLab.text = nameStr;
-            //原因
-            self.showReasonLab.text = [NSString stringWithFormat:@"拒绝原因: %@",infoDict[@"info"]];
             
+            if ([infoDict[@"info"] isEqualToString:@""]) {
+                self.showReasonLab.hidden = YES;
+            }else{
+                self.showReasonLab.hidden = NO;
+                //原因
+                self.showReasonLab.text = [NSString stringWithFormat:@"拒绝原因: %@",infoDict[@"info"]];
+            }
         }else if ([adoptStr isEqualToString:@"2"]){
             //通过
             self.showStatusLab.text =@"已同意";

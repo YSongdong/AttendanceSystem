@@ -48,7 +48,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bbq-73-Cqn">
                             <rect key="frame" x="12" y="77" width="48" height="48"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Nrl-pg-XGR">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pic_user" translatesAutoresizingMaskIntoConstraints="NO" id="Nrl-pg-XGR">
                                     <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
                                 </imageView>
                             </subviews>
@@ -207,28 +207,28 @@
                             </connections>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_wc" translatesAutoresizingMaskIntoConstraints="NO" id="aM6-cl-CVY">
-                            <rect key="frame" x="76" y="374.5" width="29" height="31"/>
+                            <rect key="frame" x="75.5" y="376.5" width="29" height="31"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_qj" translatesAutoresizingMaskIntoConstraints="NO" id="fyi-ij-npq">
-                            <rect key="frame" x="232" y="375" width="31" height="30"/>
+                            <rect key="frame" x="232" y="377" width="31" height="30"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_bk" translatesAutoresizingMaskIntoConstraints="NO" id="Dnz-g3-G79">
-                            <rect key="frame" x="388.5" y="377.5" width="30" height="26"/>
+                            <rect key="frame" x="388" y="379.5" width="30" height="26"/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="外出" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pnd-jF-Uf4">
-                            <rect key="frame" x="78" y="418.5" width="25" height="14.5"/>
+                            <rect key="frame" x="77.5" y="420.5" width="25" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.39607843139999999" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请假" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qJM-Ka-QWc">
-                            <rect key="frame" x="235" y="419" width="25" height="14.5"/>
+                            <rect key="frame" x="235" y="421" width="25" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.39607843139999999" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="补卡" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OJ0-PQ-WrZ">
-                            <rect key="frame" x="391.5" y="419" width="25" height="14.5"/>
+                            <rect key="frame" x="391" y="421" width="25" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.39607843139999999" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -330,6 +330,7 @@
                         <constraint firstItem="Bbq-73-Cqn" firstAttribute="leading" secondItem="Oy9-eC-Ltp" secondAttribute="leading" constant="12" id="i6a-MS-6eC"/>
                         <constraint firstItem="NcC-Jx-luY" firstAttribute="leading" secondItem="Oy9-eC-Ltp" secondAttribute="leading" constant="15" id="j56-BA-JNQ"/>
                         <constraint firstItem="7If-HW-xCj" firstAttribute="centerY" secondItem="h1w-Vc-OJJ" secondAttribute="centerY" id="k5I-Ub-sKL"/>
+                        <constraint firstItem="aM6-cl-CVY" firstAttribute="centerY" secondItem="QN3-UR-n4U" secondAttribute="centerY" constant="-10" id="kNx-3y-cwh"/>
                         <constraint firstItem="Cry-iI-Xzt" firstAttribute="leading" secondItem="QN3-UR-n4U" secondAttribute="trailing" constant="15" id="kc1-W4-HcW"/>
                         <constraint firstItem="GR9-Uh-cPI" firstAttribute="leading" secondItem="bRy-If-eA2" secondAttribute="leading" id="l9F-2l-VGq"/>
                         <constraint firstAttribute="trailing" secondItem="xVe-bY-EWU" secondAttribute="trailing" id="nC5-kM-neM"/>
@@ -338,7 +339,6 @@
                         <constraint firstItem="QN3-UR-n4U" firstAttribute="leading" secondItem="gad-q8-xW0" secondAttribute="leading" id="ohj-fs-w1V"/>
                         <constraint firstItem="QN3-UR-n4U" firstAttribute="top" secondItem="pJ2-yi-ZEz" secondAttribute="bottom" constant="16" id="q6h-9g-z4H"/>
                         <constraint firstItem="fyi-ij-npq" firstAttribute="centerY" secondItem="aM6-cl-CVY" secondAttribute="centerY" id="qjP-mM-wAa"/>
-                        <constraint firstItem="aM6-cl-CVY" firstAttribute="top" secondItem="QN3-UR-n4U" secondAttribute="top" constant="25" id="sLa-ZC-Vny"/>
                         <constraint firstItem="SjN-pu-URJ" firstAttribute="leading" secondItem="Oy9-eC-Ltp" secondAttribute="leading" constant="17" id="t8n-KY-qpd"/>
                         <constraint firstItem="wCI-NQ-Ai8" firstAttribute="leading" secondItem="Cry-iI-Xzt" secondAttribute="trailing" constant="15" id="uVk-MI-Fzv"/>
                         <constraint firstItem="xVe-bY-EWU" firstAttribute="top" secondItem="Oy9-eC-Ltp" secondAttribute="top" id="uhS-Pa-2L9"/>
@@ -5597,6 +5597,7 @@ iAAEx5UABMeYAATHpQAEx6oABMeyAATHtQAEx7oABMfCAATHxQAEx9cABMfaAATH3wAAAAAAAAQBAAAA
 AAAAAFkAAAAAAAAAAAAAAAAABMfhA
 </mutableData>
         </image>
+        <image name="pic_user" width="44" height="44"/>
         <image name="sy_ico_ad" width="15" height="14"/>
         <image name="sy_ico_bk" width="30" height="26"/>
         <image name="sy_ico_dspd" width="20" height="23"/>

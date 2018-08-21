@@ -25,7 +25,7 @@
 -(void)updateAddress:(NSString *) address;
 
 // 更新显示状态 1/正常 2异常
--(void) updateAddressStatu:(NSString *) statu address:(NSString *)address;
+-(void) updateAddressStatu:(NSString *) statu address:(NSString *)address isGo:(NSString *)isGoStr;
 
 
 

@@ -11,10 +11,8 @@
 #import "UpdateVersionView.h"
 
 @interface SDSettingViewController ()
-
 //升级版本view
 @property (nonatomic,strong) UpdateVersionView *updateVersionView;
-
 //
 @property (nonatomic,strong) UILabel *updateLab;
 
@@ -42,7 +40,6 @@
     };
 }
 -(void) createView{
-    
     __weak typeof(self) weakSelf = self;
     self.view.backgroundColor = [UIColor colorWithHexString:@"#f2f2f2"];
     
@@ -102,7 +99,7 @@
     self.updateLab.textColor = [UIColor colorTextBg98BlackColor];
     self.updateLab.font = Font(13);
     [self.updateLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(rightImageV.mas_left).offset(9);
+        make.right.equalTo(rightImageV.mas_left).offset(-9);
         make.centerY.equalTo(rightImageV.mas_centerY);
     }];
     self.updateLab.text = @"";
@@ -178,7 +175,7 @@
             newVersion = [dic valueForKey:@"version"];
         }
         //对比发现的新版本和本地的版本
-        if ([newVersion floatValue] > [localVersion floatValue]){
+        if (![newVersion  isEqualToString:localVersion]){
              self.updateLab.hidden = NO;
              self.updateLab.text = [NSString stringWithFormat:@"V%@版",newVersion];
         }else{

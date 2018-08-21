@@ -133,7 +133,6 @@
     }
     return 0;
 }
-
 //确定每一列返回的东西
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
@@ -279,7 +278,7 @@
         
         [self pickerView:self.pickerView didSelectRow:hour inComponent:0];
         [self pickerView:self.pickerView didSelectRow:minute inComponent:1];
-    }else if (self.pickerViewMode == DatePickerViewTimeMode){
+    }else if (self.pickerViewMode == DatePickerViewDateYMode){
         [self.pickerView selectRow:year-startYear inComponent:0 animated:NO];
         [self.pickerView selectRow:month-1 inComponent:1 animated:NO];
        
@@ -506,7 +505,6 @@
             case 0:
             {
                 selectedYear=startYear + row;
-               
             }
                 break;
             case 1:

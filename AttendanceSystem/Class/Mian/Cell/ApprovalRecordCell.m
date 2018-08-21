@@ -134,17 +134,18 @@
             type = @"年假";
         }else if ([typeStr isEqualToString:@"2"]){
             type = @"事假";
-        }else if ([typeStr isEqualToString:@"3"]){
-            type = @"调休";
+        }else if ([typeStr isEqualToString:@"7"]){
+            type = @"护理假";
         }else if ([typeStr isEqualToString:@"4"]){
             type = @"产假";
         }else if ([typeStr isEqualToString:@"5"]){
             type = @"婚假";
         }else if ([typeStr isEqualToString:@"6"]){
             type = @"丧假";
-        }else if ([typeStr isEqualToString:@"0"]){
-            type = @"其他";
+        }else if ([typeStr isEqualToString:@"8"]){
+            type = @"病假";
         }
+        
         self.beginTimeLab.text =[NSString stringWithFormat:@"请假类型: %@",type];
         
         NSString *startTimeStr ;

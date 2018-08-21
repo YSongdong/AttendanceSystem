@@ -252,7 +252,6 @@ AMapSearchDelegate
     [self.mapView setCenterCoordinate:location.coordinate];
     [self.pointAnnotaiton setCoordinate:location.coordinate];
 }
-
 -(void) createSearchView{
     self.searchHeaderView = [[MapSearchHeaderView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, 53)];
     [self.view addSubview:self.searchHeaderView];

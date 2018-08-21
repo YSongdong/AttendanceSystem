@@ -33,18 +33,26 @@
 -(void) createView{
     
     __weak typeof(self) weakSelf = self;
-    self.backgroundColor =[UIColor colorTextWhiteColor];
+    self.backgroundColor =[ UIColor colorCommonf2GreyColor];
+
+    UIView *bgView = [[UIView alloc]init];
+    [self addSubview:bgView];
+    bgView.backgroundColor = [UIColor colorTextWhiteColor];
+    [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(weakSelf);
+        make.height.equalTo(@60);
+    }];
     
     UIButton *bgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self addSubview:bgBtn];
-    bgBtn.backgroundColor =[UIColor colorTextWhiteColor];
+    [bgView addSubview:bgBtn];
     [bgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(weakSelf);
+        make.edges.equalTo(bgView);
     }];
     [bgBtn addTarget:self action:@selector(selectGroupAction:) forControlEvents:UIControlEventTouchUpInside];
     
+    
     self.leftImageV =[[UIImageView alloc]init];
-    [self addSubview:self.leftImageV];
+    [bgView addSubview:self.leftImageV];
     self.leftImageV.image = [UIImage imageNamed:@"ico_05"];
     [self.leftImageV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(weakSelf).offset(KSIphonScreenW(12));
@@ -52,7 +60,7 @@
     }];
     
     self.groupNameLab  =[[UILabel alloc]init];
-    [self addSubview:self.groupNameLab];
+    [bgView addSubview:self.groupNameLab];
     self.groupNameLab.text = @"准时";
     self.groupNameLab.textColor = [UIColor colorCommonGreenColor];
     self.groupNameLab.font = Font(16);
@@ -63,7 +71,7 @@
     
     
     self.reightImageV = [[UIImageView alloc]init];
-    [self addSubview:self.reightImageV];
+    [bgView addSubview:self.reightImageV];
     self.reightImageV.image = [UIImage imageNamed:@"ico_xl_02"];
     [self.reightImageV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(weakSelf).offset(-(KSIphonScreenW(12)));
@@ -71,7 +79,7 @@
     }];
     
     self.groupCountLab =[[UILabel alloc]init];
-    [self addSubview:self.groupCountLab];
+    [bgView addSubview:self.groupCountLab];
     self.groupCountLab.textColor = [UIColor colorTextBg98BlackColor];
     self.groupCountLab.font = Font(14);
     self.groupCountLab.text = @"3次";
@@ -81,12 +89,13 @@
     }];
     
     UIView *lineView =[[UIView alloc]init];
-    [self addSubview:lineView];
+    [bgView addSubview:lineView];
     lineView.backgroundColor  =[ UIColor colorWithHexString:@"#e0e0e0"];
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.left.bottom.equalTo(weakSelf);
         make.height.equalTo(@1);
     }];
+ 
 }
 
 -(void)selectGroupAction:(UIButton *) sender{

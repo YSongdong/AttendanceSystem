@@ -180,7 +180,6 @@ SGAdvertScrollViewDelegate
     }else{
         self.NaviBgImageV.image = [UIImage imageNamed:@"sy_nav_bg"];
     }
-    
 }
 //滑动显示侧边栏
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender{

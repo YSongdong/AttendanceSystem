@@ -19,7 +19,7 @@
     _dict = dict;
     
     self.showTimeLab.text = [NSString stringWithFormat:@"%@ (%@,%@)",dict[@"sureDate"],dict[@"week"],dict[@"sureTime"]];
-    
+   
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

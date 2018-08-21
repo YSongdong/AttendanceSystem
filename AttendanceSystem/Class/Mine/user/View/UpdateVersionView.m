@@ -12,6 +12,7 @@
 
 @property (nonatomic,strong)  UILabel *promptSubjLab;
 
+@property (nonatomic,strong) UILabel *contentLab;
 @end
 
 
@@ -42,9 +43,9 @@
     samilView.backgroundColor = [UIColor colorWithHexString:@"#e9e9e9"];
     
     [samilView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf).offset(60);
-        make.right.equalTo(weakSelf).offset(-60);
-        make.height.equalTo(@160);
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(60));
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(60));
+        make.height.equalTo(@(KSIphonScreenH(160)));
         make.centerX.equalTo(weakSelf.mas_centerX);
         make.centerY.equalTo(weakSelf.mas_centerY);
     }];
@@ -56,7 +57,7 @@
     subView.backgroundColor = [UIColor colorTextWhiteColor];
     [subView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(samilView);
-        make.height.equalTo(@40);
+        make.height.equalTo(@(KSIphonScreenH(40)));
         make.centerX.equalTo(samilView.mas_centerX);
     }];
     
@@ -73,22 +74,21 @@
     [samilView addSubview:contentView];
     contentView.backgroundColor = [UIColor colorTextWhiteColor];
     
-    UILabel *contentLab = [[UILabel alloc]init];
-    [contentView addSubview:contentLab];
-    contentLab.text = @"1.新增任务中心功能 /n 2.优化用户体验 /n 3.修复已知bug";
-    contentLab.textColor = [UIColor colorTextBg28BlackColor];
-    contentLab.font = Font(14);
-    contentLab.numberOfLines = 0;
-    [contentLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(contentView).offset(19);
-        make.top.equalTo(contentView).offset(10);
-        make.right.equalTo(contentView).offset(-19);
+    self.contentLab = [[UILabel alloc]init];
+    [contentView addSubview:self.contentLab];
+    self.contentLab.text = @"1.新增任务中心功能 \n2.优化用户体验 \n3.修复已知bug";
+    self.contentLab.textColor = [UIColor colorTextBg28BlackColor];
+    self.contentLab.font = Font(14);
+    self.contentLab.numberOfLines = 3;
+    [self.contentLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(contentView).offset(KSIphonScreenW(19));
+        make.top.equalTo(contentView).offset(KSIphonScreenH(10));
     }];
     
     [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(subView.mas_bottom).offset(1);
         make.right.left.equalTo(samilView);
-        make.bottom.equalTo(contentLab.mas_bottom).offset(-10);
+        make.bottom.equalTo(weakSelf.contentLab.mas_bottom).offset(KSIphonScreenH(10));
     }];
     
     UIButton *updateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -99,6 +99,7 @@
     updateBtn.backgroundColor = [UIColor colorTextWhiteColor];
     [updateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(contentView.mas_bottom).offset(1);
+        make.height.equalTo(@(KSIphonScreenH(40)));
         make.left.bottom.equalTo(samilView);
     }];
     [updateBtn addTarget:self action:@selector(updateAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -146,6 +147,8 @@
         for (NSDictionary *dic in array) {
             
             newVersion = [dic valueForKey:@"version"];
+            
+            self.contentLab.text = dic[@"releaseNotes"];
         }
         self.promptSubjLab.text = [NSString stringWithFormat:@"发现新版本%@版",newVersion];
     }

@@ -55,9 +55,9 @@
     [self addSubview:headerView];
     [headerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf).offset(KSNaviTopHeight+8);
-        make.left.equalTo(weakSelf).offset(25);
-        make.right.equalTo(weakSelf).offset(-25);
-        make.height.equalTo(@290);
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(25));
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(25));
+        make.height.equalTo(@(KSIphonScreenH(290)));
     }];
     
     UIImageView *bigHeaderImageV = [[UIImageView alloc]init];
@@ -71,7 +71,7 @@
     [headerView addSubview:lineImageV];
     lineImageV.image =[UIImage imageNamed:@"line"];
     [lineImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(headerView).offset(-50);
+        make.bottom.equalTo(headerView).offset(-KSIphonScreenH(50));
         make.centerX.equalTo(headerView.mas_centerX);
     }];
     
@@ -84,8 +84,8 @@
     self.errorLab.numberOfLines = 2;
     self.errorLab.textAlignment = NSTextAlignmentCenter;
     [self.errorLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(headerView).offset(18);
-        make.right.equalTo(headerView).offset(-18);
+        make.left.equalTo(headerView).offset(KSIphonScreenW(18));
+        make.right.equalTo(headerView).offset(-KSIphonScreenW(18));
         make.top.equalTo(lineImageV.mas_bottom).offset(11);
     }];
     self.errorLab.hidden = YES;
@@ -97,9 +97,9 @@
     self.headerMarkLab.textAlignment =  NSTextAlignmentCenter;
     self.headerMarkLab.textColor = [UIColor colorTextBg28BlackColor];
     [self.headerMarkLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(headerView).offset(22);
-        make.left.equalTo(headerView).offset(5);
-        make.right.equalTo(headerView).offset(-5);
+        make.top.equalTo(headerView).offset(KSIphonScreenH(22));
+        make.left.equalTo(headerView).offset(KSIphonScreenW(5));
+        make.right.equalTo(headerView).offset(-KSIphonScreenW(5));
         make.centerX.equalTo(headerView.mas_centerX);
     }];
     
@@ -109,7 +109,7 @@
     [self.headerImageV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(lineImageV.mas_top);
         make.centerX.equalTo(headerView.mas_centerX);
-        make.width.height.equalTo(@174);
+        make.width.height.equalTo(@(KSIphonScreenW(174)));
     }];
     
     self.chenkStatuImageV = [[UIImageView alloc]init];
@@ -122,11 +122,11 @@
    
     UIImageView *markIamgeV = [[UIImageView alloc]init];
     [self addSubview:markIamgeV];
-    markIamgeV.image = [UIImage imageNamed:@"ico_01"];
+    markIamgeV.image = [UIImage imageNamed:@"photoIco_01"];
     [markIamgeV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(headerView.mas_bottom).offset(30);
+        make.top.equalTo(headerView.mas_bottom).offset(KSIphonScreenH(30));
         make.left.equalTo(headerView.mas_left);
-        make.width.equalTo(@11);
+        make.width.equalTo(@(KSIphonScreenW(11)));
     }];
     
     UILabel *markLab = [[UILabel alloc]init];
@@ -146,7 +146,7 @@
     oneLab.textColor = [UIColor colorTextBg98BlackColor];
     [oneLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(markLab.mas_left);
-        make.top.equalTo(markLab.mas_bottom).offset(15);
+        make.top.equalTo(markLab.mas_bottom).offset(KSIphonScreenW(15));
     }];
     
     UILabel *twoLab = [[UILabel alloc]init];
@@ -181,10 +181,10 @@
     [self.beginBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.beginBtn.titleLabel.font = Font(16);
     [self.beginBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(treeLab.mas_bottom).offset(55);
-        make.left.equalTo(weakSelf).offset(25);
-        make.right.equalTo(weakSelf).offset(-25);
-        make.height.equalTo(@44);
+        make.top.equalTo(treeLab.mas_bottom).offset(KSIphonScreenH(55));
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(25));
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(25));
+        make.height.equalTo(@(KSIphonScreenH(44)));
     }];
     [self.beginBtn addTarget:self action:@selector(beginBtnAciton:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -194,7 +194,7 @@
     [self.updataBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
     self.updataBtn.titleLabel.font = Font(16);
     [self.updataBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.beginBtn.mas_bottom).offset(16);
+        make.top.equalTo(weakSelf.beginBtn.mas_bottom).offset(KSIphonScreenH(16));
         make.left.height.right.equalTo(weakSelf.beginBtn);
         make.centerX.equalTo(weakSelf.beginBtn.mas_centerX);
     }];

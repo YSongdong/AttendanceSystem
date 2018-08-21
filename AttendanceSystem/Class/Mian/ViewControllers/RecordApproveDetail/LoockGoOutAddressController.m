@@ -90,7 +90,7 @@ AMapSearchDelegate
 #pragma mark ---地图Delegate-----
 - (void)mapView:(MAMapView *)mapView didChangeUserTrackingMode:(MAUserTrackingMode)mode animated:(BOOL)animated
 {
-    self.mapView.showsUserLocation = YES;
+    self.mapView.showsUserLocation = NO;
 }
 - (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation{
     MAPinAnnotationView *annotationView = [[MAPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"MapSample"];
@@ -182,6 +182,7 @@ AMapSearchDelegate
     
     //赋值
     CLLocation *location = [[CLLocation alloc]initWithLatitude:[self.dict[@"lat"]floatValue]longitude:[self.dict[@"lng"]floatValue]];
+    [self.mapView addAnnotation:self.pointAnnotaiton];
     [self.pointAnnotaiton setCoordinate:location.coordinate];
     [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)];
     
@@ -242,8 +243,8 @@ AMapSearchDelegate
     [alterVC addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }]];
-   
-    NSArray *arr = [self getInstalledMapAppWithEndLocation:CLLocationCoordinate2DMake([self.dict[@"lat"]floatValue], [self.dict[@"log"]floatValue])];
+    
+    NSArray *arr = [self getInstalledMapAppWithEndLocation:CLLocationCoordinate2DMake([self.dict[@"lat"]floatValue], [self.dict[@"lng"]floatValue])];
     
     for (NSDictionary *dict in arr) {
         NSString *titleStr = dict[@"title"];
@@ -283,7 +284,7 @@ AMapSearchDelegate
     if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"iosamap://"]]) {
         NSMutableDictionary *gaodeMapDic = [NSMutableDictionary dictionary];
         gaodeMapDic[@"title"] = @"高德地图";
-        NSString *urlString = [[NSString stringWithFormat:@"iosamap://navi?sourceApplication=%@&backScheme=%@&lat=%f&lon=%f&dev=0&style=2",@"导航功能",@"nav123456",endLocation.latitude,endLocation.longitude] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSString *urlString = [[NSString stringWithFormat:@"iosamap://navi?sourceApplication=%@&backScheme=%@&lat=%f&lon=%f&dev=0&style=2",@"员工考勤系统",@"iosamap",endLocation.latitude,endLocation.longitude] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         gaodeMapDic[@"url"] = urlString;
         [maps addObject:gaodeMapDic];
     }
@@ -292,7 +293,7 @@ AMapSearchDelegate
     if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"comgooglemaps://"]]) {
         NSMutableDictionary *googleMapDic = [NSMutableDictionary dictionary];
         googleMapDic[@"title"] = @"谷歌地图";
-        NSString *urlString = [[NSString stringWithFormat:@"comgooglemaps://?x-source=%@&x-success=%@&saddr=&daddr=%f,%f&directionsmode=driving",@"导航测试",@"nav123456",endLocation.latitude, endLocation.longitude] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSString *urlString = [[NSString stringWithFormat:@"comgooglemaps://?x-source=%@&x-success=%@&saddr=&daddr=%f,%f&directionsmode=driving",@"员工考勤系统",@"comgooglemaps",endLocation.latitude, endLocation.longitude] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         googleMapDic[@"url"] = urlString;
         [maps addObject:googleMapDic];
     }
@@ -314,6 +315,7 @@ AMapSearchDelegate
     CLLocationCoordinate2D gps = CLLocationCoordinate2DMake([self.dict[@"lat"]floatValue], [self.dict[@"lng"]floatValue]);
     MKMapItem *currentLoc = [MKMapItem mapItemForCurrentLocation];
     MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:gps addressDictionary:nil]];
+    toLocation.name = self.dict[@"address"];
     NSArray *items = @[currentLoc,toLocation];
     NSDictionary *dic = @{
                           MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving,

@@ -268,7 +268,6 @@ UIImagePickerControllerDelegate
     }
     return nil;
 }
-
 -(void)setDict:(NSDictionary *)dict{
     _dict = dict;
 }
@@ -281,7 +280,6 @@ UIImagePickerControllerDelegate
         self.reGeocode = reGeocode;
         //更新tooview
         [self.toolView updateAddress:reGeocode.formattedAddress];
-        
     }
     self.userLocation = location;
     
@@ -303,26 +301,33 @@ UIImagePickerControllerDelegate
     self.scopeDataArr = [NSMutableArray arrayWithArray:arr];
     //取出半径
     NSMutableArray *minArr = [NSMutableArray array];
+    //取出在范围的数据源Index
+    NSMutableArray *indexArr =[NSMutableArray array];
     BOOL isScope = NO;
-    for (NSDictionary *dict in arr) {
+    //默认不是外勤
+    NSString *isGoStr = @"1";
+    for (int i=0; i<arr.count; i++) {
+        NSDictionary *dict = arr[i];
         NSString *isScopeStr = dict[@"isScope"];
         if ([isScopeStr isEqualToString:@"1"]) {
             isScope = YES;
             self.nowLocatIndex = [dict[@"index"]integerValue];
+            [indexArr addObject:[NSString stringWithFormat:@"%d",i]];
+            NSString *isGoStr = [NSString stringWithFormat:@"%@",dict[@"isGo"]];
+            if ([isGoStr isEqualToString:@"2"]) {
+                isGoStr = @"2";
+            }
         }
         NSString *minStr = dict[@"distance"];
         [minArr addObject:minStr];
     }
-    
     if (isScope) {
-      //  [SDShowSystemPrompView showSystemPrompStr:@"在范围内"];
-        [self.toolView updateAddressStatu:@"1" address:self.reGeocode.formattedAddress];
+        [self.toolView updateAddressStatu:@"1" address:self.reGeocode.formattedAddress isGo:isGoStr];
     }else{
         //计算最近离打卡距离
         CGFloat min =[[minArr valueForKeyPath:@"@min.floatValue"] floatValue];
-       // [SDShowSystemPrompView showSystemPrompStr:@"在范围外"];
         self.toolView.minDistance = min;
-        [self.toolView updateAddressStatu:@"2" address:self.reGeocode.formattedAddress];
+        [self.toolView updateAddressStatu:@"2" address:self.reGeocode.formattedAddress isGo:isGoStr];
         //地图上标注点view
         self.annotationView.calloutView.concetLab.text = @"未进入考勤范围";
     }
@@ -357,7 +362,6 @@ UIImagePickerControllerDelegate
         [[FVAppSdk sharedManager]livingWithParentController:self mode:FVAppLivingFastMode level:FVAppLivingSafeMiddleMode];
         [FVAppSdk sharedManager].fvLanderDelegate= self;
     }
-    
 }
 #pragma mark -----人脸-----
 /*

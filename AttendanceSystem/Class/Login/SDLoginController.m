@@ -393,6 +393,9 @@ typedef enum {
 #pragma mark ----按钮点击事件-----
 //点击登录
 -(void)selectLoginAction:(UIButton *) sender{
+    [self.phoneTF resignFirstResponder];
+    [self.passwordTF resignFirstResponder];
+    
     if ([self.type isEqualToString:@"account"]) {
         if (self.phoneTF.text.length == 0) {
             [SDShowSystemPrompView showSystemPrompStr:@"请输入员工工号/绑定手机号"];

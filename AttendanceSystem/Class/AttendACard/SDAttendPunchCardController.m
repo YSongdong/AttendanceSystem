@@ -39,7 +39,7 @@
 #import "AttendFutureTimeCell.h"
 #define ATTENDFUTURETIME_CELL @"AttendFutureTimeCell"
 
-#define HEAHERVIEWHEIGHT  67
+#define HEAHERVIEWHEIGHT  65
 @interface SDAttendPunchCardController ()
 <
 UITableViewDelegate,
@@ -132,11 +132,15 @@ AMapLocationManagerDelegate
     [self.view addSubview:self.headerView];
     [self.headerView.selectBtn addTarget:self action:@selector(selectTimeAction:) forControlEvents:UIControlEventTouchUpInside];
    
-    self.cardTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.headerView.frame)+20, KScreenW, KScreenH-CGRectGetHeight(self.headerView.frame)-KSNaviTopHeight-20-KSTabbarH)];
+    UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, 20)];
+    headerView.backgroundColor = [UIColor colorTextWhiteColor];
+    
+    self.cardTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.headerView.frame), KScreenW, KScreenH-CGRectGetHeight(self.headerView.frame)-KSNaviTopHeight-KSTabbarH)];
     [self.view addSubview:self.cardTableView];
 
     self.cardTableView.delegate = self;
     self.cardTableView.dataSource = self;
+    self.cardTableView.tableHeaderView = headerView;
     self.cardTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.cardTableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
 
@@ -156,7 +160,6 @@ AMapLocationManagerDelegate
     self.showTimeBigView = [[ShowTwoTimeDifferBigView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, CGRectGetHeight(self.cardTableView.frame))];
     [self.cardTableView addSubview:self.showTimeBigView];
     self.showTimeBigView.hidden = YES;
-    
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.cardArr.count;

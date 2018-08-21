@@ -248,7 +248,7 @@ UITableViewDataSource
 }
 -(RecordToolView *)toolView{
     if (!_toolView) {
-        _toolView =[[RecordToolView alloc]initWithFrame:CGRectMake(0, KScreenH-50-KSTabbarH, KScreenW, 50+KSTabbarH)];
+        _toolView =[[RecordToolView alloc]initWithFrame:CGRectMake(0, KScreenH-50-KSTabbarH, KScreenW, 50)];
     }
     return _toolView;
 }
