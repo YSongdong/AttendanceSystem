@@ -36,6 +36,7 @@ UITextFieldDelegate
 }
 -(void) createNavi{
     self.customNavBar.title = @"修改绑定号码";
+    self.customNavBar.rightButton.hidden= YES;
     [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
     __weak typeof(self) weakSelf = self;
     self.customNavBar.onClickLeftButton = ^{

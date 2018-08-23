@@ -474,13 +474,14 @@ UIImagePickerControllerDelegate
 }
 #pragma mark --- 按钮点击事件-----
 -(void)selectPresentAction:(UIButton *) sender{
-    if(self.mapView.userLocation.updating && self.mapView.userLocation.location) {
+ //   if(self.mapView.userLocation.updating && self.mapView.userLocation.location) {
         [self.mapView setCenterCoordinate:self.mapView.userLocation.location.coordinate animated:YES];
-    }
+ //   }
 }
 #pragma mark ----创建Navi-----
 -(void) createNavi{
     self.customNavBar.title = @"当前定位";
+    self.customNavBar.rightButton.hidden= YES;
     [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
     __weak typeof(self) weakSelf = self;
     self.customNavBar.onClickLeftButton = ^{
@@ -601,7 +602,7 @@ UIImagePickerControllerDelegate
     NSMutableDictionary *coordinateDict = [NSMutableDictionary dictionary];
     coordinateDict[@"lat"] =[NSString stringWithFormat:@"%f",self.userLocation.coordinate.latitude];
     coordinateDict[@"lng"] =[NSString stringWithFormat:@"%f",self.userLocation.coordinate.longitude];
-    mutableDict[@"Childcoordinate"] =coordinateDict;
+    mutableDict[@"coordinate"] =coordinateDict;
     mutableDict[@"deviation"] = nowDict[@"coordinate"][@"deviation"];
     mutableDict[@"title"] = self.reGeocode.formattedAddress;
     if ([mutableDict[@"title"] isEqualToString:@""]) {

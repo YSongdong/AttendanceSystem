@@ -35,8 +35,27 @@
     bgView.backgroundColor = [UIColor colorWithHexString:@"#f2f2f2"];
     [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.left.bottom.equalTo(weakSelf);
-        make.height.equalTo(@143);
+        make.height.equalTo(@(KSIphonScreenH(318)));
     }];
+    
+    NSArray *arr = @[@"请选择需要筛选的消息类型",@"全部消息",@"外出审批",@"请假审批",@"加班审批",@"其他"];
+    for (int i=0; i<6 ; i++) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [bgView addSubview:btn];
+        btn.frame = CGRectMake(0, i*KSIphonScreenH(44)+i*1, KScreenW, KSIphonScreenH(44));
+        btn.titleLabel.font = Font(18);
+        btn.titleLabel.textAlignment  = NSTextAlignmentCenter;
+        [btn setTitle:arr[i] forState:UIControlStateNormal];
+        if (i == 0) {
+            [btn setTitleColor:[UIColor colorWithHexString:@"#aaaaaa"] forState:UIControlStateNormal];
+            btn.backgroundColor = [UIColor colorWithHexString:@"#f7f7f7"];
+        }else{
+            btn.backgroundColor = [UIColor colorTextWhiteColor];
+            [btn setTitleColor:[UIColor colorTextBg28BlackColor] forState:UIControlStateNormal];
+        }
+        btn.tag = 200+i;
+        [btn addTarget:self action:@selector(selectdBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
     
     UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [bgView addSubview:cancelBtn];
@@ -46,7 +65,7 @@
     cancelBtn.backgroundColor = [UIColor colorTextWhiteColor];
     [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(bgView);
-        make.height.equalTo(@44);
+        make.height.equalTo(@(KSIphonScreenH(44)));
     }];
     [cancelBtn addTarget:self action:@selector(selectCancelActtion:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -58,5 +77,13 @@
 -(void)selectCancelActtion:(UIButton *) sender{
     [self removeFromSuperview];
 }
+//选择筛选条件
+-(void)selectdBtnAction:(UIButton *) sender{
+    
+    
+    
+}
+
+
 
 @end

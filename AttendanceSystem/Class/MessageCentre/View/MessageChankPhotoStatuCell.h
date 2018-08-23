@@ -10,4 +10,6 @@
 
 @interface MessageChankPhotoStatuCell : UITableViewCell
 
+
+
 @end

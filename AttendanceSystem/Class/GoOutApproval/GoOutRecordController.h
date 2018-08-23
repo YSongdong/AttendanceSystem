@@ -13,7 +13,8 @@
 typedef  enum{
     ApporvalRecordOutType = 0, //外出
     ApporvalRecordLeaveType,  //请假
-    ApporvalRecordCardType    //补卡
+    ApporvalRecordCardType,    //补卡
+    ApporvalRecordOverTimeType  //加班
 }ApporvalRecordType;
 
 @interface GoOutRecordController : SDBaseController

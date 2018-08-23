@@ -82,7 +82,6 @@
 		1556A39320F49C8000F64523 /* KRMainNetTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 1556A39020F49C8000F64523 /* KRMainNetTool.m */; };
 		1556A39E20F49CBF00F64523 /* SDRootNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1556A39A20F49CBF00F64523 /* SDRootNavigationController.m */; };
 		1556A39F20F49CBF00F64523 /* SDBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1556A39D20F49CBF00F64523 /* SDBaseController.m */; };
-		1556A3A520F49F4200F64523 /* CKLeftSlideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1556A3A420F49F4200F64523 /* CKLeftSlideViewController.m */; };
 		1556A3A920F49FB400F64523 /* LeftUserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1556A3A820F49FB400F64523 /* LeftUserController.m */; };
 		155900B12112E1DB00244956 /* LoockGoOutAddressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 155900B02112E1DB00244956 /* LoockGoOutAddressController.m */; };
 		155900B42112FC3700244956 /* ShowRevokeMsgView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155900B32112FC3700244956 /* ShowRevokeMsgView.m */; };
@@ -135,6 +134,8 @@
 		15ECBFCF212699590088DE82 /* CountGroupHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ECBFCE212699590088DE82 /* CountGroupHeaderView.m */; };
 		15ECBFD321269C860088DE82 /* AttendCountTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ECBFD121269C860088DE82 /* AttendCountTableViewCell.m */; };
 		15ECBFD421269C860088DE82 /* AttendCountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ECBFD221269C860088DE82 /* AttendCountTableViewCell.xib */; };
+		15F975DE212E670700D94345 /* MessageChankPhotoStatuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F975DD212E670700D94345 /* MessageChankPhotoStatuCell.m */; };
+		15F975E2212E916700D94345 /* OverTimeApplyforController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F975E1212E916700D94345 /* OverTimeApplyforController.m */; };
 		15FD66BE211939B9009A132B /* ShowPromptMsgView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FD66BD211939B9009A132B /* ShowPromptMsgView.m */; };
 		42D592191F5874AE11635113 /* libPods-AttendanceSystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9DA8F321790FBC85F87A355 /* libPods-AttendanceSystem.a */; };
 /* End PBXBuildFile section */
@@ -300,8 +301,6 @@
 		1556A39B20F49CBF00F64523 /* SDBaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBaseController.h; sourceTree = "<group>"; };
 		1556A39C20F49CBF00F64523 /* SDRootNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDRootNavigationController.h; sourceTree = "<group>"; };
 		1556A39D20F49CBF00F64523 /* SDBaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDBaseController.m; sourceTree = "<group>"; };
-		1556A3A320F49F4200F64523 /* CKLeftSlideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKLeftSlideViewController.h; sourceTree = "<group>"; };
-		1556A3A420F49F4200F64523 /* CKLeftSlideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKLeftSlideViewController.m; sourceTree = "<group>"; };
 		1556A3A720F49FB400F64523 /* LeftUserController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LeftUserController.h; sourceTree = "<group>"; };
 		1556A3A820F49FB400F64523 /* LeftUserController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LeftUserController.m; sourceTree = "<group>"; };
 		155900AF2112E1DB00244956 /* LoockGoOutAddressController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoockGoOutAddressController.h; sourceTree = "<group>"; };
@@ -402,6 +401,10 @@
 		15ECBFD021269C860088DE82 /* AttendCountTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttendCountTableViewCell.h; sourceTree = "<group>"; };
 		15ECBFD121269C860088DE82 /* AttendCountTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttendCountTableViewCell.m; sourceTree = "<group>"; };
 		15ECBFD221269C860088DE82 /* AttendCountTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttendCountTableViewCell.xib; sourceTree = "<group>"; };
+		15F975DC212E670700D94345 /* MessageChankPhotoStatuCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageChankPhotoStatuCell.h; sourceTree = "<group>"; };
+		15F975DD212E670700D94345 /* MessageChankPhotoStatuCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageChankPhotoStatuCell.m; sourceTree = "<group>"; };
+		15F975E0212E916700D94345 /* OverTimeApplyforController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OverTimeApplyforController.h; sourceTree = "<group>"; };
+		15F975E1212E916700D94345 /* OverTimeApplyforController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OverTimeApplyforController.m; sourceTree = "<group>"; };
 		15FD66BC211939B9009A132B /* ShowPromptMsgView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowPromptMsgView.h; sourceTree = "<group>"; };
 		15FD66BD211939B9009A132B /* ShowPromptMsgView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowPromptMsgView.m; sourceTree = "<group>"; };
 		51FBDEB42E43FD287D8D4510 /* Pods-AttendanceSystem.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AttendanceSystem.release.xcconfig"; path = "Pods/Target Support Files/Pods-AttendanceSystem/Pods-AttendanceSystem.release.xcconfig"; sourceTree = "<group>"; };
@@ -827,11 +830,12 @@
 				15ECBFC821267D680088DE82 /* AttendCount */,
 				15018915210EA488005673FF /* GoOutApproval */,
 				15018936210EF662005673FF /* leaveApproval */,
+				15F975DF212E90FB00D94345 /* OvertimeApplyfor */,
 				15018951210F1627005673FF /* SupplementCard */,
 				1509AEFB2110443800D45EE3 /* InitiateApplyfor */,
 				1509AEFF211045BB00D45EE3 /* MineChenkApplyFor */,
-				15A6761C211BE27900686B9E /* MessageCentre */,
 				15ECBFBB21265C280088DE82 /* Announcement */,
+				15A6761C211BE27900686B9E /* MessageCentre */,
 				15D747F120FAFDA200B7CF14 /* Login */,
 			);
 			path = Class;
@@ -908,7 +912,6 @@
 				155CEC2D20F9E55800066FDD /* AlterPassNumber */,
 				1503F26F20F87ECB00B9CDAA /* BindPhoneNumber */,
 				1517DEAB20F738B70003710A /* PhotoCollect */,
-				1556A3A220F49F4200F64523 /* CKLeftSlide */,
 				1556A39920F49CBF00F64523 /* Root */,
 			);
 			path = ViewControllers;
@@ -945,16 +948,6 @@
 				155CEC3520F9FD1A00066FDD /* SDTool.m */,
 			);
 			path = Tool;
-			sourceTree = "<group>";
-		};
-		1556A3A220F49F4200F64523 /* CKLeftSlide */ = {
-			isa = PBXGroup;
-			children = (
-				1556A3A320F49F4200F64523 /* CKLeftSlideViewController.h */,
-				1556A3A420F49F4200F64523 /* CKLeftSlideViewController.m */,
-			);
-			name = CKLeftSlide;
-			path = "../../../../../CKLeftSlide-master/CKLeftSlide";
 			sourceTree = "<group>";
 		};
 		1556A3A620F49F9000F64523 /* Mine */ = {
@@ -1062,6 +1055,8 @@
 				15A67625211BEEB300686B9E /* MessageAttendaceCardCell.m */,
 				15A67627211C122F00686B9E /* MessageAttendaceGoOutCell.h */,
 				15A67628211C122F00686B9E /* MessageAttendaceGoOutCell.m */,
+				15F975DC212E670700D94345 /* MessageChankPhotoStatuCell.h */,
+				15F975DD212E670700D94345 /* MessageChankPhotoStatuCell.m */,
 				15A6762A211C1C3C00686B9E /* ShowSiftMessageTypeView.h */,
 				15A6762B211C1C3C00686B9E /* ShowSiftMessageTypeView.m */,
 			);
@@ -1205,6 +1200,15 @@
 				15ECBFD221269C860088DE82 /* AttendCountTableViewCell.xib */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		15F975DF212E90FB00D94345 /* OvertimeApplyfor */ = {
+			isa = PBXGroup;
+			children = (
+				15F975E0212E916700D94345 /* OverTimeApplyforController.h */,
+				15F975E1212E916700D94345 /* OverTimeApplyforController.m */,
+			);
+			path = OvertimeApplyfor;
 			sourceTree = "<group>";
 		};
 		33CB08BBE55F3387F7EE86F0 /* Pods */ = {
@@ -1423,6 +1427,7 @@
 				153241CC20FD8C9B009FFE18 /* SDSettingViewController.m in Sources */,
 				150A88DA211D6D37008ACBC5 /* UpdateVersionView.m in Sources */,
 				15018959210F16B7005673FF /* SupplementCardTimeCell.m in Sources */,
+				15F975DE212E670700D94345 /* MessageChankPhotoStatuCell.m in Sources */,
 				15B4FC6820FF0C33001F6366 /* AttendCardHeaderView.m in Sources */,
 				15018962210F2D3E005673FF /* RecordSiftCollectionViewCell.m in Sources */,
 				15018965210F3480005673FF /* CollectionHeaderView.m in Sources */,
@@ -1446,6 +1451,7 @@
 				155CEC2C20F9DB7B00066FDD /* HWWeakTimer.m in Sources */,
 				1509AF062110483600D45EE3 /* ChenkHeaderView.m in Sources */,
 				1509AEEF210FFE1600D45EE3 /* MapSearchHeaderView.m in Sources */,
+				15F975E2212E916700D94345 /* OverTimeApplyforController.m in Sources */,
 				15A67623211BE34C00686B9E /* MessageAttendaceRemindCell.m in Sources */,
 				1503F27E20F8A77000B9CDAA /* HomeViewController.m in Sources */,
 				1501892C210EB927005673FF /* ApprovalSelectPhotoCell.m in Sources */,
@@ -1456,7 +1462,6 @@
 				1509AEE7210FF3AA00D45EE3 /* ShowSelectCameraView.m in Sources */,
 				15B4FC6420FF0BE3001F6366 /* SDAttendPunchCardController.m in Sources */,
 				15721B2620F5D892001E1DBB /* UIButton+LZCategory.m in Sources */,
-				1556A3A520F49F4200F64523 /* CKLeftSlideViewController.m in Sources */,
 				15A67629211C122F00686B9E /* MessageAttendaceGoOutCell.m in Sources */,
 				1556A36A20F49C3400F64523 /* main.m in Sources */,
 				1503F28520F8BEF600B9CDAA /* WRNavigationBar.m in Sources */,
@@ -1698,7 +1703,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = AttendanceSystem/AttendanceSystem.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1744,8 +1749,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "bea01ce7-bb31-4209-bfbf-2b39a22e5391";
-				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1758,7 +1763,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = AttendanceSystem/AttendanceSystem.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1804,8 +1809,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "bea01ce7-bb31-4209-bfbf-2b39a22e5391";
-				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OverTimeApplyforController : UIViewController
+#import "SDBaseController.h"
+@interface OverTimeApplyforController : SDBaseController
 
 @end

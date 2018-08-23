@@ -39,7 +39,8 @@ UITextFieldDelegate
 }
    //创建Navi
 -(void) createNavi{
-     self.customNavBar.title = @"修改登录密码";
+    self.customNavBar.title = @"修改登录密码";
+    self.customNavBar.rightButton.hidden= YES;
     if (_isMine) {
         [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
         __weak typeof(self) weakSelf = self;
@@ -98,7 +99,7 @@ UITextFieldDelegate
         [numberView addSubview:textField];
         textField.placeholder = palaceArr[i];
         textField.tag = 100+i;
-       // textField.secureTextEntry = YES;
+        textField.secureTextEntry = YES;
         textField.delegate = self;
         textField.returnKeyType = UIReturnKeyDone;
         textField.textColor = [UIColor colorWithHexString:@"#4a4a4a"];

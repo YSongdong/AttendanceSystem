@@ -209,6 +209,39 @@
             //发起申请者
             self.showNameLab.text = [NSString stringWithFormat:@"%@的补卡申请",userDict[@"realName"]];
         }
+    }else if (_cellType == RecordCellOverTimeType){
+        //加班
+        NSString *startTimeStr ;
+        if ([self.reasonTypeStr isEqualToString:@"2"]) {
+            startTimeStr =dict[@"startTime"];
+            //加班原因
+            self.cellReasonLab.text =[NSString stringWithFormat:@"加班事由: %@",dict[@"outGo"]];
+        }else{
+            NSArray *timeArr =dict[@"startTime"];
+            startTimeStr = timeArr[0];
+            //加班原因
+            self.cellReasonLab.text =[NSString stringWithFormat:@"加班事由: %@",dict[@"overTimeInfo"]];
+        }
+        //开始时间
+        self.beginTimeLab.text =[NSString stringWithFormat:@"开始时间: %@",startTimeStr];
+        //结束时间
+        self.endTimeLab.text =[NSString stringWithFormat:@"结束时间: %@",dict[@"endTime"]];
+        
+        
+        if ([self.reasonTypeStr isEqualToString:@"2"]) {
+            //头像
+            [UIImageView sd_setImageView:self.coverImageV WithURL:[SDUserInfo obtainWithPhoto]];
+            
+            //发起申请者
+            self.showNameLab.text = [NSString stringWithFormat:@"%@的加班申请",[SDUserInfo obtainWithRealName]];
+        }else{
+            NSDictionary *userDict = dict[@"userInfo"];
+            //头像
+            [UIImageView sd_setImageView:self.coverImageV WithURL:userDict[@"photo"]];
+            
+            //发起申请者
+            self.showNameLab.text = [NSString stringWithFormat:@"%@的加班申请",userDict[@"realName"]];
+        }
     }
 }
 

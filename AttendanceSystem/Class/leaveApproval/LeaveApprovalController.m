@@ -188,16 +188,20 @@ UIImagePickerControllerDelegate
         typeStr = @"1";
     }else if ([self.leaveTypeStr isEqualToString:@"事假"]){
          typeStr = @"2";
-    }else if ([self.leaveTypeStr isEqualToString:@"护理假"]){
-        typeStr = @"7";
+    }else if ([self.leaveTypeStr isEqualToString:@"调休"]){
+        typeStr = @"3";
     }else if ([self.leaveTypeStr isEqualToString:@"产假"]){
         typeStr = @"4";
     }else if ([self.leaveTypeStr isEqualToString:@"婚假"]){
         typeStr = @"5";
     }else if ([self.leaveTypeStr isEqualToString:@"丧假"]){
         typeStr = @"6";
-    } else if ([self.leaveTypeStr isEqualToString:@"病假"]){
+    } else if ([self.leaveTypeStr isEqualToString:@"护理假"]){
+        typeStr = @"7";
+    }else if ([self.leaveTypeStr isEqualToString:@"病假"]){
         typeStr = @"8";
+    }else if ([self.leaveTypeStr isEqualToString:@"轮休"]){
+        typeStr = @"9";
     }
     weaSelf.dataDcit[@"type"] =typeStr;
     //事由
@@ -316,7 +320,7 @@ UIImagePickerControllerDelegate
 -(void)createHPPickView{
     _hpPickerView = [[HQPickerView alloc]initWithFrame:self.view.bounds];
     _hpPickerView.delegate = self ;
-    _hpPickerView.customArr = @[@"年假",@"事假",@"产假",@"婚假",@"丧假",@"护理假",@"病假"];
+    _hpPickerView.customArr = @[@"年假",@"事假",@"调休",@"产假",@"婚假",@"丧假",@"护理假",@"病假",@"轮休"];
     [self.view addSubview:self.hpPickerView];
 }
 #pragma mark -----懒加载--------

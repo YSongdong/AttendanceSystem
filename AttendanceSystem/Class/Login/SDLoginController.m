@@ -66,6 +66,7 @@ typedef enum {
 }
 -(void) createNavi{
     [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
+    self.customNavBar.rightButton.hidden= YES;
     __weak typeof(self) weakSelf = self;
     self.customNavBar.onClickLeftButton = ^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
@@ -347,7 +348,7 @@ typedef enum {
     }
     if (textField == self.phoneTF) {
         CGRect viewFrame =self.view.frame;
-        viewFrame.origin.y -= KSIphonScreenH(20);
+        viewFrame.origin.y -= KSIphonScreenH(70);
         [UIView animateWithDuration:0.25 animations:^{
             self.view.frame = viewFrame;
         }];
@@ -364,7 +365,7 @@ typedef enum {
     }
     if (textField == self.phoneTF) {
         CGRect viewFrame =self.view.frame;
-        viewFrame.origin.y += KSIphonScreenH(20);
+        viewFrame.origin.y += KSIphonScreenH(70);
         [UIView animateWithDuration:0.25 animations:^{
             self.view.frame = viewFrame;
         }];

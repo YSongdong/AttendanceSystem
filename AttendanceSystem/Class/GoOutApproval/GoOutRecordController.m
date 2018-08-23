@@ -71,6 +71,8 @@ ApprovalRecordSiftControllerDelegate
          cell.cellType = RecordCellLeaveType;
     }else if (self.recordType == ApporvalRecordCardType){
         cell.cellType = RecordCellCardType;
+    } else if (self.recordType == ApporvalRecordOverTimeType){
+        cell.cellType = RecordCellOverTimeType;
     }
     cell.cutTypeStr = @"2";
     cell.dict = self.dataArr[indexPath.row];
@@ -110,6 +112,10 @@ ApprovalRecordSiftControllerDelegate
         detaVC.detaType = recordApproveCardDetaType;
         detaVC.titleStr = [NSString stringWithFormat:@"%@补卡申请",[SDUserInfo obtainWithRealName]];
         detaVC.typeStr = @"3";
+    }else if (self.recordType == ApporvalRecordOverTimeType){
+        detaVC.detaType = recordApproveOverTimeDetaType;
+        detaVC.titleStr = [NSString stringWithFormat:@"%@加班申请",[SDUserInfo obtainWithRealName]];
+        detaVC.typeStr = @"5";
     }
     [self.navigationController pushViewController:detaVC animated:YES];
 }

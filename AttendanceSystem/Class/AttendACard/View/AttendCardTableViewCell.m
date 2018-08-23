@@ -229,7 +229,7 @@ AMapSearchDelegate
     //打卡经纬度
     ChildcoordinateDict[@"lat"] = [NSString stringWithFormat:@"%f",self.userLocation.coordinate.latitude];
     ChildcoordinateDict[@"lng"] = [NSString stringWithFormat:@"%f",self.userLocation.coordinate.longitude];
-    coordinateDict[@"Childcoordinate"] = ChildcoordinateDict;
+    coordinateDict[@"coordinate"] = ChildcoordinateDict;
     coordinateDict[@"abnormalCoordinateIs"] =  [NSString stringWithFormat:@"%ld",(long)self.cardAddressStatu];
     coordinateDict[@"title"] = self.addressLab.text.length == 0 ? @"": self.addressLab.text ;
     coordinateDict[@"deviation"] =deviationStr;

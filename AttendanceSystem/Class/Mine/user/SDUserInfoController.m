@@ -82,11 +82,13 @@ UITableViewDataSource
     NSString *idcardStr;
     if ([idcard isEqualToString:@""]) {
         idcardStr = @"未完善";
+    }else{
+        idcardStr =[NSString stringWithFormat:@"%@",[SDUserInfo obtainWithidcard]];
     }
     //头像
     NSArray *headerArr = @[@{@"name":@"用户头像",@"desc":[SDUserInfo obtainWithPhoto],@"photoStatus":[SDUserInfo obtainWithPotoStatus]}];
     NSArray *infoArr = @[@{@"name":@"真实姓名",@"desc":[SDUserInfo obtainWithRealName],@"photoStatus":[SDUserInfo obtainWithSex]},
-                         @{@"name":@"身份证号",@"desc":[SDUserInfo obtainWithidcard]},
+                         @{@"name":@"身份证号",@"desc":idcardStr},
                          @{@"name":@"所属部门",@"desc":[SDUserInfo obtainWithDepartmentName]},
                          @{@"name":@"员工职位",@"desc":[SDUserInfo obtainWithPositionName]},
                          @{@"name":@"员工工号",@"desc":[SDUserInfo obtainWithJobNumber]},

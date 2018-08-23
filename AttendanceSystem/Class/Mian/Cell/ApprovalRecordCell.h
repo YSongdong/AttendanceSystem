@@ -11,7 +11,8 @@
 typedef  enum{
     RecordCellOutType = 0, //外出
     RecordCellLeaveType,   //请假
-    RecordCellCardType     //补卡
+    RecordCellCardType,     //补卡
+    RecordCellOverTimeType     //补卡
 //    RecordCellApplyForType, //我的申请
 //    RecordCellChenkApplyType //我审批的
 }RecordCellType;

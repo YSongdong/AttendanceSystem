@@ -9,7 +9,6 @@
 #import "HomeViewController.h"
 
 #import "SGAdvertScrollView.h"
-#import "CKLeftSlideViewController.h"
 #import "AppDelegate.h"
 
 #import "SDPhotoCollectController.h"
@@ -20,10 +19,14 @@
 #import "SupplementCardController.h"
 #import "InitiateApplyForController.h"
 #import "MineChenkApplyForController.h"
+#import "OverTimeApplyforController.h"
+
 
 #import "MessageCentreController.h"
 #import "AnnouncentViewController.h"
 #import "AttendCountController.h"
+
+
 
 @interface HomeViewController ()
 <
@@ -245,8 +248,9 @@ SGAdvertScrollViewDelegate
         [SDShowSystemPrompView showSystemPrompStr:@"请先联系管理员设置审批规则"];
         return;
     }
-    AttendRecordController *recordVC = [[AttendRecordController alloc]init];
-    [self.navigationController pushViewController:recordVC animated:YES];
+    OverTimeApplyforController *overTimeVC  =[[OverTimeApplyforController alloc]init];
+//    AttendRecordController *recordVC = [[AttendRecordController alloc]init];
+    [self.navigationController pushViewController:overTimeVC animated:YES];
 }
 /*********申请************/
 //我提交的申请

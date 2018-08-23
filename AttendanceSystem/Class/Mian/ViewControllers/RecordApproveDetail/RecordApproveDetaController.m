@@ -87,20 +87,14 @@ UITableViewDataSource
          headerView.headerType = RecordDetailHeaderLeaveType;
     }else if (_detaType == recordApproveCardDetaType){
         headerView.headerType = RecordDetailHeaderCardType;
+    }else if (_detaType == recordApproveOverTimeDetaType){
+        headerView.headerType = RecordDetailHeaderOverTimeType;
     }
     headerView.dict =self.dataDict;
     
-    __weak typeof(self) weakSelf = self;
     //点击地址
     headerView.selectAddressBlock = ^{
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        dict[@"address"] = weakSelf.dataDict[@"address"];
-        dict[@"lat"] = weakSelf.dataDict[@"lat"];
-        dict[@"lng"] = weakSelf.dataDict[@"lng"];
-        dict[@"radius"] = weakSelf.dataDict[@"radius"];
-        LoockGoOutAddressController *goOutVC = [[LoockGoOutAddressController alloc]init];
-        goOutVC.dict = dict.copy;
-        [weakSelf.navigationController pushViewController:goOutVC animated:YES];
+        
     };
     return headerView;
 }
@@ -116,6 +110,10 @@ UITableViewDataSource
     }else if (_detaType == recordApproveCardDetaType) {
         // 3 补卡
         CGFloat height = [RecordDetailHeaderView getWithTextHeaderViewHeight:self.dataDict headerType:@"3"];
+        return height;
+    }else if (_detaType == recordApproveOverTimeDetaType) {
+        // 3 补卡
+        CGFloat height = [RecordDetailHeaderView getWithTextHeaderViewHeight:self.dataDict headerType:@"5"];
         return height;
     }
     return 0.01f;
@@ -163,6 +161,8 @@ UITableViewDataSource
                 weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条请假申请?";
             }else if (weakSelf.detaType == recordApproveCardDetaType){
                 weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条补卡申请?";
+            }else if (weakSelf.detaType == recordApproveOverTimeDetaType){
+                weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条加班申请?";
             }
             __weak typeof(weakSelf) stongSelf = weakSelf;
             //确定
@@ -229,6 +229,7 @@ UITableViewDataSource
 //创建Navi
 -(void) createNavi{
     self.customNavBar.title = self.titleStr;
+    self.customNavBar.rightButton.hidden= YES;
     [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
     __weak typeof(self) weakSelf = self;
     self.customNavBar.onClickLeftButton = ^{
@@ -349,6 +350,8 @@ UITableViewDataSource
         url = HTTP_ATTAPPLEAVEINFO_URL;
     }else if (_detaType == recordApproveCardDetaType){
         url = HTTP_ATTAPPRREPAICARDEPAICARDINFO_URL;
+    }else if (_detaType == recordApproveOverTimeDetaType){
+        url = HTTP_ATTAPPOVERTIMEINFO_URL;
     }
     
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:url params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
@@ -400,6 +403,8 @@ UITableViewDataSource
         url = HTTP_ATTAPPLEAVEREVOKE_URL;
     }else if (_detaType == recordApproveCardDetaType){
         url = HTTP_ATTAPPREPAIRCARDREVOKE_URL;
+    }else if (_detaType == recordApproveOverTimeDetaType){
+        url = HTTP_ATTOVERTIMEREVOKE_URL;
     }
     param[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
     param[@"token"] = [SDTool getNewToken];
@@ -429,6 +434,8 @@ UITableViewDataSource
         url = HTTP_ATTAPPLEAVEURGE_URL;
     }else if (_detaType == recordApproveCardDetaType){
         url = HTTP_ATTAPPREPAIRCARDURGE_URL;
+    }else if (_detaType == recordApproveOverTimeDetaType){
+        url = HTTP_ATTOVERTIMEURGE_URL;
     }
     param[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
     param[@"token"] = [SDTool getNewToken];
@@ -460,6 +467,8 @@ UITableViewDataSource
         param[@"type"] = @"1";
     }else if (_detaType == recordApproveCardDetaType){
         param[@"type"] = @"3";
+    }else if (_detaType == recordApproveOverTimeDetaType){
+        param[@"type"] = @"5";
     }
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTAPPEXAMINEAPPROVAL_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {

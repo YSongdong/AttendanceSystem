@@ -49,11 +49,13 @@
     [self addSubview:timeView];
     timeView.backgroundColor = [UIColor colorWithHexString:@"#d8d8d8"];
     [timeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf).offset(12);
-        make.height.equalTo(@19);
-        make.width.equalTo(@125);
+        make.top.equalTo(weakSelf).offset(KSIphonScreenH(12));
+        make.height.equalTo(@(KSIphonScreenH(19)));
+        make.width.equalTo(@(KSIphonScreenW(125)));
         make.centerX.equalTo(weakSelf.mas_centerX);
     }];
+    timeView.layer.cornerRadius = 3 ;
+    timeView.layer.masksToBounds = YES;
     
     self.remindTimeLab  =[[UILabel alloc]init];
     [timeView addSubview:self.remindTimeLab];
@@ -69,9 +71,9 @@
     [self addSubview:self.leftImageV];
     self.leftImageV.image = [UIImage imageNamed:@"ico_kq"];
     [self.leftImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf).offset(12);
-        make.top.equalTo(timeView.mas_bottom).offset(15);
-        make.width.height.equalTo(@38);
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(12));
+        make.top.equalTo(timeView.mas_bottom).offset(KSIphonScreenH(15));
+        make.width.height.equalTo(@(KSIphonScreenW(38)));
     }];
     
     self.showAttendLab = [[UILabel alloc]init];
@@ -81,7 +83,7 @@
     self.showAttendLab.text = @"考勤打卡";
     [self.showAttendLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf.leftImageV.mas_top);
-        make.left.equalTo(weakSelf.leftImageV.mas_right).offset(8);
+        make.left.equalTo(weakSelf.leftImageV.mas_right).offset(KSIphonScreenW(8));
     }];
     
     
@@ -97,8 +99,8 @@
     self.showContentTypeLab.font = Font(14);
     self.showContentTypeLab.numberOfLines =2;
     [self.showContentTypeLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(contentView).offset(15);
-        make.left.equalTo(contentView).offset(10);
+        make.top.equalTo(contentView).offset(KSIphonScreenH(15));
+        make.left.equalTo(contentView).offset(KSIphonScreenW(10));
     }];
     
     self.showBeginTimeLab = [[UILabel alloc]init];
@@ -107,7 +109,7 @@
     self.showBeginTimeLab.textColor = [UIColor colorWithHexString:@"#aaaaaa"];
     self.showBeginTimeLab.font = Font(12);
     [self.showBeginTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.showContentTypeLab.mas_bottom).offset(22);
+        make.top.equalTo(weakSelf.showContentTypeLab.mas_bottom).offset(KSIphonScreenH(22));
         make.left.equalTo(weakSelf.showContentTypeLab.mas_left);
     }];
     
@@ -116,9 +118,9 @@
     self.beginTimeLab.textColor = [UIColor colorTextBg65BlackColor];
     self.beginTimeLab.font = Font(12);
     [self.beginTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf.showBeginTimeLab.mas_right).offset(10);
+        make.left.equalTo(weakSelf.showBeginTimeLab.mas_right).offset(KSIphonScreenW(10));
         make.centerY.equalTo(weakSelf.showBeginTimeLab.mas_centerY);
-        make.right.equalTo(contentView).offset(-10);
+        make.right.equalTo(contentView).offset(-KSIphonScreenW(10));
     }];
     
     self.showEndTimeLab = [[UILabel alloc]init];
@@ -127,7 +129,7 @@
     self.showEndTimeLab.font =Font(12);
     self.showEndTimeLab.textColor = [UIColor colorWithHexString:@"#aaaaaa"];
     [self.showEndTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.showBeginTimeLab.mas_bottom).offset(8);
+        make.top.equalTo(weakSelf.showBeginTimeLab.mas_bottom).offset(KSIphonScreenH(8));
         make.left.equalTo(weakSelf.showBeginTimeLab.mas_left);
     }];
     
@@ -138,7 +140,7 @@
     [self.endTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(weakSelf.beginTimeLab.mas_left);
         make.centerY.equalTo(weakSelf.showEndTimeLab.mas_centerY);
-        make.right.equalTo(contentView).offset(-10);
+        make.right.equalTo(contentView).offset(-KSIphonScreenW(10));
     }];
     
     self.showGoOutReasonLab  =[[UILabel alloc]init];
@@ -147,7 +149,7 @@
     self.showGoOutReasonLab.font =Font(12);
     self.showGoOutReasonLab.textColor = [UIColor colorWithHexString:@"#aaaaaa"];
     [self.showGoOutReasonLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.showEndTimeLab.mas_bottom).offset(8);
+        make.top.equalTo(weakSelf.showEndTimeLab.mas_bottom).offset(KSIphonScreenH(8));
         make.left.equalTo(weakSelf.showEndTimeLab.mas_left);
     }];
     
@@ -158,7 +160,7 @@
     [self.goOutReasonLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(weakSelf.beginTimeLab.mas_left);
         make.centerY.equalTo(weakSelf.showGoOutReasonLab.mas_centerY);
-        make.right.equalTo(contentView).offset(-10);
+        make.right.equalTo(contentView).offset(-KSIphonScreenW(10));
     }];
     
     UIView *detaView  =[[ UIView alloc]init];
@@ -166,8 +168,8 @@
     detaView.backgroundColor = [UIColor colorTextWhiteColor];
     [detaView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(contentView);
-        make.top.equalTo(weakSelf.showGoOutReasonLab.mas_bottom).offset(10);
-        make.height.equalTo(@33);
+        make.top.equalTo(weakSelf.showGoOutReasonLab.mas_bottom).offset(KSIphonScreenH(10));
+        make.height.equalTo(@(KSIphonScreenH(33)));
     }];
     
     UIView *lineView = [[UIView alloc]init];
@@ -184,7 +186,7 @@
     showDetaLab.textColor = [UIColor colorWithHexString:@"#239566"];
     showDetaLab.font = Font(12);
     [showDetaLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(detaView).offset(10);
+        make.left.equalTo(detaView).offset(KSIphonScreenW(10));
         make.centerY.equalTo(detaView.mas_centerY);
     }];
     
@@ -192,14 +194,14 @@
     [detaView addSubview:rightImageV];
     rightImageV.image = [UIImage imageNamed:@"ico_cxdw_enter"];
     [rightImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(detaView).offset(-10);
+        make.right.equalTo(detaView).offset(-KSIphonScreenW(10));
         make.centerY.equalTo(showDetaLab.mas_centerY);
     }];
     
     [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.showAttendLab.mas_bottom).offset(5);
-        make.left.equalTo(weakSelf.leftImageV.mas_right).offset(8);
-        make.right.equalTo(weakSelf).offset(-27);
+        make.top.equalTo(weakSelf.showAttendLab.mas_bottom).offset(KSIphonScreenH(5));
+        make.left.equalTo(weakSelf.leftImageV.mas_right).offset(KSIphonScreenW(8));
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(27));
         make.bottom.equalTo(detaView.mas_bottom);
     }];
     contentView.layer.cornerRadius = 5;
@@ -207,6 +209,12 @@
     contentView.layer.borderWidth = 0.5;
     contentView.layer.borderColor = [UIColor colorWithHexString:@"#e7e7e7"].CGColor;
 }
+
+
+
+
+
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

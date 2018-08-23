@@ -8,6 +8,8 @@
 
 #import "MessageCentreController.h"
 
+#import "ShowSiftMessageTypeView.h"
+
 
 #import "MessageAttendaceRemindCell.h"
 #define MESSAGEATTENDACEREMIND_CELL @"MessageAttendaceRemindCell"
@@ -20,6 +22,8 @@
 @interface MessageCentreController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic,strong) UITableView *msgTableView;
 @property (nonatomic,strong) NSMutableArray *dataArr;
+//消息筛选
+@property (nonatomic,strong)ShowSiftMessageTypeView *msgTypeView;
 
 @end
 
@@ -48,9 +52,11 @@
         return cell;
     }else  if ([typeStr isEqualToString:@"1"] || [typeStr isEqualToString:@"2"] ){
         MessageAttendaceGoOutCell *cell = [tableView dequeueReusableCellWithIdentifier:MESSAGEATTENDACEGOOUT_CELL forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }else{
         MessageAttendaceRemindCell *cell  = [tableView dequeueReusableCellWithIdentifier:MESSAGEATTENDACEREMIND_CELL forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
 }
@@ -94,12 +100,22 @@
     //右边
     [self.customNavBar wr_setRightButtonWithImage:[UIImage imageNamed:@"wcjl_ico_sx"]];
     self.customNavBar.onClickRightButton = ^{
-       
+        [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.msgTypeView];
     };
 }
--(void)dealloc{
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
+#pragma mark -----------懒加载--------
+
+-(ShowSiftMessageTypeView *)msgTypeView{
+    if (!_msgTypeView) {
+        _msgTypeView = [[ShowSiftMessageTypeView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
+    }
+    return _msgTypeView;
+    
+    
 }
+
+
+
 
 
 

@@ -36,11 +36,13 @@
     [self addSubview:timeView];
     timeView.backgroundColor = [UIColor colorWithHexString:@"#d8d8d8"];
     [timeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf).offset(12);
-        make.height.equalTo(@19);
-        make.width.equalTo(@125);
+        make.top.equalTo(weakSelf).offset(KSIphonScreenH(12));
+        make.height.equalTo(@(KSIphonScreenH(19)));
+        make.width.equalTo(@(KSIphonScreenW(125)));
         make.centerX.equalTo(weakSelf.mas_centerX);
     }];
+    timeView.layer.cornerRadius = 3 ;
+    timeView.layer.masksToBounds = YES;
     
     self.remindTimeLab  =[[UILabel alloc]init];
     [timeView addSubview:self.remindTimeLab];
@@ -56,9 +58,9 @@
     [self addSubview:leftImageV];
     leftImageV.image = [UIImage imageNamed:@"ico_kq"];
     [leftImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf).offset(12);
-        make.top.equalTo(timeView.mas_bottom).offset(15);
-        make.width.height.equalTo(@38);
+        make.left.equalTo(weakSelf).offset(KSIphonScreenW(12));
+        make.top.equalTo(timeView.mas_bottom).offset(KSIphonScreenH(15));
+        make.width.height.equalTo(@(KSIphonScreenH(38)));
     }];
     
     UILabel *showAttendLab = [[UILabel alloc]init];
@@ -68,7 +70,7 @@
     showAttendLab.text = @"考勤打卡";
     [showAttendLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(leftImageV.mas_top);
-        make.left.equalTo(leftImageV.mas_right).offset(8);
+        make.left.equalTo(leftImageV.mas_right).offset(KSIphonScreenW(8));
     }];
     
     UIView *contentView = [[UIView alloc]init];
@@ -81,8 +83,8 @@
     showLab.textColor = [UIColor colorWithHexString:@"#3dbafd"];
     showLab.font = Font(16);
     [showLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(contentView).offset(15);
-        make.left.equalTo(contentView).offset(10);
+        make.top.equalTo(contentView).offset(KSIphonScreenH(15));
+        make.left.equalTo(contentView).offset(KSIphonScreenW(10));
     }];
     
     self.showTimeLab = [[UILabel alloc]init];
@@ -93,14 +95,14 @@
     self.showTimeLab.numberOfLines = 0;
     [self.showTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(showLab.mas_left);
-        make.top.equalTo(showLab.mas_bottom).offset(15);
-        make.right.equalTo(contentView).offset(-10);
+        make.top.equalTo(showLab.mas_bottom).offset(KSIphonScreenH(15));
+        make.right.equalTo(contentView).offset(-KSIphonScreenW(10));
     }];
    
     [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(showAttendLab.mas_bottom).offset(5);
-        make.left.equalTo(leftImageV.mas_right).offset(8);
-        make.right.equalTo(weakSelf).offset(-27);
+        make.top.equalTo(showAttendLab.mas_bottom).offset(KSIphonScreenH(5));
+        make.left.equalTo(leftImageV.mas_right).offset(KSIphonScreenW(8));
+        make.right.equalTo(weakSelf).offset(-KSIphonScreenW(27));
         make.bottom.equalTo(weakSelf.showTimeLab.mas_bottom).offset(15);
     }];
     contentView.layer.cornerRadius = 5;

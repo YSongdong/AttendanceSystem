@@ -560,7 +560,7 @@
             make.top.equalTo(showDepartmentNameLab.mas_bottom).offset(16);
             make.left.equalTo(showDepartmentNameLab.mas_left);
         }];
-         //补卡
+        //补卡
         //结束时间
         self.endTimeLab.hidden =YES;
         //时长
@@ -624,6 +624,58 @@
                 [imageV addGestureRecognizer:tap];
             }
         }
+    }else if (_headerType == RecordDetailHeaderOverTimeType){
+        //开始时间
+        self.beginTimeLab.text =dict[@"startTime"];
+        //结束时间
+        self.endTimeLab.text =dict[@"endTime"];
+        //时长
+        self.timeNumberLab.text =[NSString stringWithFormat:@"%.2f",[dict[@"numbers"]floatValue]];
+        
+        NSString *outGoStr = dict[@"leaveInfo"];
+        if ([outGoStr isEqualToString:@""]) {
+            [self.ImageArrView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(weakSelf.showIncidentTypenLab.mas_bottom).offset(16);
+                make.left.right.equalTo(weakSelf);
+                make.height.equalTo(@52);
+            }];
+        }else{
+            [self.ImageArrView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(weakSelf.incidentReaSonLab.mas_bottom).offset(16);
+                make.left.right.equalTo(weakSelf);
+                make.height.equalTo(@52);
+            }];
+        }
+        self.showIncidentTypenLab.text = @"加班事由";
+        //请假事由
+        self.incidentReaSonLab.numberOfLines = 4;
+        self.incidentReaSonLab.text =outGoStr;
+        
+        //隐藏选择地点
+        self.showAddressLab.hidden = YES;
+        self.addressLab.hidden = YES;
+        self.addressImageV.hidden =YES;
+        
+        NSArray *imageArr = dict[@"images"];
+        if (imageArr.count == 0) {
+            self.ImageArrView.hidden = YES;
+        }else{
+            for (int i=0; i<imageArr.count; i++) {
+                UIImageView *imageV = [[UIImageView alloc]init];
+                [self.ImageArrView addSubview:imageV];
+                [SDTool sd_setImageView:imageV WithURL:imageArr[i]];
+                imageV.tag =  200+i;
+                [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(weakSelf).offset(85+i*54+i*5);
+                    make.bottom.equalTo(weakSelf.mas_bottom).offset(-17);
+                    make.width.height.equalTo(@54);
+                }];
+                imageV.userInteractionEnabled = YES;
+                UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addImageAciton:)];
+                [imageV addGestureRecognizer:tap];
+            }
+        }
+        
     }
 
 }
@@ -680,6 +732,21 @@
         }
         
         return outGoHeig + 250;
+    }else if ([headerType isEqualToString:@"5"]){
+        //计算加班事由高度
+        NSString *leaveInfoStr = dict[@"overTimeInfo"];
+        //加班
+        if (![leaveInfoStr isEqualToString:@""]) {
+            outGoHeig  = [SDTool getLabelHeightWithText:leaveInfoStr width:KScreenW-85-12 font:12];
+        }else{
+            outGoHeig = 17;
+        }
+        NSArray *imageArr = dict[@"images"];
+        if (imageArr.count > 0) {
+            outGoHeig += 52;
+        }
+        
+        return outGoHeig + 320;
     }
      return 0;
 }

@@ -193,30 +193,33 @@
     NSMutableArray *coordArr  = [NSMutableArray array];
     
     NSArray *coordinateArr = Datadict[@"coordinate"];
-    for (int i=0; i<coordinateArr.count; i++) {
-        NSDictionary *coorDict = coordinateArr[i];
-        NSDictionary *coordinateDict = coorDict[@"coordinate"];
-        NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:coorDict];
-        mutableDict[@"index"] = [NSString stringWithFormat:@"%d",i];
-        //1.将两个经纬度点转成投影点
-        MAMapPoint point1 = MAMapPointForCoordinate(CLLocationCoordinate2DMake([coordinateDict[@"lat"]doubleValue],[coordinateDict[@"lng"]doubleValue]));
-        MAMapPoint point2 = MAMapPointForCoordinate(CLLocationCoordinate2DMake(location.coordinate.latitude,location.coordinate.longitude));
-        //2.计算距离
-        CLLocationDistance distance = MAMetersBetweenMapPoints(point1,point2);
-        
-        //newDict
-        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:coorDict];
-        dict[@"distance"] = [NSString stringWithFormat:@"%.2f",distance];
-        mutableDict[@"distance"] = [NSString stringWithFormat:@"%.2f",distance];
-        //半径（范围）
-        NSString *deviationStr =coorDict[@"deviation"];
-        if (distance < [deviationStr doubleValue] ) {
-            //是否在范围内  1、 是  2 不是
-            mutableDict[@"isScope"] = @"1";
-        }else{
-            mutableDict[@"isScope"] = @"2";
+
+    if ( coordinateArr.count > 0 ) {
+        for (int i=0; i<coordinateArr.count; i++) {
+            NSDictionary *coorDict = coordinateArr[i];
+            NSDictionary *coordinateDict = coorDict[@"coordinate"];
+            NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:coorDict];
+            mutableDict[@"index"] = [NSString stringWithFormat:@"%d",i];
+            //1.将两个经纬度点转成投影点
+            MAMapPoint point1 = MAMapPointForCoordinate(CLLocationCoordinate2DMake([coordinateDict[@"lat"]doubleValue],[coordinateDict[@"lng"]doubleValue]));
+            MAMapPoint point2 = MAMapPointForCoordinate(CLLocationCoordinate2DMake(location.coordinate.latitude,location.coordinate.longitude));
+            //2.计算距离
+            CLLocationDistance distance = MAMetersBetweenMapPoints(point1,point2);
+            
+            //newDict
+            NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:coorDict];
+            dict[@"distance"] = [NSString stringWithFormat:@"%.2f",distance];
+            mutableDict[@"distance"] = [NSString stringWithFormat:@"%.2f",distance];
+            //半径（范围）
+            NSString *deviationStr =coorDict[@"deviation"];
+            if (distance < [deviationStr doubleValue] ) {
+                //是否在范围内  1、 是  2 不是
+                mutableDict[@"isScope"] = @"1";
+            }else{
+                mutableDict[@"isScope"] = @"2";
+            }
+            [coordArr addObject:mutableDict];
         }
-        [coordArr addObject:mutableDict];
     }
     return coordArr.copy;
 }

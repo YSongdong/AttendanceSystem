@@ -62,7 +62,6 @@ AMapSearchDelegate
     [self createNavi];
     [self createSearchView];
     [self createTableView];
-    
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -70,9 +69,7 @@ AMapSearchDelegate
 }
 #pragma mark ----搜索Pol -----
 -(void) searchStr:(NSString *) str{
-    
     AMapPOIKeywordsSearchRequest *request = [[AMapPOIKeywordsSearchRequest alloc] init];
-    
     request.keywords            = str;
     request.city                = self.reGeocode.city;
   //  request.types               = @"高等院校";
@@ -189,8 +186,16 @@ AMapSearchDelegate
     
     CLLocation *loca = [[CLLocation alloc]initWithLatitude:location.latitude longitude:location.longitude];
     
-    [self.pointAnnotaiton setCoordinate:loca.coordinate];
+//    [self.pointAnnotaiton setCoordinate:loca.coordinate];
     [self.mapView setCenterCoordinate:loca.coordinate];
+    
+    //搜索
+    AMapPOIAroundSearchRequest *request = [[AMapPOIAroundSearchRequest alloc] init];
+    request.location            = [AMapGeoPoint locationWithLatitude:loca.coordinate.latitude longitude:loca.coordinate.longitude];
+    /* 按照距离排序. */
+    request.sortrule            = 0;
+    request.requireExtension    = YES;
+    [self.search AMapPOIAroundSearch:request];
 }
 //重新定位
 -(void)selectPresentAction:(UIButton *)sender{
@@ -377,6 +382,7 @@ AMapSearchDelegate
 //创建Navi
 -(void) createNavi{
     self.customNavBar.title = @"地图选点";
+    self.customNavBar.rightButton.hidden= YES;
     [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
     __weak typeof(self) weakSelf = self;
     self.customNavBar.onClickLeftButton = ^{

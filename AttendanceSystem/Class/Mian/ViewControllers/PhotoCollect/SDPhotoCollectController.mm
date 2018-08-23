@@ -23,6 +23,8 @@ FVAppSdkControllerDelegate
 @property (nonatomic,strong) UIImage * selecdImage;
 //判断是否上传照片
 @property (nonatomic,assign) BOOL isUpdatePhoto;
+//判断是否重新上传照片
+@property (nonatomic,assign) BOOL isAgainPhoto;
 @end
 
 @implementation SDPhotoCollectController
@@ -30,7 +32,7 @@ FVAppSdkControllerDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.isUpdatePhoto = NO;
-   // [self createNavi];
+    self.isAgainPhoto =  NO;
     //创建UI
     [self createView];
 }
@@ -53,6 +55,7 @@ FVAppSdkControllerDelegate
 //设置navi
 -(void) createNavi{
     self.customNavBar.title = @"用户留底照片采集";
+    self.customNavBar.rightButton.hidden= YES;
     [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
     __weak typeof(self) weakSelf = self;
     self.customNavBar.onClickLeftButton = ^{
@@ -66,7 +69,15 @@ FVAppSdkControllerDelegate
     scrollView.backgroundColor = [UIColor colorBgGreyColor];
     [self.view addSubview:scrollView];
     
-    self.photoView = [[PhotoCollectView alloc]initWithFrame:CGRectMake(0, -20, KScreenW, 760)];
+    //系统版本号
+    NSString *version= [UIDevice currentDevice].systemVersion;
+    NSArray *arr =[version componentsSeparatedByString:@"."];
+    NSString *verStr = arr[0];
+    if([verStr integerValue] >= 9.0 ) {
+         self.photoView = [[PhotoCollectView alloc]initWithFrame:CGRectMake(0, -20, KScreenW, 760)];
+    }else{
+         self.photoView = [[PhotoCollectView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, 760)];
+    }
     [scrollView addSubview:self.photoView];
     
     self.photoView.chenkErrorStr = self.chenkErrorStr;
@@ -77,7 +88,40 @@ FVAppSdkControllerDelegate
     __weak typeof(self) weakSelf = self;
     //开始采集
     self.photoView.beginBlock = ^{
-        if (!weakSelf.isUpdatePhoto) {
+            if (!weakSelf.isUpdatePhoto) {
+                
+                if (weakSelf.isAgainPhoto) {
+                    [weakSelf requestUplacUserData];
+                }else{
+                    //获取照片
+                    AVAuthorizationStatus authStatus =  [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+                    if (authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied)
+                    {
+                        [SDShowSystemPrompView showSystemPrompStr:@"您还没有开启相机权限"];
+                        return ;
+                    }
+                    [[FVAppSdk sharedManager]gatherWithParentController:weakSelf];
+                    [FVAppSdk sharedManager].fvLanderDelegate =  weakSelf;
+                }
+            }else{
+                NSString *phoneStr = [SDUserInfo obtainWithBindPhone];
+                if ([phoneStr isEqualToString:@"1"]) {
+                    AlterPassNumberController *passVC = [[AlterPassNumberController alloc]init];
+                    [weakSelf.navigationController pushViewController:passVC animated:YES];
+                }else{
+                    BindingPhoneController *bindVC = [[BindingPhoneController alloc]init];
+                    bindVC.isMine = NO;
+                    [weakSelf.navigationController pushViewController:bindVC animated:YES];
+                }
+            }
+        
+    };
+    //立即上传
+    self.photoView.updateBlock = ^{
+        
+        if (!weakSelf.isAgainPhoto) {
+            [weakSelf requestUplacUserData];
+        }else{
             //获取照片
             AVAuthorizationStatus authStatus =  [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
             if (authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied)
@@ -87,21 +131,7 @@ FVAppSdkControllerDelegate
             }
             [[FVAppSdk sharedManager]gatherWithParentController:weakSelf];
             [FVAppSdk sharedManager].fvLanderDelegate =  weakSelf;
-        }else{
-            NSString *phoneStr = [SDUserInfo obtainWithBindPhone];
-            if ([phoneStr isEqualToString:@"1"]) {
-                AlterPassNumberController *passVC = [[AlterPassNumberController alloc]init];
-                [weakSelf.navigationController pushViewController:passVC animated:YES];
-            }else{
-                BindingPhoneController *bindVC = [[BindingPhoneController alloc]init];
-                bindVC.isMine = NO;
-                [weakSelf.navigationController pushViewController:bindVC animated:YES];
-            }
         }
-    };
-    //立即上传
-    self.photoView.updateBlock = ^{
-        [weakSelf requestUplacUserData];
     };
     
     //返回按钮
@@ -117,11 +147,20 @@ FVAppSdkControllerDelegate
 -(void)FVFaceGatherView:(FVAppSdk *)gather didGatherImage:(UIImage*)image{
     if (image) {
         [self dismissViewControllerAnimated:YES completion:nil];
-        [self.photoView.beginBtn setTitle:@"重新采集" forState:UIControlStateNormal];
+       
         self.selecdImage = image;
         self.photoView.headerImageV.image = image;
         //显示立即上传按钮
         self.photoView.updataBtn.hidden = NO;
+        if ([self.chenkStatu  isEqualToString:@"2"]) {
+            self.isAgainPhoto = YES;
+            //未通过
+            [self.photoView.updataBtn setTitle:@"重新采集" forState:UIControlStateNormal];
+            
+            [self.photoView.beginBtn setTitle:@"立即上传" forState:UIControlStateNormal];
+        }else{
+            [self.photoView.beginBtn setTitle:@"重新采集" forState:UIControlStateNormal];
+        }
         self.photoView.chenkStatuImageV.image = [UIImage imageNamed:@""];
         self.photoView.headerMarkLab.text =  @"用户留底照片采集";
         self.photoView.headerMarkLab.textColor = [UIColor colorTextBg28BlackColor];

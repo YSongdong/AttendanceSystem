@@ -31,8 +31,6 @@
 #import "ApprovalPersonCell.h"
 #define APPROVALPERSON_CELL @"ApprovalPersonCell"
 
-
-
 @interface GoOutApprovalController ()
 <
 UITableViewDelegate,

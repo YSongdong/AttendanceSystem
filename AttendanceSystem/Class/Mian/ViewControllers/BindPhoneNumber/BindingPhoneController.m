@@ -48,6 +48,7 @@
 #pragma mark   -----设置Navi-----
 -(void) createNavi{
     self.customNavBar.title = @"绑定手机号";
+    self.customNavBar.rightButton.hidden= YES;
     if (_isMine) {
         [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
         __weak typeof(self) weakSelf = self;

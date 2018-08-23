@@ -13,8 +13,8 @@
 typedef  enum{
     RecordApproveGoOutDetaType = 0, //外出
     RecordApproveLeaveDetaType,      //请假
-    recordApproveCardDetaType      //补卡
-    
+    recordApproveCardDetaType,      //补卡
+    recordApproveOverTimeDetaType   //加班
 }RecordApproveDetaType;
 
 @interface RecordApproveDetaController : SDBaseController
@@ -28,7 +28,7 @@ typedef  enum{
 //是否是ApplyFor
 @property (nonatomic,assign)BOOL isApplyFor;
 
-//type 1请假流程 2外出流程 3补卡流程
+//type 1请假流程 2外出流程 3补卡流程 5加班流程
 @property (nonatomic,strong)NSString  *typeStr;
 //外出记录id
 @property (nonatomic,strong)NSString *recordIdStr;

@@ -151,7 +151,7 @@
     
     UILabel *twoLab = [[UILabel alloc]init];
     [self addSubview:twoLab];
-    twoLab.text = @"2.  该照片将引用于系统考试、考勤签到等重要场景进行身份验证，不可随意修改。";
+    twoLab.text = @"2.  该照片将应用于考勤签到时进行身份验证，不可随意修改。";
     twoLab.font = Font(14);
     twoLab.numberOfLines = 0;
     [UILabel changeLineSpaceForLabel:twoLab WithSpace:5];

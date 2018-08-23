@@ -11,8 +11,8 @@
 typedef  enum{
     RecordDetailHeaderGoOutType = 0, //外出
     RecordDetailHeaderLeaveType,     //请假
-    RecordDetailHeaderCardType      //请假
-    
+    RecordDetailHeaderCardType,      //请假
+    RecordDetailHeaderOverTimeType   //加班
 }RecordDetailHeaderType;
 
 @interface RecordDetailHeaderView : UIView

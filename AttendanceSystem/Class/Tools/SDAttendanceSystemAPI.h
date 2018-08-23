@@ -97,6 +97,17 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 /*********补卡催办***********/
 #define  HTTP_ATTAPPREPAIRCARDURGE_URL   getRequestPath(@"attendance/Att_app_repaircard/repaircardUrge")
 
+/*********加班申请信息***********/
+/*********新增加班***********/
+#define  HTTP_ATTAPPOVERTIMEADDOVERTIME_URL   getRequestPath(@"attendance/Att_app_over_time/addOverTime")
+/*********加班列表***********/
+#define  HTTP_ATTAPPOVERTIMELIST_URL   getRequestPath(@"attendance/Att_app_over_time/overTimeList")
+/*********加班催办***********/
+#define  HTTP_ATTOVERTIMEURGE_URL   getRequestPath(@"attendance/Att_app_over_time/overTimeUrge")
+/*********撤销申请***********/
+#define  HTTP_ATTOVERTIMEREVOKE_URL   getRequestPath(@"attendance/Att_app_over_time/overTimeRevoke")
+/*********加班详情***********/
+#define  HTTP_ATTAPPOVERTIMEINFO_URL   getRequestPath(@"attendance/Att_app_over_time/overTimeInfo")
 
 /*********我的申请***********/
 #define  HTTP_ATTAPPAPPLYLIST_URL   getRequestPath(@"attendance/Att_app_approval/applyList")
