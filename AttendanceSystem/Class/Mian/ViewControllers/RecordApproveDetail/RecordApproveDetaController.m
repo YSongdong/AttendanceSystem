@@ -53,6 +53,15 @@ UITableViewDataSource
     [self createTableView];
     [self createGCDGroup];
 }
+//视图将要消失
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[ShowPromptMsgView class]]) {
+            [view removeFromSuperview];
+        }
+    }
+}
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return self.dataArr.count;
 }
@@ -92,9 +101,12 @@ UITableViewDataSource
     }
     headerView.dict =self.dataDict;
     
+    __weak typeof(self) weakSelf = self;
     //点击地址
     headerView.selectAddressBlock = ^{
-        
+        LoockGoOutAddressController *loockVC = [[LoockGoOutAddressController alloc]init];
+        loockVC.dict = weakSelf.dataDict;
+        [weakSelf.navigationController pushViewController:loockVC animated:YES];
     };
     return headerView;
 }
@@ -353,7 +365,6 @@ UITableViewDataSource
     }else if (_detaType == recordApproveOverTimeDetaType){
         url = HTTP_ATTAPPOVERTIMEINFO_URL;
     }
-    
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:url params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
         //这个组的任务完成时离开
         dispatch_group_leave(self.group);
@@ -411,16 +422,15 @@ UITableViewDataSource
     param[@"recordId"] = self.recordIdStr;
     param[@"unitId"] = [SDUserInfo obtainWithUniId];
     param[@"userId"] = [SDUserInfo obtainWithUserId];
-    
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:url params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
-        [[UIApplication sharedApplication].keyWindow addSubview:self.showPromptMsgView];
         self.dataDict = nil;
         [self.dataArr removeAllObjects];
         self.chenkStatusStr = @"2";
+        [self.view addSubview:self.showPromptMsgView];
         [self createGCDGroup];
     }];
 }
@@ -475,11 +485,10 @@ UITableViewDataSource
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
-        
         [self.dataArr removeAllObjects];
         self.dataDict = nil;
         self.chenkStatusStr = @"2";
-        [[UIApplication sharedApplication].keyWindow addSubview:self.showPromptMsgView];
+        [self.view addSubview:self.showPromptMsgView];
         [self createGCDGroup];
     }];
 }

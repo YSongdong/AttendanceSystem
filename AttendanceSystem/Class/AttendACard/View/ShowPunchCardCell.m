@@ -339,7 +339,6 @@
     //判断是否请假
     NSString *leaveInStr = [NSString stringWithFormat:@"%@",dict[@"leaveIn"]];
     
-   dispatch_async(dispatch_get_main_queue(), ^{
 #pragma mark ---是请假-----
      //请假
     if ([leaveInStr isEqualToString:@"2"]) {
@@ -519,15 +518,15 @@
             }];
             [self.workStatuBtn addTarget:self action:@selector(selectLeavaAction:) forControlEvents:UIControlEventTouchUpInside];
             
-            /// 补卡
-            self.applyCardBtn.hidden = NO;
-            self.applyCardBtn.tag = 500;
-            [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
-            [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(KSIphonScreenW(20));
-                make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
-            }];
-            [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+//            /// 补卡
+            self.applyCardBtn.hidden = YES;
+//            self.applyCardBtn.tag = 500;
+//            [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
+//            [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(KSIphonScreenW(20));
+//                make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
+//            }];
+//            [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
             return ;
         }
 #pragma mark -----------是外勤，打卡-----------
@@ -650,7 +649,7 @@
             }];
             [self.workStatuBtn addTarget:self action:@selector(selectLeavaAction:) forControlEvents:UIControlEventTouchUpInside];
             
-            if ([arr containsObject:@"正常"]) {
+//            if ([arr containsObject:@"正常"]) {
                 self.applyCardBtn.hidden = YES;
                 //打卡
                 if ([dict[@"remark"] isEqualToString:@""]) {
@@ -668,36 +667,36 @@
                         make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
                     }];
                 }
-            }else{
-                /// 补卡
-                self.applyCardBtn.hidden = NO;
-                self.applyCardBtn.tag = 500;
-                [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
-                [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(KSIphonScreenW(20));
-                    make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
-                }];
-                [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+//            }else{
+//                /// 补卡
+//                self.applyCardBtn.hidden = YES;
+//                self.applyCardBtn.tag = 500;
+//                [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
+//                [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(KSIphonScreenW(20));
+//                    make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
+//                }];
+//                [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
                 
                 
-                //打卡
-                if ([dict[@"remark"] isEqualToString:@""]) {
-                    self.markBtn.hidden = NO;
-                    [self.markBtn setTitle:@"添加备注>" forState:UIControlStateNormal];
-                    [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                        make.left.equalTo(weakSelf.applyCardBtn.mas_right).offset(KSIphonScreenW(20));
-                        make.centerY.equalTo(weakSelf.applyCardBtn.mas_centerY);
-                    }];
-                }else{
-                    self.markBtn.hidden = NO;
-                    [self.markBtn setTitle:@"查看备注>" forState:UIControlStateNormal];
-                    [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                        make.left.equalTo(weakSelf.applyCardBtn.mas_right).offset(KSIphonScreenW(20));
-                        make.centerY.equalTo(weakSelf.applyCardBtn.mas_centerY);
-                    }];
-                }
-                
-            }
+//                //打卡
+//                if ([dict[@"remark"] isEqualToString:@""]) {
+//                    self.markBtn.hidden = NO;
+//                    [self.markBtn setTitle:@"添加备注>" forState:UIControlStateNormal];
+//                    [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                        make.left.equalTo(weakSelf.applyCardBtn.mas_right).offset(KSIphonScreenW(20));
+//                        make.centerY.equalTo(weakSelf.applyCardBtn.mas_centerY);
+//                    }];
+//                }else{
+//                    self.markBtn.hidden = NO;
+//                    [self.markBtn setTitle:@"查看备注>" forState:UIControlStateNormal];
+//                    [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                        make.left.equalTo(weakSelf.applyCardBtn.mas_right).offset(KSIphonScreenW(20));
+//                        make.centerY.equalTo(weakSelf.applyCardBtn.mas_centerY);
+//                    }];
+//                }
+//
+//            }
             [self.markBtn addTarget:self action:@selector(nomalLookMark:) forControlEvents:UIControlEventTouchUpInside];
             
             return;
@@ -736,52 +735,51 @@
             [self.workStatuBtn addTarget:self action:@selector(selectLeavaAction:) forControlEvents:UIControlEventTouchUpInside];
             
             //补卡已通过
-            self.applyCardBtn.hidden = NO;
-            self.applyCardBtn.tag = 501;
-            [self.applyCardBtn setTitle:@"补卡 已通过>" forState:UIControlStateNormal];
-            [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(KSIphonScreenW(20));
-                make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
-            }];
-            [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+            self.applyCardBtn.hidden = YES;
+//            self.applyCardBtn.tag = 501;
+//            [self.applyCardBtn setTitle:@"补卡 已通过>" forState:UIControlStateNormal];
+//            [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(KSIphonScreenW(20));
+//                make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
+//            }];
+//            [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
             return;
           }
         }
         return;
     }
-    
 #pragma mark -----------不是外勤，补卡------------
-    if ([lackCardStr isEqualToString:@"3"]){
-         NSString *isDoSureStr =[NSString stringWithFormat:@"%@",dict[@"lackCardData"][@"isDoSure"]];
-        if ([isDoSureStr isEqualToString:@"2"]) {
-            self.normalBtn.hidden = YES;
-            self.unusualBtn.hidden = YES;
-            self.leaveBtn.hidden =  YES;
-            //显示补卡时间
-            NSDictionary *lackCardDict = dict[@"lackCardData"];
-            self.showCardTimeLab.text = [NSString stringWithFormat:@"补卡时间: %@",lackCardDict[@"doTime"]];
-            //隐藏地址和身份验证
-            addressView.hidden = YES;
-            addressImageV.hidden = YES;
-            testView.hidden = YES;
-            testImageV.hidden = YES;
-            //隐藏备注
-            self.markBtn.hidden = YES;
-            //外勤已通过
-            self.workStatuBtn.hidden = YES;
-            
-            //补卡已通过
-            self.applyCardBtn.hidden = NO;
-            self.applyCardBtn.tag = 501;
-            [self.applyCardBtn setTitle:@"补卡 已通过>" forState:UIControlStateNormal];
-            [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(weakSelf.showCardTimeLab.mas_left);
-                make.top.equalTo(weakSelf.showCardTimeLab.mas_bottom).offset(KSIphonScreenH(13));
-            }];
-            [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
-            return;
-        }
-    }
+//    if ([lackCardStr isEqualToString:@"3"]){
+//         NSString *isDoSureStr =[NSString stringWithFormat:@"%@",dict[@"lackCardData"][@"isDoSure"]];
+//        if ([isDoSureStr isEqualToString:@"2"]) {
+//            self.normalBtn.hidden = YES;
+//            self.unusualBtn.hidden = YES;
+//            self.leaveBtn.hidden =  YES;
+//            //显示补卡时间
+//            NSDictionary *lackCardDict = dict[@"lackCardData"];
+//            self.showCardTimeLab.text = [NSString stringWithFormat:@"补卡时间: %@",lackCardDict[@"doTime"]];
+//            //隐藏地址和身份验证
+//            addressView.hidden = YES;
+//            addressImageV.hidden = YES;
+//            testView.hidden = YES;
+//            testImageV.hidden = YES;
+//            //隐藏备注
+//            self.markBtn.hidden = YES;
+//            //外勤已通过
+//            self.workStatuBtn.hidden = YES;
+//
+//            //补卡已通过
+//            self.applyCardBtn.hidden =YES;
+//            self.applyCardBtn.tag = 501;
+//            [self.applyCardBtn setTitle:@"补卡 已通过>" forState:UIControlStateNormal];
+//            [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                make.left.equalTo(weakSelf.showCardTimeLab.mas_left);
+//                make.top.equalTo(weakSelf.showCardTimeLab.mas_bottom).offset(KSIphonScreenH(13));
+//            }];
+//            [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+//            return;
+//        }
+//    }
 #pragma mark ---不是外勤，也没有打卡-----
     //判断是否打卡
     if ([timeClockinHiStr isEqualToString:@""]) {
@@ -813,15 +811,15 @@
         //外勤已通过
         self.workStatuBtn.hidden = YES;
         
-        /// 补卡
-        self.applyCardBtn.hidden = NO;
-        self.applyCardBtn.tag = 500;
-        [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
-        [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(weakSelf.unusualBtn.mas_left);
-            make.top.equalTo(weakSelf.unusualBtn.mas_bottom).offset(KSIphonScreenH(13));
-        }];
-        [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+//        /// 补卡
+        self.applyCardBtn.hidden = YES;
+//        self.applyCardBtn.tag = 500;
+//        [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
+//        [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            make.left.equalTo(weakSelf.unusualBtn.mas_left);
+//            make.top.equalTo(weakSelf.unusualBtn.mas_bottom).offset(KSIphonScreenH(13));
+//        }];
+//        [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
         return;
     }
  #pragma mark ---不是外勤，打卡-----
@@ -911,8 +909,8 @@
         }
         //隐藏
         self.workStatuBtn.hidden = YES;
-        
-        if ([arr containsObject:@"正常"]) {
+        self.applyCardBtn.hidden = YES;
+//        if ([arr containsObject:@"正常"]) {
             //隐藏补卡
             self.applyCardBtn.hidden= YES;
             //打卡
@@ -931,41 +929,40 @@
                     make.top.equalTo(addressImageV.mas_bottom).offset(KSIphonScreenH(25));
                 }];
             }
-        }else{
-            //显示补卡
-            self.applyCardBtn.hidden= NO;
-            self.applyCardBtn.tag = 500;
-            [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
-            [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(addressImageV.mas_left);
-                make.top.equalTo(addressImageV.mas_bottom).offset(KSIphonScreenH(25));
-            }];
-            [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
-            //打卡
-            if ([dict[@"remark"] isEqualToString:@""]) {
-                self.markBtn.hidden = NO;
-                [self.markBtn setTitle:@"添加备注>" forState:UIControlStateNormal];
-                [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.left.equalTo(weakSelf.applyCardBtn.mas_right).offset(KSIphonScreenW(20));
-                    make.centerY.equalTo(weakSelf.applyCardBtn.mas_centerY);
-                }];
-            }else{
-                self.markBtn.hidden = NO;
-                [self.markBtn setTitle:@"查看备注>" forState:UIControlStateNormal];
-                [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-                    make.left.equalTo(weakSelf.applyCardBtn.mas_right).offset(KSIphonScreenW(20));
-                    make.centerY.equalTo(weakSelf.applyCardBtn.mas_centerY);
-                }];
-            }
-        }
+//        }else{
+//            //显示补卡
+//            self.applyCardBtn.hidden= NO;
+//            self.applyCardBtn.tag = 500;
+//            [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
+//            [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                make.left.equalTo(addressImageV.mas_left);
+//                make.top.equalTo(addressImageV.mas_bottom).offset(KSIphonScreenH(25));
+//            }];
+//            [self.applyCardBtn addTarget:self action:@selector(timeUnusualUFaceBuCard:) forControlEvents:UIControlEventTouchUpInside];
+//            //打卡
+//            if ([dict[@"remark"] isEqualToString:@""]) {
+//                self.markBtn.hidden = NO;
+//                [self.markBtn setTitle:@"添加备注>" forState:UIControlStateNormal];
+//                [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.left.equalTo(weakSelf.applyCardBtn.mas_right).offset(KSIphonScreenW(20));
+//                    make.centerY.equalTo(weakSelf.applyCardBtn.mas_centerY);
+//                }];
+//            }else{
+//                self.markBtn.hidden = NO;
+//                [self.markBtn setTitle:@"查看备注>" forState:UIControlStateNormal];
+//                [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.left.equalTo(weakSelf.applyCardBtn.mas_right).offset(KSIphonScreenW(20));
+//                    make.centerY.equalTo(weakSelf.applyCardBtn.mas_centerY);
+//                }];
+//            }
+//        }
         [self.markBtn addTarget:self action:@selector(nomalLookMark:) forControlEvents:UIControlEventTouchUpInside];
         return;
     }
     
-
-        });
- 
-
+   dispatch_async(dispatch_get_main_queue(), ^{
+       
+    });
 }
 #pragma mark ------按钮点击事件------
 //请假已通过

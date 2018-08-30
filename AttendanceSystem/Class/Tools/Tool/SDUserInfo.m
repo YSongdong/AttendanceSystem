@@ -97,6 +97,15 @@
     mutableDict[@"userId"] = dict[@"userId"];
     [SDUserInfo saveUserData:mutableDict.copy];
 }
+//修改考勤组
++(void) alterProGroupId:(NSString *)agId{
+    NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict1 = [userD objectForKey:@"Login"];
+    NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:dict1];
+    mutableDict[@"proGroupId"] = agId;
+    [SDUserInfo saveUserData:mutableDict.copy];
+}
+
 //修改用户保存信息
 +(void) alterUserInfo:(NSDictionary *)dict{
     NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
@@ -123,6 +132,8 @@
     mutableDict[@"outgo"] = dict[@"outgo"];
     mutableDict[@"recard"] = dict[@"recard"];
     mutableDict[@"leave"] = dict[@"leave"];
+    mutableDict[@"overtime"] = dict[@"overtime"];
+    mutableDict[@"cardReissue"] = dict[@"cardReissue"];
     [SDUserInfo saveUserData:mutableDict.copy];
 }
 // -----------------取出数据---------
@@ -206,6 +217,18 @@
     NSDictionary *dict = [userD objectForKey:@"Login"];
     return dict[@"departmentName"];
 }
+//获取appListCount  我的待审批数量
++(NSString *) obtainWithAppListCount{
+    NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict = [userD objectForKey:@"Login"];
+    return dict[@"appListCount"];
+}
+//获取msgCount 未读消息数量
++(NSString *) obtainWithMsgCount{
+    NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict = [userD objectForKey:@"Login"];
+    return dict[@"msgCount"];
+}
 //获取plaformId
 +(NSString *) obtainWithPlafrmId{
     NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
@@ -255,6 +278,16 @@
     NSDictionary *dict = [userD objectForKey:@"Login"];
     return dict[@"outgo"];
 }
-
-
+//获取  overtime  1:有加班流程 2：没有
++(NSString *) obtainWithOvertime{
+    NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict = [userD objectForKey:@"Login"];
+    return dict[@"overtime"];
+}
+//获取  CardReissue  //1需要补卡 2无需补卡
++(NSString *) obtainWithCardReissue{
+    NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict = [userD objectForKey:@"Login"];
+    return dict[@"cardReissue"];
+}
 @end

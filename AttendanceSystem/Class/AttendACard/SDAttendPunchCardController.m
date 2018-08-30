@@ -117,6 +117,18 @@ AMapLocationManagerDelegate
     [self.headerView.selectBtn setTitle:dateStr forState:UIControlStateNormal];
     [self requestAttendInfo:self.selectCalendarStr];
 }
+//视图已经消失
+- (void)viewDidDisappear:(BOOL)animated {
+   [super viewDidDisappear:animated];
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[ShowLocatPromentView class]]) {
+            [view removeFromSuperview];
+        }
+        if ([view isKindOfClass:[ShowUnkownPhotoPromtView class]]) {
+            [view removeFromSuperview];
+        }
+    }
+}
 //设置navi
 -(void) createNavi{
     self.customNavBar.title = @"考勤打卡";

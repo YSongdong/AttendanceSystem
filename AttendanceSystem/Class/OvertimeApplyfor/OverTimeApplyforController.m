@@ -69,7 +69,9 @@ UIImagePickerControllerDelegate
     [self createNavi];
     [self createTableView];
     [self requestApprovalMemberData];
-    
+    //监听当键将要退出时
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)  name:UIKeyboardWillHideNotification object:nil];
+
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 5;
@@ -173,12 +175,13 @@ UIImagePickerControllerDelegate
     weaSelf.dataDcit[@"startTime"] = [weaSelf.beginTimeStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     weaSelf.dataDcit[@"endTime"] =[weaSelf.endTimeStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     weaSelf.dataDcit[@"numbers"] = [NSString stringWithFormat:@"%.2f",timeLong];
+    
     //事由
     if ([weaSelf.leaveReasonStr isEqualToString:@""]) {
         [SDShowSystemPrompView showSystemPrompStr:@"请输入加班事由"];
         return;
     }
-    weaSelf.dataDcit[@"outGo"] = weaSelf.leaveReasonStr;
+    weaSelf.dataDcit[@"overTimeInfo"] = weaSelf.leaveReasonStr;
 
     weaSelf.dataDcit[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
     weaSelf.dataDcit[@"token"] = [SDTool getNewToken];
@@ -211,13 +214,22 @@ UIImagePickerControllerDelegate
         }
     }
 }
+#pragma mark -----键盘收起通知-----
+//当键退出
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+    ApprovarReasonCell *cell = [self.overTimeTableView cellForRowAtIndexPath:indexPath];
+    [cell.cellTextView resignFirstResponder];
+    self.leaveReasonStr = cell.cellTextView.text;
+}
 #pragma mark ----调系统相机上传头像------
 // 选择了图片或者拍照了
 - (void)imagePickerController:(UIImagePickerController *)aPicker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [aPicker dismissViewControllerAnimated:YES completion:nil];
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
     //
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
     ApprovalSelectPhotoCell *cell = [self.overTimeTableView cellForRowAtIndexPath:indexPath];
     [cell.imageArr insertObject:image atIndex:0];
     //更新UI
@@ -271,10 +283,12 @@ UIImagePickerControllerDelegate
         [weakSelf.navigationController popViewControllerAnimated:YES];
     };
     //右边
-    [self.customNavBar wr_setRightButtonWithTitle:@"加班记录" titleColor:[UIColor colorTextWhiteColor]];
+    [self.customNavBar wr_setRightButtonWithNormal:nil highlighted:nil];
+    [self.customNavBar.rightButton setTitle:@"加班记录" forState:UIControlStateNormal];
+    self.customNavBar.rightButton.frame = CGRectMake(KScreenW - 70, KSStatusHeight, 70 , 44);
     self.customNavBar.onClickRightButton = ^{
         GoOutRecordController *recordVC = [[GoOutRecordController alloc]init];
-        recordVC.recordType = ApporvalRecordOutType;
+        recordVC.recordType = ApporvalRecordOverTimeType;
         recordVC.titleStr = @"加班记录";
         [weakSelf.navigationController pushViewController:recordVC animated:YES];
     };
@@ -363,7 +377,7 @@ UIImagePickerControllerDelegate
             dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0/*延迟执行时间*/ * NSEC_PER_SEC));
             dispatch_after(delayTime, dispatch_get_main_queue(), ^{
                 RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
-                detaVC.detaType = RecordApproveGoOutDetaType;
+                detaVC.detaType = recordApproveOverTimeDetaType;
                 detaVC.isSkipGrade = YES;
                 detaVC.typeStr = @"5";
                 //审核中

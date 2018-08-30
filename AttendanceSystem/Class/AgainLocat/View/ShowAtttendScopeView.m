@@ -130,7 +130,7 @@ AMapLocationManagerDelegate
     //测量距离
     NSArray *arr = [SDTool getData:self.coordinateDict Locat:userLocation];
     NSMutableArray *mutableArr = [NSMutableArray array];
-    if (mutableArr.count !=0) {
+    if (arr.count > 0) {
         for (NSDictionary *dict in arr) {
             if ([dict[@"isScope"] isEqualToString:@"1"]) {
                 [mutableArr insertObject:dict atIndex:0];

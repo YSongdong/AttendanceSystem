@@ -59,7 +59,7 @@
     
     self.remindTimeLab  =[[UILabel alloc]init];
     [timeView addSubview:self.remindTimeLab];
-    self.remindTimeLab.text = @"2018.02.03 12:30:30";
+    self.remindTimeLab.text = @"";
     self.remindTimeLab.textColor =[ UIColor colorTextWhiteColor];
     self.remindTimeLab.font = Font(12);
     [self.remindTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -91,16 +91,16 @@
     [self addSubview:contentView];
     contentView.backgroundColor = [UIColor colorTextWhiteColor];
     
-    
     self.showContentTypeLab = [[UILabel alloc]init];
     [contentView addSubview:self.showContentTypeLab];
-    self.showContentTypeLab.text = @"您的补卡申请已提交";
+    self.showContentTypeLab.text = @"";
     self.showContentTypeLab.textColor = [UIColor colorTextBg28BlackColor];
     self.showContentTypeLab.font = Font(14);
     self.showContentTypeLab.numberOfLines =2;
     [self.showContentTypeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(contentView).offset(KSIphonScreenH(15));
         make.left.equalTo(contentView).offset(KSIphonScreenW(10));
+        make.right.equalTo(contentView).offset(-KSIphonScreenW(10));
     }];
     
     self.showBeginTimeLab = [[UILabel alloc]init];
@@ -169,7 +169,7 @@
     [detaView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(contentView);
         make.top.equalTo(weakSelf.showGoOutReasonLab.mas_bottom).offset(KSIphonScreenH(10));
-        make.height.equalTo(@(KSIphonScreenH(33)));
+        make.height.equalTo(@(KSIphonScreenH(28)));
     }];
     
     UIView *lineView = [[UIView alloc]init];
@@ -209,10 +209,201 @@
     contentView.layer.borderWidth = 0.5;
     contentView.layer.borderColor = [UIColor colorWithHexString:@"#e7e7e7"].CGColor;
 }
+//计算cell 高度
++(CGFloat) getWithCellHeight:(NSDictionary *) dict{
+    CGFloat height = 0;
+    
+    height += 240;
+    NSString *titleStr = dict[@"title"];
+    CGFloat heightText = [SDTool getLabelHeightWithText:titleStr width:KScreenW-130 font:14];
+    
+    height = height+heightText;
+    
+    return height;
+}
 
+-(void)setDict:(NSDictionary *)dict{
+    _dict = dict;
+    
+    NSInteger type =[dict[@"type"] integerValue];
+    //我审批的
+    if (type > 0 && type <9) {
+        //时间
+        self.remindTimeLab.text = dict[@"startTime"];
+        
+        self.showAttendLab.text = @"我审批的";
+        
+        self.leftImageV.image = [UIImage imageNamed:@"msg_ico_01"];
+        
+        //标题
+        self.showContentTypeLab.attributedText =[self getAttributedText:dict[@"title"] andType:type andStatu:[dict[@"type"] integerValue]];
+        
+        if (type == 1 || type == 5) {
+            // 请假
+            //请假类型
+            NSString *infoStr =[NSString stringWithFormat:@"%@",dict[@"info"]];
+            NSString *type ;
+            if ([infoStr isEqualToString:@"1"]) {
+                type = @"年假";
+            }else if ([infoStr isEqualToString:@"2"]){
+                type = @"事假";
+            }else if ([infoStr isEqualToString:@"3"]){
+                type = @"调休";
+            }else if ([infoStr isEqualToString:@"4"]){
+                type = @"产假";
+            }else if ([infoStr isEqualToString:@"5"]){
+                type = @"婚假";
+            }else if ([infoStr isEqualToString:@"6"]){
+                type = @"丧假";
+            }else if ([infoStr isEqualToString:@"7"]){
+                type = @"护理假";
+            }else if ([infoStr isEqualToString:@"8"]){
+                type = @"病假";
+            }else if ([infoStr isEqualToString:@"9"]){
+                type = @"轮休";
+            }
+            self.showBeginTimeLab.text =[NSString stringWithFormat:@"请假类型 %@",type];
+            //开始时间
+            self.showEndTimeLab.text =[NSString stringWithFormat:@"开始时间 %@",dict[@"startTime"]];
+            //结束时间
+            self.showGoOutReasonLab.text =[NSString stringWithFormat:@"结束时间 %@",dict[@"endTime"]];
+        }else if (type == 2 || type == 6){
+            //外出
+            //开始时间
+            self.showBeginTimeLab.text =[NSString stringWithFormat:@"开始时间 %@",dict[@"startTime"]];
+            //结束时间
+            self.showEndTimeLab.text =[NSString stringWithFormat:@"结束时间 %@",dict[@"endTime"]];
+            //事由
+            self.showGoOutReasonLab.text =[NSString stringWithFormat:@"外出事由 %@",dict[@"info"]];
+        }else if (type == 3 || type == 7){
+            // 加班
+            //开始时间
+            self.showBeginTimeLab.text =[NSString stringWithFormat:@"开始时间 %@",dict[@"startTime"]];
+            //结束时间
+            self.showEndTimeLab.text =[NSString stringWithFormat:@"结束时间 %@",dict[@"endTime"]];
+            //事由
+            self.showGoOutReasonLab.text =[NSString stringWithFormat:@"加班事由 %@",dict[@"info"]];
+        }
+        
+    }else if(type > 8 && type <17 )  {
+        //我发起的
+        //时间
+        self.remindTimeLab.text = dict[@"startTime"];
+        
+        self.showAttendLab.text = @"我发起的";
+        
+        self.leftImageV.image = [UIImage imageNamed:@"ico_wfqd"];
+        
+        //标题
+        self.showContentTypeLab.attributedText =[self getAttributedText:dict[@"title"] andType:type andStatu:[dict[@"type"] integerValue]];
+       
+        if (type == 9 || type == 13) {
+            // 请假
+            //请假类型
+            NSString *infoStr =[NSString stringWithFormat:@"%@",dict[@"info"]];
+            NSString *type ;
+            if ([infoStr isEqualToString:@"1"]) {
+                type = @"年假";
+            }else if ([infoStr isEqualToString:@"2"]){
+                type = @"事假";
+            }else if ([infoStr isEqualToString:@"3"]){
+                type = @"调休";
+            }else if ([infoStr isEqualToString:@"4"]){
+                type = @"产假";
+            }else if ([infoStr isEqualToString:@"5"]){
+                type = @"婚假";
+            }else if ([infoStr isEqualToString:@"6"]){
+                type = @"丧假";
+            }else if ([infoStr isEqualToString:@"7"]){
+                type = @"护理假";
+            }else if ([infoStr isEqualToString:@"8"]){
+                type = @"病假";
+            }else if ([infoStr isEqualToString:@"9"]){
+                type = @"轮休";
+            }
+            self.showBeginTimeLab.text =[NSString stringWithFormat:@"请假类型 %@",type];
+            //开始时间
+            self.showEndTimeLab.text =[NSString stringWithFormat:@"开始时间 %@",dict[@"startTime"]];
+            //结束时间
+            self.showGoOutReasonLab.text =[NSString stringWithFormat:@"结束时间 %@",dict[@"endTime"]];
+        }else if (type == 10 || type == 14){
+            //外出
+            //开始时间
+            self.showBeginTimeLab.text =[NSString stringWithFormat:@"开始时间 %@",dict[@"startTime"]];
+            //结束时间
+            self.showEndTimeLab.text =[NSString stringWithFormat:@"结束时间 %@",dict[@"endTime"]];
+            //事由
+            self.showGoOutReasonLab.text =[NSString stringWithFormat:@"外出事由 %@",dict[@"info"]];
+        }else if (type == 11 || type == 15){
+            // 加班
+            //开始时间
+            self.showBeginTimeLab.text =[NSString stringWithFormat:@"开始时间 %@",dict[@"startTime"]];
+            //结束时间
+            self.showEndTimeLab.text =[NSString stringWithFormat:@"结束时间 %@",dict[@"endTime"]];
+            //事由
+            self.showGoOutReasonLab.text =[NSString stringWithFormat:@"加班事由 %@",dict[@"info"]];
+        }
 
-
-
+    }
+}
+-(NSMutableAttributedString *) getAttributedText:(NSString *) text andType:(NSInteger) type andStatu:(NSInteger)statu{
+    if ([text isEqualToString:@""]) {
+        return nil ;
+    }
+    NSMutableAttributedString * attributedStr = [[NSMutableAttributedString alloc] initWithString:text];
+    if ([text rangeOfString:@"已同意"].location !=NSNotFound ) {
+        if ([text rangeOfString:@"等待"].location != NSNotFound) {
+            //已同意
+            NSRange  agreeBegRange = [text rangeOfString:@"申请" options:NSLiteralSearch];
+            NSRange  agreeEndRange = [text rangeOfString:@"同意" options:NSLiteralSearch];
+            NSRange  agreeRange = NSMakeRange(agreeBegRange.location+2, agreeEndRange.location-agreeBegRange.location+2);
+            [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorCommonGreenColor] range:agreeRange];
+            
+            //审核中
+            NSRange  beginRange = [text rangeOfString:@"等待" options:NSLiteralSearch];
+            NSRange  endRange = [text rangeOfString:@"审批" options:NSLiteralSearch];
+            NSRange  range = NSMakeRange(beginRange.location, endRange.location-beginRange.location+2);
+            [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#ffb046"] range:range];
+        }else{
+            //已同意
+            NSRange  agreeBegRange = [text rangeOfString:@"申请" options:NSLiteralSearch];
+            NSRange  agreeEndRange = [text rangeOfString:@"同意" options:NSLiteralSearch];
+            NSRange  agreeRange = NSMakeRange(agreeBegRange.location+2, agreeEndRange.location-agreeBegRange.location+2);
+            [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorCommonGreenColor] range:agreeRange];
+        }
+        return attributedStr;
+    }
+    
+    if ([text rangeOfString:@"等待"].location !=NSNotFound ) {
+        //审核中
+        NSRange  beginRange = [text rangeOfString:@"等待" options:NSLiteralSearch];
+        NSRange  endRange = [text rangeOfString:@"审批" options:NSLiteralSearch];
+        NSRange  range = NSMakeRange(beginRange.location, endRange.location-beginRange.location+2);
+        [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#ffb046"] range:range];
+        
+        return attributedStr ;
+    }
+    if ([text rangeOfString:@"审批未通过"].location !=NSNotFound ) {
+        NSRange range = [text rangeOfString:@"审批未通过"];
+        [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#f75254"] range:range];
+        
+          return attributedStr;
+        }
+    
+    if ([text rangeOfString:@"审批通过"].location !=NSNotFound) {
+        NSRange range = [text rangeOfString:@"审批通过"];
+        [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorCommonGreenColor] range:range];
+        return attributedStr;
+    }
+   
+    if ([text rangeOfString:@"已撤销"].location !=NSNotFound) {
+        NSRange range = [text rangeOfString:@"已撤销"];
+        [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#aaaaaa"] range:range];
+        return attributedStr;
+    }
+    
+    return nil;
+}
 
 
 

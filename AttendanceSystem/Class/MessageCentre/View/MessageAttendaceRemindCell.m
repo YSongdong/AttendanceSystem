@@ -46,7 +46,7 @@
     
     self.remindTimeLab  =[[UILabel alloc]init];
     [timeView addSubview:self.remindTimeLab];
-    self.remindTimeLab.text = @"2018.02.03 12:30:30";
+    self.remindTimeLab.text = @"";
     self.remindTimeLab.textColor =[ UIColor colorTextWhiteColor];
     self.remindTimeLab.font = Font(12);
     [self.remindTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -111,9 +111,21 @@
     contentView.layer.borderColor = [UIColor colorWithHexString:@"#e7e7e7"].CGColor;
 }
 
-
-
-
+-(void)setDict:(NSDictionary *)dict{
+    _dict = dict;
+    
+    //显示时间
+    self.remindTimeLab.text = dict[@"createTime"];
+    
+    //
+    NSString *typeStr = [NSString stringWithFormat:@"%@",dict[@"type"]];
+    if ([typeStr isEqualToString:@"1"]) {
+         self.showTimeLab.text = @"还有10分钟就要上班了，别忘记打卡";
+    }else{
+         self.showTimeLab.text = @"还有10分钟就要下班了，别忘记打卡";
+    }
+    
+}
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

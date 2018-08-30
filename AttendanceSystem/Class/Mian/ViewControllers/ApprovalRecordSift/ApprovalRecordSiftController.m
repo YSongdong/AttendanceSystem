@@ -218,13 +218,17 @@ UICollectionViewDelegateFlowLayout
         [self.dataArr addObject:mutbleArr];
         
         
-        NSArray *typeArr =@[@"全部",@"请假",@"外出",@"补卡"];
+        NSArray *typeArr =@[@"全部",@"请假",@"外出",@"加班"];
         NSMutableArray *mutbleTypeArr = [NSMutableArray array];
         for (int i=0; i<typeArr.count; i++) {
             NSMutableDictionary *dict = [NSMutableDictionary dictionary];
             dict[@"content"] = typeArr[i];
             dict[@"isSelect"] = @"2";
-            dict[@"type"] = [NSString stringWithFormat:@"%d",i];
+            if (i == typeArr.count-1) {
+                dict[@"type"] = [NSString stringWithFormat:@"%d",i+2];
+            }else{
+                dict[@"type"] = [NSString stringWithFormat:@"%d",i];
+            }
             if (self.selelctSiftArr == nil) {
                 if (i == 0) {
                     //默认第一个选中
@@ -255,8 +259,16 @@ UICollectionViewDelegateFlowLayout
                     [self.selectIndexPathArr addObject:nomalIndexPath];
                 }else{
                     NSDictionary *selecDict = self.selelctSiftArr[j];
-                    NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:[selecDict[@"type"]integerValue] inSection:j];
-                    [self.selectIndexPathArr addObject:nomalIndexPath];
+                    NSString *typeStr = selecDict[@"type"];
+                    if ([typeStr isEqualToString:@"5"]) {
+                        NSInteger type =[typeStr integerValue];
+                        NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:type-2 inSection:j];
+                        [self.selectIndexPathArr addObject:nomalIndexPath];
+                    }else{
+                        NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:[selecDict[@"type"]integerValue] inSection:j];
+                        [self.selectIndexPathArr addObject:nomalIndexPath];
+                    }
+                    
                 }
                
             }
@@ -264,13 +276,17 @@ UICollectionViewDelegateFlowLayout
         
     }else if (_siftType == RecordTypeSiftType){
         
-        NSArray *typeArr =@[@"全部",@"请假",@"外出",@"补卡"];
+        NSArray *typeArr =@[@"全部",@"请假",@"外出",@"加班"];
         NSMutableArray *mutbleTypeArr = [NSMutableArray array];
         for (int i=0; i<typeArr.count; i++) {
             NSMutableDictionary *dict = [NSMutableDictionary dictionary];
             dict[@"content"] = typeArr[i];
             dict[@"isSelect"] = @"2";
-            dict[@"type"] = [NSString stringWithFormat:@"%d",i];
+            if (i == typeArr.count-1) {
+                dict[@"type"] = [NSString stringWithFormat:@"%d",i+2];
+            }else{
+                dict[@"type"] = [NSString stringWithFormat:@"%d",i];
+            }
             if (self.selelctSiftArr == nil) {
                 if (i == 0) {
                     //默认第一个选中
@@ -293,8 +309,16 @@ UICollectionViewDelegateFlowLayout
         }else{
             //选中
             NSDictionary *selectDict = self.selelctSiftArr[0];
-            NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:[selectDict[@"type"]integerValue]inSection:0];
-            [self.selectIndexPathArr addObject:nomalIndexPath];
+            NSString *typeStr = selectDict[@"type"];
+            if ([typeStr isEqualToString:@"5"]) {
+                NSInteger type =[typeStr integerValue];
+                NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:type-2 inSection:0];
+                [self.selectIndexPathArr addObject:nomalIndexPath];
+            }else{
+                NSIndexPath *nomalIndexPath = [NSIndexPath indexPathForRow:[selectDict[@"type"]integerValue]inSection:0];
+                [self.selectIndexPathArr addObject:nomalIndexPath];
+            }
+            
         }
     }
 }

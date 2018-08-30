@@ -74,6 +74,8 @@ ApprovalRecordSiftControllerDelegate
         cell.cellType = RecordCellOutType;
     }else if ([typeStr isEqualToString:@"3"]){
         cell.cellType = RecordCellCardType;
+    }else if ([typeStr isEqualToString:@"5"]){
+        cell.cellType = RecordCellOverTimeType;
     }
     cell.cutTypeStr = @"2";
     cell.dict =dict;
@@ -119,6 +121,10 @@ ApprovalRecordSiftControllerDelegate
         //补卡
         detaVC.detaType = recordApproveCardDetaType;
         detaVC.typeStr = @"3";
+    }else if ([typeStr isEqualToString:@"5"]){
+        //加班
+        detaVC.detaType = recordApproveOverTimeDetaType;
+        detaVC.typeStr = @"5";
     }
     [self.navigationController pushViewController:detaVC animated:YES];
 }

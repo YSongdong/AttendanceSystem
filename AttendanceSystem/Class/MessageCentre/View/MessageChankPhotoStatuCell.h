@@ -11,5 +11,9 @@
 @interface MessageChankPhotoStatuCell : UITableViewCell
 
 
+//计算cell 高度
++(CGFloat) getWithCellHeight:(NSDictionary *) dict;
+
+@property (nonatomic,strong) NSDictionary *dict ;
 
 @end

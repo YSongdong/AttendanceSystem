@@ -39,7 +39,7 @@
     timeView.backgroundColor = [UIColor colorWithHexString:@"#d8d8d8"];
     [timeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf).offset(KSIphonScreenH(12));
-        make.height.equalTo(@(KSIphonScreenH(19)));
+        make.height.equalTo(@(KSIphonScreenH(15)));
         make.width.equalTo(@(KSIphonScreenW(125)));
         make.centerX.equalTo(weakSelf.mas_centerX);
     }];
@@ -48,7 +48,7 @@
     
     self.remindTimeLab  =[[UILabel alloc]init];
     [timeView addSubview:self.remindTimeLab];
-    self.remindTimeLab.text = @"2018.02.03 12:30:30";
+    self.remindTimeLab.text = @"";
     self.remindTimeLab.textColor =[ UIColor colorTextWhiteColor];
     self.remindTimeLab.font = Font(12);
     [self.remindTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -58,7 +58,7 @@
     
     self.leftImageV = [[UIImageView alloc]init];
     [self addSubview:self.leftImageV];
-    self.leftImageV.image = [UIImage imageNamed:@"ico_kq"];
+    self.leftImageV.image = [UIImage imageNamed:@"ico_zpsh"];
     [self.leftImageV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(weakSelf).offset(KSIphonScreenW(12));
         make.top.equalTo(timeView.mas_bottom).offset(KSIphonScreenH(15));
@@ -74,8 +74,7 @@
         make.top.equalTo(weakSelf.leftImageV.mas_top);
         make.left.equalTo(weakSelf.leftImageV.mas_right).offset(KSIphonScreenW(8));
     }];
-    
-    
+
     UIView *contentView = [[UIView alloc]init];
     [self addSubview:contentView];
     contentView.backgroundColor = [UIColor colorTextWhiteColor];
@@ -86,7 +85,7 @@
     showPhotoLab.font = Font(16);
     showPhotoLab.textColor = [UIColor colorCommonGreenColor];
     [showPhotoLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(contentView).offset(KSIphonScreenH(15));
+        make.top.equalTo(contentView).offset(KSIphonScreenH(10));
         make.left.equalTo(contentView).offset(KSIphonScreenW(10));
     }];
     
@@ -97,15 +96,17 @@
     self.showChankPhotoRulstLab.font = Font(14);
     self.showChankPhotoRulstLab.numberOfLines =0;
     [self.showChankPhotoRulstLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(contentView).offset(KSIphonScreenH(15));
-        make.left.equalTo(contentView).offset(KSIphonScreenW(10));
+        make.top.equalTo(showPhotoLab.mas_bottom).offset(KSIphonScreenH(10));
+        make.left.equalTo(showPhotoLab.mas_left);
+        make.right.equalTo(contentView).offset(-KSIphonScreenW(10));
+        make.bottom.equalTo(contentView).offset(-KSIphonScreenH(13));
     }];
   
     [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf.showAttendLab.mas_bottom).offset(KSIphonScreenH(5));
         make.left.equalTo(weakSelf.leftImageV.mas_right).offset(KSIphonScreenW(8));
         make.right.equalTo(weakSelf).offset(-KSIphonScreenW(27));
-        make.bottom.equalTo(weakSelf.showChankPhotoRulstLab.mas_bottom).offset(-13);
+        make.bottom.equalTo(weakSelf).offset(-KSIphonScreenH(13));
     }];
     
     contentView.layer.cornerRadius = 5;
@@ -114,6 +115,49 @@
     contentView.layer.borderColor = [UIColor colorWithHexString:@"#e7e7e7"].CGColor;
 }
 
+//计算cell 高度
++(CGFloat) getWithCellHeight:(NSDictionary *) dict{
+    CGFloat height = 0;
+    
+    height += 140;
+    NSString *titleStr = dict[@"title"];
+    CGFloat heightText = [SDTool getLabelHeightWithText:titleStr width:KScreenW-130 font:14];
+    
+    height = height+heightText;
+
+    return height;
+}
+-(void)setDict:(NSDictionary *)dict{
+    _dict = dict;
+    
+    //时间
+    self.remindTimeLab.text = dict[@"createTime"];
+    //结果
+    self.showChankPhotoRulstLab.attributedText = [self getReplacementStr:dict];
+}
+-(NSMutableAttributedString * )getReplacementStr:(NSDictionary *)dict{
+    NSString *titleStr = dict[@"title"];
+    
+    NSMutableAttributedString * attributedStr = [[NSMutableAttributedString alloc] initWithString:titleStr];
+    
+    NSString *typeStr = [NSString stringWithFormat:@"%@",dict[@"type"]];
+    if ([typeStr  isEqualToString:@"1"]) {
+        NSRange range;
+        range = [titleStr rangeOfString:@"已通过"];
+        if (range.location != NSNotFound) {
+            // 设置颜色
+            [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorCommonGreenColor] range:range];
+        }
+    }else{
+        NSRange range;
+        range = [titleStr rangeOfString:@"未通过"];
+        if (range.location != NSNotFound) {
+            // 设置颜色
+            [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#f75254"] range:range];
+        }
+    }
+    return attributedStr;
+}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

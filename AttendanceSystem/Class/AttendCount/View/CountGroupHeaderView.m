@@ -50,7 +50,6 @@
     }];
     [bgBtn addTarget:self action:@selector(selectGroupAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    
     self.leftImageV =[[UIImageView alloc]init];
     [bgView addSubview:self.leftImageV];
     self.leftImageV.image = [UIImage imageNamed:@"ico_05"];
@@ -61,14 +60,13 @@
     
     self.groupNameLab  =[[UILabel alloc]init];
     [bgView addSubview:self.groupNameLab];
-    self.groupNameLab.text = @"准时";
+    self.groupNameLab.text = @"";
     self.groupNameLab.textColor = [UIColor colorCommonGreenColor];
     self.groupNameLab.font = Font(16);
     [self.groupNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(weakSelf.leftImageV.mas_right).offset(KSIphonScreenW(8));
         make.centerY.equalTo(weakSelf.leftImageV.mas_centerY);
     }];
-    
     
     self.reightImageV = [[UIImageView alloc]init];
     [bgView addSubview:self.reightImageV];
@@ -82,7 +80,7 @@
     [bgView addSubview:self.groupCountLab];
     self.groupCountLab.textColor = [UIColor colorTextBg98BlackColor];
     self.groupCountLab.font = Font(14);
-    self.groupCountLab.text = @"3次";
+    self.groupCountLab.text = @"0次";
     [self.groupCountLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(weakSelf.reightImageV.mas_left).offset(-KSIphonScreenW(8));
         make.centerY.equalTo(weakSelf.reightImageV.mas_centerY);
@@ -95,7 +93,6 @@
         make.right.left.bottom.equalTo(weakSelf);
         make.height.equalTo(@1);
     }];
- 
 }
 
 -(void)selectGroupAction:(UIButton *) sender{
@@ -146,10 +143,10 @@
         self.leftImageV.image = [UIImage imageNamed:@"ico_06"];
     }else if ([typeStr isEqualToString:@"field"]){
         //外勤
-        self.leftImageV.image = [UIImage imageNamed:@"ico_07"];
+        self.leftImageV.image = [UIImage imageNamed:@"ico_wq"];
     }else if ([typeStr isEqualToString:@"leave"]){
         //请假
-        self.leftImageV.image = [UIImage imageNamed:@"ico_08"];
+        self.leftImageV.image = [UIImage imageNamed:@"ico_qj"];
     }else if ([typeStr isEqualToString:@"abnormal"]){
         //异常记录
         self.leftImageV.image = [UIImage imageNamed:@"ico_09"];

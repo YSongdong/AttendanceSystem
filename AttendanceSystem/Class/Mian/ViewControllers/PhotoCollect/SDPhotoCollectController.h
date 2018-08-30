@@ -17,4 +17,5 @@
 @property (nonatomic,strong) NSString *chenkStatu;
 //审核失败原因
 @property (nonatomic,strong) NSString *chenkErrorStr;
+
 @end

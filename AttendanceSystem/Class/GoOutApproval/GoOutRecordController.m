@@ -205,7 +205,6 @@ ApprovalRecordSiftControllerDelegate
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     NSString *url;
-    
     param[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
     param[@"token"] = [SDTool getNewToken];
     param[@"offset"] = [NSString stringWithFormat:@"%ld",(long)self.page];
@@ -215,13 +214,13 @@ ApprovalRecordSiftControllerDelegate
     param[@"status"] = self.statuStr;
     if (_recordType == ApporvalRecordOutType) {
         url = HTTP_ATTAPPOUTGOOUTLIST_URL;
-
     }else if (_recordType == ApporvalRecordLeaveType){
         url = HTTP_ATTAPPLEAVELIST_URL;
     }else if (_recordType == ApporvalRecordCardType){
         url = HTTP_ATTAPPREPAICARDLIST_URL;
+    }else if (_recordType == ApporvalRecordOverTimeType){
+        url = HTTP_ATTAPPOVERTIMELIST_URL;
     }
-    
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:url params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];

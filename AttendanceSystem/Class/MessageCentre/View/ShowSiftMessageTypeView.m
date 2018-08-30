@@ -35,11 +35,11 @@
     bgView.backgroundColor = [UIColor colorWithHexString:@"#f2f2f2"];
     [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.left.bottom.equalTo(weakSelf);
-        make.height.equalTo(@(KSIphonScreenH(318)));
+        make.height.equalTo(@(KSIphonScreenH(362)));
     }];
     
-    NSArray *arr = @[@"请选择需要筛选的消息类型",@"全部消息",@"外出审批",@"请假审批",@"加班审批",@"其他"];
-    for (int i=0; i<6 ; i++) {
+    NSArray *arr = @[@"请选择需要筛选的消息类型",@"全部消息",@"考勤打卡",@"外出审批",@"请假审批",@"加班审批",@"其他"];
+    for (int i=0; i<arr.count ; i++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         [bgView addSubview:btn];
         btn.frame = CGRectMake(0, i*KSIphonScreenH(44)+i*1, KScreenW, KSIphonScreenH(44));
@@ -79,9 +79,35 @@
 }
 //选择筛选条件
 -(void)selectdBtnAction:(UIButton *) sender{
-    
-    
-    
+    switch (sender.tag - 200) {
+        case 1:{
+            self.selectType(@"0");
+            break;
+        }
+        case 2:{
+            self.selectType(@"1");
+            break;
+        }
+        case 3:{
+            self.selectType(@"2");
+            break;
+        }
+        case 4:{
+            self.selectType(@"3");
+            break;
+        }
+        case 5:{
+             self.selectType(@"5");
+            break;
+        }
+        case 6:{
+             self.selectType(@"6");
+            break;
+        }
+        default:
+            break;
+    }
+   [self removeFromSuperview];
 }
 
 

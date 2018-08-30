@@ -134,16 +134,20 @@
             type = @"年假";
         }else if ([typeStr isEqualToString:@"2"]){
             type = @"事假";
-        }else if ([typeStr isEqualToString:@"7"]){
-            type = @"护理假";
+        }else if ([typeStr isEqualToString:@"3"]){
+            type = @"调休";
         }else if ([typeStr isEqualToString:@"4"]){
             type = @"产假";
         }else if ([typeStr isEqualToString:@"5"]){
             type = @"婚假";
         }else if ([typeStr isEqualToString:@"6"]){
             type = @"丧假";
+        }else if ([typeStr isEqualToString:@"7"]){
+            type = @"护理假";
         }else if ([typeStr isEqualToString:@"8"]){
             type = @"病假";
+        }else if ([typeStr isEqualToString:@"9"]){
+            type = @"轮休";
         }
         
         self.beginTimeLab.text =[NSString stringWithFormat:@"请假类型: %@",type];
@@ -215,12 +219,12 @@
         if ([self.reasonTypeStr isEqualToString:@"2"]) {
             startTimeStr =dict[@"startTime"];
             //加班原因
-            self.cellReasonLab.text =[NSString stringWithFormat:@"加班事由: %@",dict[@"outGo"]];
+            self.cellReasonLab.text =[NSString stringWithFormat:@"加班事由: %@",dict[@"overTimeInfo"]];
         }else{
             NSArray *timeArr =dict[@"startTime"];
             startTimeStr = timeArr[0];
             //加班原因
-            self.cellReasonLab.text =[NSString stringWithFormat:@"加班事由: %@",dict[@"overTimeInfo"]];
+            self.cellReasonLab.text =[NSString stringWithFormat:@"加班事由: %@",dict[@"info"]];
         }
         //开始时间
         self.beginTimeLab.text =[NSString stringWithFormat:@"开始时间: %@",startTimeStr];

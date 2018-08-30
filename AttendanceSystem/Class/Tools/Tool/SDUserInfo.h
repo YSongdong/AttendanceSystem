@@ -34,6 +34,8 @@
 +(void) alterNumberPhoto:(NSDictionary *)dict;
 //修改用户保存信息
 +(void) alterUserInfo:(NSDictionary *)dict;
+//修改考勤组
++(void) alterProGroupId:(NSString *)agId;
 
 // -----------------取出数据---------
 //获取userId
@@ -62,6 +64,10 @@
 +(NSString *) obtainWithPositionName;
 //获取departmentName  部门名称
 +(NSString *) obtainWithDepartmentName;
+//获取appListCount  我的待审批数量
++(NSString *) obtainWithAppListCount;
+//获取msgCount 未读消息数量
++(NSString *) obtainWithMsgCount;
 //获取plaformId
 +(NSString *) obtainWithPlafrmId;
 //获取unitId
@@ -78,6 +84,8 @@
 +(NSString *) obtainWithLeave;
 //获取  outgo  1：有外出流程 2：没有
 +(NSString *) obtainWithOutGo;
-
-
+//获取  overtime  1:有加班流程 2：没有
++(NSString *) obtainWithOvertime;
+//获取  CardReissue  //1需要补卡 2无需补卡
++(NSString *) obtainWithCardReissue;
 @end

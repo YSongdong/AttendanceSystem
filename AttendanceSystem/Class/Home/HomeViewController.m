@@ -84,6 +84,8 @@ SGAdvertScrollViewDelegate
 //我审核的申请
 - (IBAction)meChenkApplication:(UIButton *)sender;
 
+
+
 @property (weak, nonatomic) IBOutlet UIButton *meExamBtn;
 @property (weak, nonatomic) IBOutlet UIImageView *meExamImageV;
 @property (weak, nonatomic) IBOutlet UILabel *meExamLab;
@@ -110,17 +112,7 @@ SGAdvertScrollViewDelegate
     [weakSelf requestUserInfoData];
     //请求公告
     [weakSelf requestBulletinDataList];
-//    if ([[SDUserInfo obtainWithIsCharge] isEqualToString:@"2"]) {
-//        weakSelf.meExamBtn.hidden = YES;
-//        weakSelf.meExamImageV.hidden = YES;
-//        weakSelf.meExamLab.hidden = YES;
-//        weakSelf.meChankReightImageV.hidden = YES;
-//    }else{
-//        weakSelf.meExamBtn.hidden = NO;
-//        weakSelf.meExamImageV.hidden = NO;
-//        weakSelf.meExamLab.hidden = NO;
-//        weakSelf.meChankReightImageV.hidden = NO;
-//    }
+    
 }
 //更新ui
 -(void) updateView{
@@ -177,7 +169,7 @@ SGAdvertScrollViewDelegate
 //    //隐藏广告
 //    self.msgImageV.hidden = YES;
 //    self.advertView.hidden = YES;
-    
+
     if (KIsiPhoneX) {
         self.NaviBgImageV.image = [UIImage imageNamed:@"sy_bg"];
     }else{
@@ -243,7 +235,7 @@ SGAdvertScrollViewDelegate
 }
 //补卡
 - (IBAction)supplemCardAction:(UIButton *)sender {
-    NSString *recardStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithRecard]];
+    NSString *recardStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithOvertime]];
     if ([recardStr isEqualToString:@"2"]) {
         [SDShowSystemPrompView showSystemPrompStr:@"请先联系管理员设置审批规则"];
         return;
@@ -276,6 +268,23 @@ SGAdvertScrollViewDelegate
         //修改用户保存信息
         [SDUserInfo alterUserInfo:showdata];
         
+        //判断是否有新审批消息
+        NSString *appListCountStr = [NSString stringWithFormat:@"%@", showdata[@"appListCount"]];
+        NSInteger  appListCount = [appListCountStr integerValue];
+        if (appListCount > 0) {
+            self.meExamImageV.image = [UIImage imageNamed:@"sy_ico_selectdspd"];
+        }else{
+            self.meExamImageV.image = [UIImage imageNamed:@"sy_ico_dspd"];
+        }
+        
+        //右边
+        NSString *msgCountStr = [NSString stringWithFormat:@"%@",showdata[@"msgCount"]];
+        NSInteger msgCount = [msgCountStr integerValue];
+        if (msgCount > 0) {
+            [self.customNavBar wr_setRightButtonWithImage:[UIImage imageNamed:@"icon_senews"]];
+        }else{
+            [self.customNavBar wr_setRightButtonWithImage:[UIImage imageNamed:@"ico_news"]];
+        }
         [UIImageView sd_setImageView:self.headerImageV WithURL:[SDUserInfo obtainWithPhoto]];
     }];
 }
@@ -290,7 +299,6 @@ SGAdvertScrollViewDelegate
         if (error) {
             return ;
         }
-        
         if (![showdata isKindOfClass:[NSDictionary class]]) {
             return;
         }

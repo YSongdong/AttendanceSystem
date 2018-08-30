@@ -220,6 +220,7 @@ AMapSearchDelegate
 //创建Navi
 -(void) createNavi{
     self.customNavBar.title = @"外出地点";
+    self.customNavBar.rightButton.hidden = YES;
     [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
     __weak typeof(self) weakSelf = self;
     self.customNavBar.onClickLeftButton = ^{

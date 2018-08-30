@@ -42,7 +42,13 @@ UIGestureRecognizerDelegate
     
     __weak typeof(self) weakSelf = self;
     //右边
-    [self.customNavBar wr_setRightButtonWithImage:[UIImage imageNamed:@"sy_nav_ico_news"]];
+    NSString *msgCountStr = [NSString stringWithFormat:@"%@",[SDUserInfo obtainWithMsgCount]];
+    NSInteger msgCount = [msgCountStr integerValue];
+    if (msgCount > 0) {
+       [self.customNavBar wr_setRightButtonWithImage:[UIImage imageNamed:@"icon_senews"]];
+    }else{
+        [self.customNavBar wr_setRightButtonWithImage:[UIImage imageNamed:@"ico_news"]];
+    }
     self.customNavBar.onClickRightButton = ^{
         MessageCentreController *msgVC =[[MessageCentreController alloc]init];
         [weakSelf.navigationController pushViewController:msgVC animated:YES];

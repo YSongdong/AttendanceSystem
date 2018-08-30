@@ -489,6 +489,8 @@
             self.leaveLab.text = @"年假";
         }else if ([leaveTypeStr isEqualToString:@"2"]){
             self.leaveLab.text = @"事假";
+        }else if ([leaveTypeStr isEqualToString:@"3"]){
+            self.leaveLab.text = @"调休";
         }else if ([leaveTypeStr isEqualToString:@"4"]){
             self.leaveLab.text = @"产假";
         }else if ([leaveTypeStr isEqualToString:@"5"]){
@@ -499,6 +501,8 @@
             self.leaveLab.text = @"护理假";
         }else if ([leaveTypeStr isEqualToString:@"8"]){
             self.leaveLab.text = @"病假";
+        }else if ([leaveTypeStr isEqualToString:@"9"]){
+            self.leaveLab.text = @"轮休";
         }
         
         //开始时间
@@ -625,6 +629,14 @@
             }
         }
     }else if (_headerType == RecordDetailHeaderOverTimeType){
+         //隐藏请假类型
+        self.showLeaveLab.hidden = YES;
+        self.leaveLab.hidden = YES;
+        [showBeginTimeLab mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(showDepartmentNameLab.mas_bottom).offset(16);
+            make.left.equalTo(showDepartmentNameLab.mas_left);
+        }];
+        
         //开始时间
         self.beginTimeLab.text =dict[@"startTime"];
         //结束时间
@@ -632,8 +644,8 @@
         //时长
         self.timeNumberLab.text =[NSString stringWithFormat:@"%.2f",[dict[@"numbers"]floatValue]];
         
-        NSString *outGoStr = dict[@"leaveInfo"];
-        if ([outGoStr isEqualToString:@""]) {
+        NSString *overTimeStr = dict[@"overTimeInfo"];
+        if ([overTimeStr isEqualToString:@""]) {
             [self.ImageArrView mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(weakSelf.showIncidentTypenLab.mas_bottom).offset(16);
                 make.left.right.equalTo(weakSelf);
@@ -647,9 +659,9 @@
             }];
         }
         self.showIncidentTypenLab.text = @"加班事由";
-        //请假事由
+        //加班事由
         self.incidentReaSonLab.numberOfLines = 4;
-        self.incidentReaSonLab.text =outGoStr;
+        self.incidentReaSonLab.text =overTimeStr;
         
         //隐藏选择地点
         self.showAddressLab.hidden = YES;
@@ -745,8 +757,7 @@
         if (imageArr.count > 0) {
             outGoHeig += 52;
         }
-        
-        return outGoHeig + 320;
+        return outGoHeig +290;
     }
      return 0;
 }

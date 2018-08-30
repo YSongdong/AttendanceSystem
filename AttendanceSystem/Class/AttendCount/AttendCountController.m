@@ -157,7 +157,9 @@ UITableViewDataSource
         [weakSelf.navigationController popViewControllerAnimated:YES];
     };
     
-    [self.customNavBar wr_setRightButtonWithTitle:@"考勤记录" titleColor:[UIColor colorTextWhiteColor]];
+    [self.customNavBar wr_setRightButtonWithNormal:nil highlighted:nil];
+    [self.customNavBar.rightButton setTitle:@"考勤记录" forState:UIControlStateNormal];
+    self.customNavBar.rightButton.frame = CGRectMake(KScreenW - 70, KSStatusHeight, 70 , 44);
     self.customNavBar.onClickRightButton = ^{
         AttendRecordController *recodVC =[[AttendRecordController alloc]init];
         recodVC.selectDate = [[weakSelf showDateFormatter]stringFromDate:[NSDate date]];
@@ -220,59 +222,80 @@ UITableViewDataSource
         [self.dataArr removeAllObjects];
         
         //缺卡
-        NSMutableDictionary * missCardDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"missCard"]];
-        missCardDict[@"isOff"] = @"1";
-        missCardDict[@"name"] = @"缺卡";
-        missCardDict[@"type"] = @"missCard";
-        [self.dataArr addObject:missCardDict];
+        if ([[showdata allKeys] containsObject:@"missCard"]) {
+            NSMutableDictionary * missCardDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"missCard"]];
+            missCardDict[@"isOff"] = @"1";
+            missCardDict[@"name"] = @"缺卡";
+            missCardDict[@"type"] = @"missCard";
+            [self.dataArr addObject:missCardDict];
+        }
+       
         //旷工
-        NSMutableDictionary * completionDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"completion"]];
-        completionDict[@"isOff"] = @"1";
-        completionDict[@"name"] = @"旷工";
-        completionDict[@"type"] = @"completion";
-        [self.dataArr addObject:completionDict];
+        if ([[showdata allKeys] containsObject:@"completion"]) {
+            NSMutableDictionary * completionDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"completion"]];
+            completionDict[@"isOff"] = @"1";
+            completionDict[@"name"] = @"旷工";
+            completionDict[@"type"] = @"completion";
+            [self.dataArr addObject:completionDict];
+           }
         //迟到
-        NSMutableDictionary * lateDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"late"]];
-        lateDict[@"isOff"] = @"1";
-        lateDict[@"name"] = @"迟到";
-        lateDict[@"type"] = @"late";
-        [self.dataArr addObject:lateDict];
+        if ([[showdata allKeys] containsObject:@"late"]) {
+            NSMutableDictionary * lateDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"late"]];
+            lateDict[@"isOff"] = @"1";
+            lateDict[@"name"] = @"迟到";
+            lateDict[@"type"] = @"late";
+            [self.dataArr addObject:lateDict];
+        }
+       
         //早退
-        NSMutableDictionary * leavEarlyDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"leavEarly"]];
-        leavEarlyDict[@"isOff"] = @"1";
-        leavEarlyDict[@"name"] = @"早退";
-        leavEarlyDict[@"type"] = @"leavEarly";
-        [self.dataArr addObject:leavEarlyDict];
+        if ([[showdata allKeys] containsObject:@"leavEarly"]) {
+            NSMutableDictionary * leavEarlyDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"leavEarly"]];
+            leavEarlyDict[@"isOff"] = @"1";
+            leavEarlyDict[@"name"] = @"早退";
+            leavEarlyDict[@"type"] = @"leavEarly";
+            [self.dataArr addObject:leavEarlyDict];
+        }
         //准时
-        NSMutableDictionary * onTimeDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"onTime"]];
-        onTimeDict[@"isOff"] = @"1";
-        onTimeDict[@"name"] = @"准时";
-        onTimeDict[@"type"] = @"onTime";
-        [self.dataArr addObject:onTimeDict];
-        //补卡申请
-        NSMutableDictionary * supCardDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"supCard"]];
-        supCardDict[@"isOff"] = @"1";
-        supCardDict[@"name"] = @"补卡申请";
-        supCardDict[@"type"] = @"supCard";
-        [self.dataArr addObject:supCardDict];
-        //外勤
-        NSMutableDictionary * fieldDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"field"]];
-        fieldDict[@"isOff"] = @"1";
-        fieldDict[@"name"] = @"外勤";
-        fieldDict[@"type"] = @"field";
-        [self.dataArr addObject:fieldDict];
+        if ([[showdata allKeys] containsObject:@"onTime"]) {
+            NSMutableDictionary * onTimeDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"onTime"]];
+            onTimeDict[@"isOff"] = @"1";
+            onTimeDict[@"name"] = @"准时";
+            onTimeDict[@"type"] = @"onTime";
+            [self.dataArr addObject:onTimeDict];
+        }
         //请假
-        NSMutableDictionary * leaveDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"leave"]];
-        leaveDict[@"isOff"] = @"1";
-        leaveDict[@"name"] = @"请假";
-        leaveDict[@"type"] = @"leave";
-        [self.dataArr addObject:leaveDict];
+        if ([[showdata allKeys] containsObject:@"leave"]) {
+            NSMutableDictionary * leaveDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"leave"]];
+            leaveDict[@"isOff"] = @"1";
+            leaveDict[@"name"] = @"请假";
+            leaveDict[@"type"] = @"leave";
+            [self.dataArr addObject:leaveDict];
+         }
+        //外勤
+        if ([[showdata allKeys] containsObject:@"field"]) {
+            NSMutableDictionary * fieldDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"field"]];
+            fieldDict[@"isOff"] = @"1";
+            fieldDict[@"name"] = @"外勤";
+            fieldDict[@"type"] = @"field";
+            [self.dataArr addObject:fieldDict];
+        }
+//        //补卡申请
+//         if ([[showdata allKeys] containsObject:@"supCard"]) {
+//            NSMutableDictionary * supCardDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"supCard"]];
+//            supCardDict[@"isOff"] = @"1";
+//            supCardDict[@"name"] = @"补卡申请";
+//            supCardDict[@"type"] = @"supCard";
+//             [self.dataArr addObject:supCardDict];
+//         }
+        
         //异常记录
-        NSMutableDictionary * abnormalDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"abnormal"]];
-        abnormalDict[@"isOff"] = @"1";
-        abnormalDict[@"name"] = @"异常记录";
-        abnormalDict[@"type"] = @"abnormal";
-        [self.dataArr addObject:abnormalDict];
+        if ([[showdata allKeys] containsObject:@"abnormal"]) {
+            NSMutableDictionary * abnormalDict= [NSMutableDictionary dictionaryWithDictionary:showdata[@"abnormal"]];
+            abnormalDict[@"isOff"] = @"1";
+            abnormalDict[@"name"] = @"异常记录";
+            abnormalDict[@"type"] = @"abnormal";
+            [self.dataArr addObject:abnormalDict];
+        }
         
         [self.countTableView reloadData];
         

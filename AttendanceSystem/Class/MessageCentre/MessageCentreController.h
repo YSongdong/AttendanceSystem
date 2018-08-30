@@ -12,5 +12,5 @@
 @interface MessageCentreController : SDBaseController
 
 
-
+@property (nonatomic,assign) BOOL isAppDelegate;
 @end

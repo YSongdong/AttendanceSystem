@@ -22,7 +22,9 @@
 
     UILabel *lab = [[UILabel alloc]init];
     [bgView addSubview:lab];
-    lab.text = str;
+    if (![str isKindOfClass:[NSNull class]]) {
+       lab.text = str;
+    }
     lab.numberOfLines = 0;
     lab.textColor = [UIColor whiteColor];
     lab.font = Font(16);

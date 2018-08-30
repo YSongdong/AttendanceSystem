@@ -23,9 +23,7 @@
 #import "MessageCentreController.h"
 #import "RecordApproveDetaController.h"
 
-
 @interface AppDelegate ()<REFrostedViewControllerDelegate,JPUSHRegisterDelegate>
-
 
 @end
 
@@ -45,27 +43,36 @@
   
     //极光推送
     [self registerJPUHSerVice:launchOptions];
+    //自定义消息
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(networkDidReceiveMessage:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
     return YES;
 }
-
 - (void)networkDidReceiveMessage:(NSNotification *)notification {
-    NSDictionary * userInfo = [notification userInfo];
-    NSDictionary *extrasDict = [userInfo valueForKey:@"content"];
-    
-//    RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
-//    detaVC.detaType = recordApproveCardDetaType;
-//    detaVC.titleStr = [NSString stringWithFormat:@"%@补卡申请",[SDUserInfo obtainWithRealName]];
-//    detaVC.typeStr = @"3";
-//    detaVC.isSkipGrade = YES;
-//    //审核中
-//    detaVC.chenkStatusStr = @"1";
-//   // detaVC.recordIdStr = showdata[@"id"];
-//    self.window.rootViewController =detaVC;
+    //更新考勤组
+    NSDictionary *userInfoDict = notification.userInfo;
+    NSDictionary *extrasDict = userInfoDict[@"extras"];
+    NSString *allTypeStr = [NSString stringWithFormat:@"%@",extrasDict[@"allType"]];
+    if ([allTypeStr isEqualToString:@"4"]) {
+        //更新考勤组
+        NSString *agIdStr = extrasDict[@"agId"];
+        [SDUserInfo alterProGroupId:agIdStr];
+        
+    }else   if ([allTypeStr isEqualToString:@"1"]) {
+        //插入消息
+        NSMutableDictionary *mutableDict = [NSMutableDictionary dictionary];
+        mutableDict[@"allType"] =  extrasDict[@"allType"];
+        mutableDict[@"approvalId"] = extrasDict[@"approvalId"];
+        mutableDict[@"approvalId"] = extrasDict[@"approvalId"];
+        mutableDict[@"title"] = extrasDict[@"msg"];
+        mutableDict[@"msgId"] = extrasDict[@"msgId"];
+        mutableDict[@"recordId"] = extrasDict[@"recordId"];
+        mutableDict[@"type"] = extrasDict[@"type"];
+        mutableDict[@"userName"] = extrasDict[@"userName"];
+        [self requestMsg:mutableDict.copy];
+    }
 }
 -(void) startRootView{
- 
     if ([SDUserInfo passLoginData]) {
         SDRootNavigationController *leftVC = [[SDRootNavigationController alloc]initWithRootViewController:[LeftUserController new]];
         SDRootNavigationController *rootVC = [[SDRootNavigationController alloc]initWithRootViewController:[HomeViewController new]];
@@ -134,7 +141,25 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler  API_AVAILABLE(ios(10.0)) API_AVAILABLE(ios(10.0)){
     // Required
     NSDictionary * userInfo = notification.request.content.userInfo;
-  
+   
+    //清除角标
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    [JPUSHService setBadge:0];
+    
+    NSString *allTypeStr = [NSString stringWithFormat:@"%@",userInfo[@"allType"]];
+    if([allTypeStr isEqualToString:@"1"]){
+        NSMutableDictionary *mutableDict = [NSMutableDictionary dictionary];
+        mutableDict[@"allType"] =  userInfo[@"allType"];
+        mutableDict[@"approvalId"] = userInfo[@"approvalId"];
+        mutableDict[@"approvalId"] = userInfo[@"approvalId"];
+        mutableDict[@"title"] = userInfo[@"msg"];
+        mutableDict[@"msgId"] = userInfo[@"msgId"];
+        mutableDict[@"recordId"] = userInfo[@"recordId"];
+        mutableDict[@"type"] = userInfo[@"type"];
+        mutableDict[@"userName"] = userInfo[@"userName"];
+        
+        [self requestMsg:mutableDict.copy];
+    }
     if (@available(iOS 10.0, *)) {
         if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
             [JPUSHService handleRemoteNotification:userInfo];
@@ -153,17 +178,50 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^__strong)(void))completionHandler  API_AVAILABLE(ios(10.0)){
     // Required
     NSDictionary * userInfo = response.notification.request.content.userInfo;
-    NSLog(@"-----%@----",userInfo);
+    //清除角标
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    [JPUSHService setBadge:0];
+    
+    NSString *allTypeStr = [NSString stringWithFormat:@"%@",userInfo[@"allType"]];
+    if([allTypeStr isEqualToString:@"1"]){
+        NSMutableDictionary *mutableDict = [NSMutableDictionary dictionary];
+        mutableDict[@"allType"] =  userInfo[@"allType"];
+        mutableDict[@"approvalId"] = userInfo[@"approvalId"];
+        mutableDict[@"approvalId"] = userInfo[@"approvalId"];
+        mutableDict[@"title"] = userInfo[@"msg"];
+        mutableDict[@"msgId"] = userInfo[@"msgId"];
+        mutableDict[@"recordId"] = userInfo[@"recordId"];
+        mutableDict[@"type"] = userInfo[@"type"];
+        mutableDict[@"userName"] = userInfo[@"userName"];
+         mutableDict[@"userId"] = [SDUserInfo obtainWithUserId];
+        [self requestMsg:mutableDict.copy];
+        
+        MessageCentreController *msgVC = [[MessageCentreController alloc]init];
+        msgVC.isAppDelegate = YES;
+        SDRootNavigationController *msgtNavi = [[SDRootNavigationController alloc]initWithRootViewController:msgVC];
+        self.window.rootViewController = msgtNavi;
+        
+    }else{
+        MessageCentreController *msgVC = [[MessageCentreController alloc]init];
+        msgVC.isAppDelegate = YES;
+        SDRootNavigationController *msgtNavi = [[SDRootNavigationController alloc]initWithRootViewController:msgVC];
+        self.window.rootViewController = msgtNavi;
+    }
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
     }
     completionHandler();  // 系统要求执行这个方法
 }
+//添加推送消息
+-(void) requestMsg:(NSDictionary *)dict{
+    [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTPUSHMESSAGEGROUP_URL params:dict withModel:nil waitView:nil complateHandle:^(id showdata, NSString *error) {
+        
+    }];
+}
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // Required,For systems with less than or equal to iOS6
     [JPUSHService handleRemoteNotification:userInfo];
 }
-
 - (void)applicationWillResignActive:(UIApplication *)application {
   
 }

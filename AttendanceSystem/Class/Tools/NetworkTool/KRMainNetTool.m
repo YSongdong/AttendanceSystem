@@ -235,6 +235,14 @@ singleton_implementation(KRMainNetTool)
     //删除
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"登录已过期,请重新登录!" preferredStyle:UIAlertControllerStyleAlert];
     [alertController addAction:[UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+
+        //退出的时候删除别名
+        [JPUSHService deleteAlias:^(NSInteger iResCode, NSString *iAlias, NSInteger seq) {
+            if (iResCode == 0) {
+                NSLog(@"删除别名成功");
+            }
+        } seq:1];
+        
         //删除本地用户信息
         [SDUserInfo delUserInfo];
         

@@ -25,6 +25,8 @@ FVAppSdkControllerDelegate
 @property (nonatomic,assign) BOOL isUpdatePhoto;
 //判断是否重新上传照片
 @property (nonatomic,assign) BOOL isAgainPhoto;
+
+@property (nonatomic,assign) BOOL isCollect;
 @end
 
 @implementation SDPhotoCollectController
@@ -33,6 +35,7 @@ FVAppSdkControllerDelegate
     [super viewDidLoad];
     self.isUpdatePhoto = NO;
     self.isAgainPhoto =  NO;
+    self.isCollect = NO;
     //创建UI
     [self createView];
 }
@@ -88,49 +91,44 @@ FVAppSdkControllerDelegate
     __weak typeof(self) weakSelf = self;
     //开始采集
     self.photoView.beginBlock = ^{
-            if (!weakSelf.isUpdatePhoto) {
-                
-                if (weakSelf.isAgainPhoto) {
-                    [weakSelf requestUplacUserData];
-                }else{
-                    //获取照片
-                    AVAuthorizationStatus authStatus =  [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-                    if (authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied)
-                    {
-                        [SDShowSystemPrompView showSystemPrompStr:@"您还没有开启相机权限"];
-                        return ;
-                    }
-                    [[FVAppSdk sharedManager]gatherWithParentController:weakSelf];
-                    [FVAppSdk sharedManager].fvLanderDelegate =  weakSelf;
-                }
-            }else{
-                NSString *phoneStr = [SDUserInfo obtainWithBindPhone];
-                if ([phoneStr isEqualToString:@"1"]) {
-                    AlterPassNumberController *passVC = [[AlterPassNumberController alloc]init];
-                    [weakSelf.navigationController pushViewController:passVC animated:YES];
-                }else{
-                    BindingPhoneController *bindVC = [[BindingPhoneController alloc]init];
-                    bindVC.isMine = NO;
-                    [weakSelf.navigationController pushViewController:bindVC animated:YES];
-                }
-            }
-        
+        //获取照片
+        AVAuthorizationStatus authStatus =  [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+        if (authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied)
+        {
+            [SDShowSystemPrompView showSystemPrompStr:@"您还没有开启相机权限"];
+            return ;
+        }
+        [[FVAppSdk sharedManager]gatherWithParentController:weakSelf];
+        [FVAppSdk sharedManager].fvLanderDelegate =  weakSelf;
     };
     //立即上传
     self.photoView.updateBlock = ^{
-        
-        if (!weakSelf.isAgainPhoto) {
-            [weakSelf requestUplacUserData];
-        }else{
-            //获取照片
-            AVAuthorizationStatus authStatus =  [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-            if (authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied)
-            {
-                [SDShowSystemPrompView showSystemPrompStr:@"您还没有开启相机权限"];
-                return ;
+        if (!weakSelf.isUpdatePhoto) {
+            if (weakSelf.isCollect) {
+                 [weakSelf requestUplacUserData];
+                
+            }else{
+                //获取照片
+                AVAuthorizationStatus authStatus =  [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+                if (authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied)
+                {
+                    [SDShowSystemPrompView showSystemPrompStr:@"您还没有开启相机权限"];
+                    return ;
+                }
+                [[FVAppSdk sharedManager]gatherWithParentController:weakSelf];
+                [FVAppSdk sharedManager].fvLanderDelegate =  weakSelf;
             }
-            [[FVAppSdk sharedManager]gatherWithParentController:weakSelf];
-            [FVAppSdk sharedManager].fvLanderDelegate =  weakSelf;
+        }else{
+            
+            NSString *phoneStr = [SDUserInfo obtainWithBindPhone];
+            if ([phoneStr isEqualToString:@"1"]) {
+                AlterPassNumberController *passVC = [[AlterPassNumberController alloc]init];
+                [weakSelf.navigationController pushViewController:passVC animated:YES];
+            }else{
+                BindingPhoneController *bindVC = [[BindingPhoneController alloc]init];
+                bindVC.isMine = NO;
+                [weakSelf.navigationController pushViewController:bindVC animated:YES];
+            }
         }
     };
     
@@ -151,14 +149,18 @@ FVAppSdkControllerDelegate
         self.selecdImage = image;
         self.photoView.headerImageV.image = image;
         //显示立即上传按钮
-        self.photoView.updataBtn.hidden = NO;
+        self.photoView.beginBtn.hidden = NO;
+        
+        self.isCollect =  YES;
+        
         if ([self.chenkStatu  isEqualToString:@"2"]) {
             self.isAgainPhoto = YES;
             //未通过
-            [self.photoView.updataBtn setTitle:@"重新采集" forState:UIControlStateNormal];
-            
-            [self.photoView.beginBtn setTitle:@"立即上传" forState:UIControlStateNormal];
+            [self.photoView.updataBtn setTitle:@"立即上传" forState:UIControlStateNormal];
+
+            [self.photoView.beginBtn setTitle:@"重新采集" forState:UIControlStateNormal];
         }else{
+            [self.photoView.updataBtn setTitle:@"立即上传" forState:UIControlStateNormal];
             [self.photoView.beginBtn setTitle:@"重新采集" forState:UIControlStateNormal];
         }
         self.photoView.chenkStatuImageV.image = [UIImage imageNamed:@""];
@@ -203,11 +205,11 @@ FVAppSdkControllerDelegate
             self.photoView.updataBtn.hidden = YES;
         }else{
             //隐藏上传按钮
-            self.photoView.updataBtn.hidden = YES;
+            self.photoView.beginBtn.hidden = YES;
             //显示下一步按钮
-            self.photoView.beginBtn.hidden = NO;
-            [self.photoView.beginBtn setTitle:@"下一步" forState:UIControlStateNormal];
-            [self.photoView.beginBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            self.photoView.updataBtn.hidden = NO;
+            [self.photoView.updataBtn setTitle:@"下一步" forState:UIControlStateNormal];
+            [self.photoView.updataBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         }
     }];
 

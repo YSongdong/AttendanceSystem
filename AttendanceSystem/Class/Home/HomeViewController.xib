@@ -183,7 +183,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QN3-UR-n4U">
-                            <rect key="frame" x="20" y="349.5" width="141.5" height="105"/>
+                            <rect key="frame" x="20" y="349.5" width="141" height="105"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="105" id="xKL-59-QlC"/>
                             </constraints>
@@ -193,41 +193,41 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cry-iI-Xzt">
-                            <rect key="frame" x="176.5" y="349.5" width="140.5" height="105"/>
+                            <rect key="frame" x="176" y="349.5" width="140.5" height="105"/>
                             <state key="normal" backgroundImage="sy_spzx_bg"/>
                             <connections>
                                 <action selector="leaveBtnAction:" destination="-1" eventType="touchUpInside" id="zXZ-7Y-ZOK"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wCI-NQ-Ai8">
-                            <rect key="frame" x="332" y="349.5" width="141" height="105"/>
+                            <rect key="frame" x="331.5" y="349.5" width="141.5" height="105"/>
                             <state key="normal" backgroundImage="sy_spzx_bg"/>
                             <connections>
                                 <action selector="supplemCardAction:" destination="-1" eventType="touchUpInside" id="XRJ-ts-ezN"/>
                             </connections>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_wc" translatesAutoresizingMaskIntoConstraints="NO" id="aM6-cl-CVY">
-                            <rect key="frame" x="75.5" y="376.5" width="29" height="31"/>
+                            <rect key="frame" x="75" y="376.5" width="29" height="31"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_qj" translatesAutoresizingMaskIntoConstraints="NO" id="fyi-ij-npq">
-                            <rect key="frame" x="232" y="377" width="31" height="30"/>
+                            <rect key="frame" x="231.5" y="377" width="31" height="30"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_bk" translatesAutoresizingMaskIntoConstraints="NO" id="Dnz-g3-G79">
-                            <rect key="frame" x="388" y="379.5" width="30" height="26"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_jb" translatesAutoresizingMaskIntoConstraints="NO" id="Dnz-g3-G79">
+                            <rect key="frame" x="387.5" y="378" width="31" height="29"/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="外出" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pnd-jF-Uf4">
-                            <rect key="frame" x="77.5" y="420.5" width="25" height="14.5"/>
+                            <rect key="frame" x="77" y="420.5" width="25" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.39607843139999999" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请假" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qJM-Ka-QWc">
-                            <rect key="frame" x="235" y="421" width="25" height="14.5"/>
+                            <rect key="frame" x="234.5" y="421" width="25" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.39607843139999999" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="补卡" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OJ0-PQ-WrZ">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="加班" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OJ0-PQ-WrZ">
                             <rect key="frame" x="391" y="421" width="25" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.39607843139999999" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -5599,8 +5599,8 @@ AAAAAFkAAAAAAAAAAAAAAAAABMfhA
         </image>
         <image name="pic_user" width="44" height="44"/>
         <image name="sy_ico_ad" width="15" height="14"/>
-        <image name="sy_ico_bk" width="30" height="26"/>
         <image name="sy_ico_dspd" width="20" height="23"/>
+        <image name="sy_ico_jb" width="31" height="29"/>
         <image name="sy_ico_kqdk" width="24" height="30"/>
         <image name="sy_ico_kqjl" width="28" height="30"/>
         <image name="sy_ico_kqtj" width="29" height="30"/>

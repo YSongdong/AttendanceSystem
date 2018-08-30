@@ -134,6 +134,8 @@
 		15ECBFCF212699590088DE82 /* CountGroupHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ECBFCE212699590088DE82 /* CountGroupHeaderView.m */; };
 		15ECBFD321269C860088DE82 /* AttendCountTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ECBFD121269C860088DE82 /* AttendCountTableViewCell.m */; };
 		15ECBFD421269C860088DE82 /* AttendCountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ECBFD221269C860088DE82 /* AttendCountTableViewCell.xib */; };
+		15F8A327212FE9DF00CB6B74 /* LeaveAttendCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F8A326212FE9DF00CB6B74 /* LeaveAttendCardCell.m */; };
+		15F8A32A212FF67D00CB6B74 /* OverTimeAttendCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F8A329212FF67D00CB6B74 /* OverTimeAttendCardCell.m */; };
 		15F975DE212E670700D94345 /* MessageChankPhotoStatuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F975DD212E670700D94345 /* MessageChankPhotoStatuCell.m */; };
 		15F975E2212E916700D94345 /* OverTimeApplyforController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F975E1212E916700D94345 /* OverTimeApplyforController.m */; };
 		15FD66BE211939B9009A132B /* ShowPromptMsgView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FD66BD211939B9009A132B /* ShowPromptMsgView.m */; };
@@ -401,6 +403,10 @@
 		15ECBFD021269C860088DE82 /* AttendCountTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttendCountTableViewCell.h; sourceTree = "<group>"; };
 		15ECBFD121269C860088DE82 /* AttendCountTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttendCountTableViewCell.m; sourceTree = "<group>"; };
 		15ECBFD221269C860088DE82 /* AttendCountTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttendCountTableViewCell.xib; sourceTree = "<group>"; };
+		15F8A325212FE9DF00CB6B74 /* LeaveAttendCardCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LeaveAttendCardCell.h; sourceTree = "<group>"; };
+		15F8A326212FE9DF00CB6B74 /* LeaveAttendCardCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LeaveAttendCardCell.m; sourceTree = "<group>"; };
+		15F8A328212FF67D00CB6B74 /* OverTimeAttendCardCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OverTimeAttendCardCell.h; sourceTree = "<group>"; };
+		15F8A329212FF67D00CB6B74 /* OverTimeAttendCardCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OverTimeAttendCardCell.m; sourceTree = "<group>"; };
 		15F975DC212E670700D94345 /* MessageChankPhotoStatuCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageChankPhotoStatuCell.h; sourceTree = "<group>"; };
 		15F975DD212E670700D94345 /* MessageChankPhotoStatuCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageChankPhotoStatuCell.m; sourceTree = "<group>"; };
 		15F975E0212E916700D94345 /* OverTimeApplyforController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OverTimeApplyforController.h; sourceTree = "<group>"; };
@@ -1093,6 +1099,10 @@
 				15B4FC6A20FF1A8F001F6366 /* AttendCardTableViewCell.m */,
 				150C0DC221005D0300A18C41 /* ShowPunchCardCell.h */,
 				150C0DC321005D0300A18C41 /* ShowPunchCardCell.m */,
+				15F8A325212FE9DF00CB6B74 /* LeaveAttendCardCell.h */,
+				15F8A326212FE9DF00CB6B74 /* LeaveAttendCardCell.m */,
+				15F8A328212FF67D00CB6B74 /* OverTimeAttendCardCell.h */,
+				15F8A329212FF67D00CB6B74 /* OverTimeAttendCardCell.m */,
 				151F7264210809B50005FDCB /* ShowUnPunchCardCell.h */,
 				151F7265210809B50005FDCB /* ShowUnPunchCardCell.m */,
 				151F726A2108794D0005FDCB /* AttendFutureTimeCell.h */,
@@ -1446,6 +1456,7 @@
 				1556A39320F49C8000F64523 /* KRMainNetTool.m in Sources */,
 				151F7266210809B50005FDCB /* ShowUnPunchCardCell.m in Sources */,
 				150C0DC421005D0300A18C41 /* ShowPunchCardCell.m in Sources */,
+				15F8A32A212FF67D00CB6B74 /* OverTimeAttendCardCell.m in Sources */,
 				155CEC2220F9A2A400066FDD /* SDUserLeaveTableViewCell.m in Sources */,
 				15ECBFBE21265C700088DE82 /* AnnouncentViewController.m in Sources */,
 				155CEC2C20F9DB7B00066FDD /* HWWeakTimer.m in Sources */,
@@ -1491,6 +1502,7 @@
 				15ECBFD321269C860088DE82 /* AttendCountTableViewCell.m in Sources */,
 				151F726C2108794D0005FDCB /* AttendFutureTimeCell.m in Sources */,
 				15D747F420FAFDBD00B7CF14 /* SDLoginController.m in Sources */,
+				15F8A327212FE9DF00CB6B74 /* LeaveAttendCardCell.m in Sources */,
 				1501892F210EBE5E005673FF /* ApprovalSubintCell.m in Sources */,
 				155CEC2520F9A2DF00066FDD /* SDUserInfo.m in Sources */,
 				15A6761F211BE2C300686B9E /* MessageCentreController.m in Sources */,
@@ -1703,7 +1715,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = AttendanceSystem/AttendanceSystem.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1749,8 +1761,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "bea01ce7-bb31-4209-bfbf-2b39a22e5391";
+				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1763,7 +1775,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = AttendanceSystem/AttendanceSystem.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1809,8 +1821,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "bea01ce7-bb31-4209-bfbf-2b39a22e5391";
+				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

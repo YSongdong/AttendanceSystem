@@ -68,6 +68,8 @@ UIImagePickerControllerDelegate
     [self createTableView];
     [self requesRepairCardInfo];
     [self requestApprovalMemberData];
+    //监听当键将要退出时
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)  name:UIKeyboardWillHideNotification object:nil];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -235,13 +237,24 @@ UIImagePickerControllerDelegate
         [weakSelf.navigationController popViewControllerAnimated:YES];
     };
     //右边
-    [self.customNavBar wr_setRightButtonWithTitle:@"补卡记录" titleColor:[UIColor colorTextWhiteColor]];
+    [self.customNavBar wr_setRightButtonWithNormal:nil highlighted:nil];
+    [self.customNavBar.rightButton setTitle:@"补卡记录" forState:UIControlStateNormal];
+    self.customNavBar.rightButton.frame = CGRectMake(KScreenW - 70, KSStatusHeight, 70 , 44);
     self.customNavBar.onClickRightButton = ^{
         GoOutRecordController *recordVC = [[GoOutRecordController alloc]init];
         recordVC.recordType = ApporvalRecordCardType;
         recordVC.titleStr = @"补卡记录";
         [weakSelf.navigationController pushViewController:recordVC animated:YES];
     };
+}
+#pragma mark -----键盘收起通知-----
+//当键退出
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+    ApprovarReasonCell *cell = [self.cardTableView cellForRowAtIndexPath:indexPath];
+    [cell.cellTextView resignFirstResponder];
+    self.leaveReasonStr = cell.cellTextView.text;
 }
 #pragma mark -----手势点击事件----
 //点击tableivew收起键盘

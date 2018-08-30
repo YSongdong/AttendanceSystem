@@ -10,4 +10,7 @@
 
 @interface ShowSiftMessageTypeView : UIView
 
+//类型
+@property (nonatomic,copy) void(^selectType)(NSString *typeStr);
+
 @end

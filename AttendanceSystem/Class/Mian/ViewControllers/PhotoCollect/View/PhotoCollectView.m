@@ -174,37 +174,37 @@
         make.right.equalTo(twoLab.mas_right);
     }];
     
-    self.beginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self addSubview:self.beginBtn];
-    [self.beginBtn setBackgroundImage:[UIImage imageNamed:@"btn_01"] forState:UIControlStateNormal];
-    [self.beginBtn setTitle:@"开始采集" forState:UIControlStateNormal];
-    [self.beginBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.beginBtn.titleLabel.font = Font(16);
-    [self.beginBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.updataBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self addSubview:self.updataBtn];
+    [self.updataBtn setBackgroundImage:[UIImage imageNamed:@"btn_01"] forState:UIControlStateNormal];
+    [self.updataBtn setTitle:@"开始采集" forState:UIControlStateNormal];
+    [self.updataBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.updataBtn.titleLabel.font = Font(16);
+    [self.updataBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(treeLab.mas_bottom).offset(KSIphonScreenH(55));
         make.left.equalTo(weakSelf).offset(KSIphonScreenW(25));
         make.right.equalTo(weakSelf).offset(-KSIphonScreenW(25));
         make.height.equalTo(@(KSIphonScreenH(44)));
     }];
-    [self.beginBtn addTarget:self action:@selector(beginBtnAciton:) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.updataBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self addSubview:self.updataBtn];
-    [self.updataBtn setTitle:@"立即上传" forState:UIControlStateNormal];
-    [self.updataBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
-    self.updataBtn.titleLabel.font = Font(16);
-    [self.updataBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.beginBtn.mas_bottom).offset(KSIphonScreenH(16));
-        make.left.height.right.equalTo(weakSelf.beginBtn);
-        make.centerX.equalTo(weakSelf.beginBtn.mas_centerX);
-    }];
-    self.updataBtn.layer.cornerRadius = 22;
-    self.updataBtn.layer.masksToBounds = YES;
-    self.updataBtn.layer.borderWidth = 1;
-    self.updataBtn.layer.borderColor = [UIColor colorCommonGreenColor].CGColor;
-    
     [self.updataBtn addTarget:self action:@selector(updateBtnAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.updataBtn.hidden = YES;
+    
+    
+    self.beginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self addSubview:self.beginBtn];
+    [self.beginBtn setTitle:@"开始采集" forState:UIControlStateNormal];
+    [self.beginBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
+    self.beginBtn.titleLabel.font = Font(16);
+    [self.beginBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf.updataBtn.mas_bottom).offset(KSIphonScreenH(16));
+        make.left.height.right.equalTo(weakSelf.updataBtn);
+        make.centerX.equalTo(weakSelf.updataBtn.mas_centerX);
+    }];
+    self.beginBtn.layer.cornerRadius = 22;
+    self.beginBtn.layer.masksToBounds = YES;
+    self.beginBtn.layer.borderWidth = 1;
+    self.beginBtn.layer.borderColor = [UIColor colorCommonGreenColor].CGColor;
+    [self.beginBtn addTarget:self action:@selector(beginBtnAciton:) forControlEvents:UIControlEventTouchUpInside];
+    self.beginBtn.hidden = YES;
     
 }
 //开始采集
@@ -230,7 +230,9 @@
         self.errorLab.hidden = YES;
         //隐藏采集按钮
         self.beginBtn.hidden = YES;
-    
+        //隐藏上传按钮
+        self.updataBtn.hidden= YES;
+        
         NSString *nameStr = @"留底照片已提交，等待管理员审核";
         //设置富文本
         NSMutableAttributedString *attributeStr1 = [[NSMutableAttributedString alloc] initWithString:nameStr];
@@ -255,7 +257,8 @@
         self.errorLab.hidden = YES;
         //隐藏采集按钮
         self.beginBtn.hidden = YES;
-        
+        //隐藏上传按钮
+        self.updataBtn.hidden= YES;
         NSString *nameStr =@"用户留底照片认证已通过";
         //设置富文本
         NSMutableAttributedString *attributeStr1 = [[NSMutableAttributedString alloc] initWithString:nameStr];
@@ -280,7 +283,18 @@
         //显示失败原因
         self.errorLab.hidden = NO;
         
-         self.errorLab.text = [NSString stringWithFormat:@"失败原因：%@",self.chenkErrorStr];
+        //显示上传按钮
+        self.updataBtn.hidden= NO;
+        [self.updataBtn setTitle:@"重新采集" forState:UIControlStateNormal];
+        //隐藏采集按钮
+        self.beginBtn.hidden = YES;
+        
+        if (![self.chenkErrorStr isEqualToString:@""]) {
+           self.errorLab.hidden = NO;
+           self.errorLab.text = [NSString stringWithFormat:@"失败原因：%@",self.chenkErrorStr];
+        }else{
+            self.errorLab.hidden = YES;
+        }
         
         NSString *nameStr =@"用户留底照片认证未通过";
         //设置富文本
@@ -297,7 +311,6 @@
         
         self.headerMarkLab.attributedText = attributeStr1;
     }
-    
     
 }
 @end

@@ -105,7 +105,7 @@
     NSInteger buttonWidth = 44;
     NSInteger titleLabelHeight = 44;
     NSInteger titleLabelWidth = 180;
-    NSInteger rightbuttonWidth = 80;
+    NSInteger rightbuttonWidth = 44;
     
     self.backgroundView.frame = self.bounds;
     self.backgroundImageView.frame = self.bounds;
@@ -172,7 +172,8 @@
     [self.rightButton setImage:normal forState:UIControlStateNormal];
     [self.rightButton setImage:highlighted forState:UIControlStateHighlighted];
     [self.rightButton setTitle:title forState:UIControlStateNormal];
-    self.rightButton.titleLabel.font =  [UIFont systemFontOfSize:16];
+    self.rightButton.titleLabel.font =  [UIFont systemFontOfSize:15];
+    self.rightButton.titleLabel.textAlignment = NSTextAlignmentRight;
     [self.rightButton setTitleColor:titleColor forState:UIControlStateNormal];
 }
 - (void)wr_setRightButtonWithImage:(UIImage *)image title:(NSString *)title titleColor:(UIColor *)titleColor {
