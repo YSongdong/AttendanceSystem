@@ -17,6 +17,11 @@
 //选择地点
 @property (nonatomic,copy) void(^selectAddressBlock)(void);
 
+//设置打卡半径
+@property (weak, nonatomic) IBOutlet UILabel *showAttandRadiusLab;
+
+
+
 //添加地点更新UI
 -(void) addAddressUpdateUI:(NSString *)addressStr;
 

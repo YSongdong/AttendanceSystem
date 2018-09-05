@@ -104,6 +104,7 @@
                 <outlet property="selectSettingAddressBtn" destination="OFH-Ur-iet" id="bx6-Lz-aeQ"/>
                 <outlet property="showAddressBtn" destination="Rtg-Ef-wiQ" id="2Vz-zc-P1Q"/>
                 <outlet property="showAddressLab" destination="AtM-ee-PdB" id="fcv-Md-ANv"/>
+                <outlet property="showAttandRadiusLab" destination="q2R-Dn-IDC" id="TDv-D8-Gdu"/>
             </connections>
             <point key="canvasLocation" x="37.5" y="152.5"/>
         </tableViewCell>

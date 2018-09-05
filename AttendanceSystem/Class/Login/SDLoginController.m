@@ -63,6 +63,16 @@ typedef enum {
     [self createNavi];
     //创建ui
     [self createView];
+    //注册通知
+    [self registerNotifi];
+}
+//注册通知
+-(void) registerNotifi{
+    //注册通知
+    //程序从前台退到后台
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(applicationDidEnterBackground) name:UIApplicationDidEnterBackgroundNotification  object:nil];
+    //app从后台推到前台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground)name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 -(void) createNavi{
     [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
@@ -353,7 +363,6 @@ typedef enum {
             self.view.frame = viewFrame;
         }];
     }
-    
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     if (textField == self.passwordTF) {
@@ -370,6 +379,19 @@ typedef enum {
             self.view.frame = viewFrame;
         }];
     }
+}
+#pragma mark  ----- 通知事件-------
+//app从前台退到后台
+-(void) applicationDidEnterBackground
+{
+    [self.phoneTF resignFirstResponder];
+    [self.passwordTF resignFirstResponder];
+}
+//app从后台推到前台
+-(void)applicationWillEnterForeground
+{
+    [self.phoneTF resignFirstResponder];
+    [self.passwordTF resignFirstResponder];
 }
 #pragma  mark -----清空按钮------
 //电话号码

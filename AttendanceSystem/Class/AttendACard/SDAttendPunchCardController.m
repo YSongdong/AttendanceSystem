@@ -132,7 +132,6 @@ AMapLocationManagerDelegate
 //设置navi
 -(void) createNavi{
     self.customNavBar.title = @"考勤打卡";
-    self.customNavBar.rightButton.hidden= YES;
     [self.customNavBar wr_setLeftButtonWithImage:[UIImage imageNamed:@"nav_ico_back"]];
     __weak typeof(self) weakSelf = self;
     self.customNavBar.onClickLeftButton = ^{
@@ -269,9 +268,7 @@ AMapLocationManagerDelegate
             [weakSelf.navigationController pushViewController:supplementVC animated:YES];
         };
         return cell;
-        
     }else{
-       
         //判断显示样式(1'上班打卡',2'还未到打卡时间',3有打卡记录)
         NSString *titleStr = [NSString stringWithFormat:@"%@",dict[@"title"]];
         if ([titleStr isEqualToString:@"1"]) {
@@ -391,7 +388,7 @@ AMapLocationManagerDelegate
                 }
                 detaVC.titleStr = [NSString stringWithFormat:@"%@请假申请",[SDUserInfo obtainWithRealName]];
                 //其他
-                detaVC.chenkStatusStr = @"2";
+                detaVC.chenkStatusStr = @"3";
                 [weakSelf.navigationController pushViewController:detaVC animated:YES];
             };
             //外勤补卡通过
@@ -419,7 +416,7 @@ AMapLocationManagerDelegate
                 }
                 detaVC.titleStr = [NSString stringWithFormat:@"%@外勤申请",[SDUserInfo obtainWithRealName]];
                 //其他
-                detaVC.chenkStatusStr = @"2";
+                detaVC.chenkStatusStr = @"3";
                 [weakSelf.navigationController pushViewController:detaVC animated:YES];
             };
             //申请补卡
@@ -449,20 +446,22 @@ AMapLocationManagerDelegate
     //1 今天 2 过去 3未来
    if ([nowStr isEqualToString:@"3"]) {
        if (indexPath.row == 0) {
-          return 230;
+         // return  KSIphonScreenH(230);
+           return 230;
        }else{
-           return 44;
+           return KSIphonScreenH(44);
        }
     }else{
         NSDictionary *dict =  self.cardArr[indexPath.row];
         //判断显示样式(1'上班打卡',2'还未到打卡时间',3有打卡记录)
         NSString *titleStr = [NSString stringWithFormat:@"%@",dict[@"title"]];
         if ([titleStr isEqualToString:@"1"]) {
+           // return KSIphonScreenH(240);
             return 230;
         }else  if ([titleStr isEqualToString:@"3"])  {
-            return 160;
+            return KSIphonScreenH(160);
         }else{
-            return 44;
+            return KSIphonScreenH(44);
         }
     }
 }
@@ -690,13 +689,13 @@ AMapLocationManagerDelegate
     weakSelf.showTureSingInView.againFaceBlock = ^{
         //重新验证
         weakSelf.isTureAgainFace = YES;
-        //隐藏
-        weakSelf.showTureSingInView.hidden = YES;
         
         [weakSelf selectFaceAction:nil];
+        //隐藏
+        [weakSelf.showTureSingInView removeFromSuperview];
+        
     };
 }
-
 #pragma mark ---懒加载-----
 -(AttendCardHeaderView *)headerView{
     if (!_headerView) {
@@ -742,7 +741,6 @@ AMapLocationManagerDelegate
     }
     return _showMarkView;
 }
-
 - (NSDateFormatter *)requestDateFormatter{
     static NSDateFormatter *dateFormatter;
     if(!dateFormatter){
@@ -835,7 +833,6 @@ AMapLocationManagerDelegate
     [dataArr addObject:[self.faceImage fixOrientation]];
  
     [[KRMainNetTool sharedKRMainNetTool] upLoadData:HTTP_APPATTENDFACERECOGNITION_URL params:param.copy andData:dataArr.copy waitView:self.view complateHandle:^(id showdata, NSString *error) {
-     
         if (error) {
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
@@ -847,8 +844,14 @@ AMapLocationManagerDelegate
             if ([succStr isEqualToString:@"1"]) {
                 //确认信息重新验证
                 if (self.isTureAgainFace) {
+                    [self showTureSingView:@"1"];
                     self.showTureSingInView.againFaceStr = succStr;
                 }else{
+                    NSNumber *abnormalCoordinateIs = self.cardDataDict[@"abnormalCoordinateIs"];
+                    if ([abnormalCoordinateIs integerValue] == 2) {
+                        [self showTureSingView:@"1"];
+                        return ;
+                    }
                     self.cardDataDict[@"abnormalIdentityIs"] = [NSNumber numberWithInteger:1];
                     self.cardDataDict[@"vioLationId"] = showdata[@"id"];
                     //请求数据
@@ -857,10 +860,16 @@ AMapLocationManagerDelegate
             }else{
                 //确认信息重新验证
                 if (!self.isTureAgainFace) {
-                    self.cardDataDict[@"abnormalIdentityIs"] = [NSNumber numberWithInteger:1];
+                    self.cardDataDict[@"abnormalIdentityIs"] = [NSNumber numberWithInteger:2];
                     self.cardDataDict[@"vioLationId"] = showdata[@"id"];
                     [self showTureSingView:@"2"];
                 }else{
+                    NSNumber *abnormalCoordinateIs = self.cardDataDict[@"abnormalCoordinateIs"];
+                    if ([abnormalCoordinateIs integerValue] == 2) {
+                        [self showTureSingView:@"2"];
+                        return ;
+                    }
+                    [self showTureSingView:@"2"];
                     self.showTureSingInView.faceStatusStr = @"2";
                 }
             }

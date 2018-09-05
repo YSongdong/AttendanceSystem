@@ -218,7 +218,6 @@ AMapSearchDelegate
             }
             return NSOrderedSame;
         }];
-        
         NSDictionary *frintDict = [tempArr firstObject];
         deviationStr =  frintDict[@"distance"];
     }

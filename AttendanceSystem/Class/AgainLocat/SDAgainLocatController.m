@@ -441,9 +441,10 @@ UIImagePickerControllerDelegate
     weakSelf.showTureSingInView.againFaceBlock = ^{
         //重新验证
         weakSelf.isTureAgainFace = YES;
-        //隐藏
-        weakSelf.showTureSingInView.hidden = YES;
+        
         [weakSelf selectFaceAction:nil];
+        //隐藏
+        [weakSelf.showTureSingInView removeFromSuperview];
     };
 }
 -(void)selectUPdataPhoto:(UIButton *)sender{
@@ -472,6 +473,30 @@ UIImagePickerControllerDelegate
     //显示确认信息view
     self.showTureSingInView.hidden = NO;
 }
+//添加地址信息
+-(void) addAddressInfo{
+    //找到当前位置的
+    NSDictionary *nowDict =  self.scopeDataArr[self.nowLocatIndex];
+    NSMutableDictionary *mutableDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary *coordinateDict = [NSMutableDictionary dictionary];
+    coordinateDict[@"lat"] =[NSString stringWithFormat:@"%f",self.userLocation.coordinate.latitude];
+    coordinateDict[@"lng"] =[NSString stringWithFormat:@"%f",self.userLocation.coordinate.longitude];
+    mutableDict[@"coordinate"] =coordinateDict;
+    mutableDict[@"deviation"] = nowDict[@"coordinate"][@"deviation"];
+    mutableDict[@"title"] = self.reGeocode.formattedAddress;
+    if ([mutableDict[@"title"] isEqualToString:@""]) {
+        [SDShowSystemPrompView showSystemPrompStr:@"还未获取到定位信息"];
+        return ;
+    }
+    self.cardDataDict[@"coordinate"] = [SDTool convertToJsonData:mutableDict];
+    if ([nowDict[@"isScope"] isEqualToString:@"1"]) {
+        self.cardDataDict[@"abnormalCoordinateIs"] = [NSNumber numberWithInteger:1];
+    }else{
+        self.cardDataDict[@"abnormalCoordinateIs"] = [NSNumber numberWithInteger:2];
+    }
+    self.cardDataDict[@"isGo"] =nowDict[@"isGo"];
+}
+
 #pragma mark --- 按钮点击事件-----
 -(void)selectPresentAction:(UIButton *) sender{
  //   if(self.mapView.userLocation.updating && self.mapView.userLocation.location) {
@@ -570,8 +595,14 @@ UIImagePickerControllerDelegate
             if ([succStr isEqualToString:@"1"]) {
                 //确认信息重新验证
                 if (self.isTureAgainFace) {
+                    [self showTureSingView:@"1"];
                     self.showTureSingInView.againFaceStr = succStr;
                 }else{
+                    NSDictionary *nowDict =  self.scopeDataArr[self.nowLocatIndex];
+                    if ([nowDict[@"isScope"] isEqualToString:@"2"]) {
+                        [self showTureSingView:@"1"];
+                        return;
+                    }
                     self.cardDataDict[@"abnormalIdentityIs"] = [NSNumber numberWithInteger:1];
                     self.cardDataDict[@"vioLationId"] = showdata[@"id"];
                     //请求数据
@@ -584,6 +615,12 @@ UIImagePickerControllerDelegate
                     self.cardDataDict[@"vioLationId"] = showdata[@"id"];
                     [self showTureSingView:@"2"];
                 }else{
+                    NSDictionary *nowDict =  self.scopeDataArr[self.nowLocatIndex];
+                    if ([nowDict[@"isScope"] isEqualToString:@"2"]) {
+                        [self showTureSingView:@"2"];
+                        return;
+                    }
+                    [self showTureSingView:@"2"];
                     self.showTureSingInView.faceStatusStr = @"2";
                 }
             }
@@ -596,26 +633,8 @@ UIImagePickerControllerDelegate
     NSMutableArray *imageArr = self.showTureSingInView.imageArr;
     //移除最后一个
     [imageArr removeLastObject];
-    //找到当前位置的
-    NSDictionary *nowDict =  self.scopeDataArr[self.nowLocatIndex];
-    NSMutableDictionary *mutableDict = [NSMutableDictionary dictionary];
-    NSMutableDictionary *coordinateDict = [NSMutableDictionary dictionary];
-    coordinateDict[@"lat"] =[NSString stringWithFormat:@"%f",self.userLocation.coordinate.latitude];
-    coordinateDict[@"lng"] =[NSString stringWithFormat:@"%f",self.userLocation.coordinate.longitude];
-    mutableDict[@"coordinate"] =coordinateDict;
-    mutableDict[@"deviation"] = nowDict[@"coordinate"][@"deviation"];
-    mutableDict[@"title"] = self.reGeocode.formattedAddress;
-    if ([mutableDict[@"title"] isEqualToString:@""]) {
-        [SDShowSystemPrompView showSystemPrompStr:@"还未获取到定位信息"];
-        return ;
-    }
-    self.cardDataDict[@"coordinate"] = [SDTool convertToJsonData:mutableDict];
-    if ([nowDict[@"isScope"] isEqualToString:@"1"]) {
-         self.cardDataDict[@"abnormalCoordinateIs"] = [NSNumber numberWithInteger:1];
-    }else{
-        self.cardDataDict[@"abnormalCoordinateIs"] = [NSNumber numberWithInteger:2];
-    }
-    self.cardDataDict[@"isGo"] =nowDict[@"isGo"];
+    // 添加地址信息
+    [self addAddressInfo];
     
     [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_APPATTENDANCEAPPDOSIGNIN_URL params:self.cardDataDict andData:imageArr.copy waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {

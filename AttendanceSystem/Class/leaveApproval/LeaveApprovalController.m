@@ -156,13 +156,13 @@ UIImagePickerControllerDelegate
     if (indexPath.row == 0) {
         return 250;
     }else if (indexPath.row ==1){
-         return 135;
+         return KSIphonScreenH(135);
     }else if (indexPath.row ==2){
-         return 135;
+         return KSIphonScreenH(135);
     }else if (indexPath.row ==3){
-         return 165;
+         return KSIphonScreenH(165);
     }else{
-        return 80;
+        return KSIphonScreenH(80);
     }
 }
 -(void) getSubmitData{
@@ -291,6 +291,12 @@ UIImagePickerControllerDelegate
     [cell updateTimeType:self.selectTimeType andTimeStr:date];
 }
 - (void)pickerView:(UIPickerView *)pickerView didSelectText:(NSString *)text{
+    [self.approvalArr removeAllObjects];
+    if ([text isEqualToString:@"年假"]) {
+        [self requestGetLeaveApproval];
+    }else{
+        [self requestApprovalMemberData];
+    }
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     SelectTimeTypeCell *cell  = [self.leaveTableView cellForRowAtIndexPath:indexPath];
     cell.showLeaveTypeLab.text = text;
@@ -330,6 +336,9 @@ UIImagePickerControllerDelegate
     [self.customNavBar.rightButton setTitle:@"请假记录" forState:UIControlStateNormal];
     self.customNavBar.rightButton.frame = CGRectMake(KScreenW - 70, KSStatusHeight, 70 , 44);
     self.customNavBar.onClickRightButton = ^{
+        //收起键盘
+        [weakSelf commentTableViewTouchInSide];
+        
         GoOutRecordController *recordVC = [[GoOutRecordController alloc]init];
         recordVC.recordType = ApporvalRecordLeaveType;
         recordVC.titleStr = @"请假记录";
@@ -385,12 +394,39 @@ UIImagePickerControllerDelegate
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
-      
-        if ([showdata isKindOfClass:[NSArray class]]) {
-            self.approvalArr = [NSMutableArray arrayWithArray:showdata];
+        if ([showdata isKindOfClass:[NSDictionary class]]) {
+            if ([[showdata allKeys] containsObject:@"rule"]) {
+                self.approvalArr = [NSMutableArray arrayWithArray:showdata[@"rule"]];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
+                ApprovalPersonCell *cell =[self.leaveTableView cellForRowAtIndexPath:indexPath];
+                [cell updateCellUINSArr:self.approvalArr];
+            }
+        }
+    }];
+}
+//年假请假特殊审批流程
+-(void) requestGetLeaveApproval{
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
+    param[@"token"] = [SDTool getNewToken];
+    param[@"type"] = @"1";
+    param[@"unitId"] = [SDUserInfo obtainWithUniId];
+    param[@"userId"] = [SDUserInfo obtainWithUserId];
+    [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTAPPLEAVEGETLEAVEAPPROVAl_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
+        if (error) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
             ApprovalPersonCell *cell =[self.leaveTableView cellForRowAtIndexPath:indexPath];
-            [cell updateCellUINSArr:self.approvalArr];
+            [cell updateCellUINSArr:@[]];
+            [SDShowSystemPrompView showSystemPrompStr:error];
+            return ;
+        }
+        if ([showdata isKindOfClass:[NSDictionary class]]) {
+            if ([[showdata allKeys] containsObject:@"rule"]) {
+                self.approvalArr = [NSMutableArray arrayWithArray:showdata[@"rule"]];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
+                ApprovalPersonCell *cell =[self.leaveTableView cellForRowAtIndexPath:indexPath];
+                [cell updateCellUINSArr:self.approvalArr];
+            }
         }
     }];
 }
@@ -421,8 +457,6 @@ UIImagePickerControllerDelegate
             [weakSelf.navigationController pushViewController:detaVC animated:YES];
         });
     }];
-    
-    
 }
 
 

@@ -96,7 +96,7 @@
         return [MessageAttendaceGoOutCell getWithCellHeight:dict];
     }else{
          //1：考勤打卡
-         return 168;
+         return KSIphonScreenH(168);
     }
 }
 //- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -119,6 +119,9 @@
         if ([statusStr isEqualToString:@"1"]) {
             //审核中
             detaVC.chenkStatusStr = @"1";
+        }else  if ([statusStr isEqualToString:@"2"]) {
+            //审批通过
+            detaVC.chenkStatusStr = @"3";
         }else{
             //其他
             detaVC.chenkStatusStr = @"2";

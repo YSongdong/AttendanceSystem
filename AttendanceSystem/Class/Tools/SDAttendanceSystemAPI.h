@@ -13,10 +13,9 @@
 FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 
 //测试域名
-//#define PUBLISH_DIMAIN_URL @"http://192.168.3.201:1088/"
-#define PUBLISH_DIMAIN_URL @"http://kq.api.cqlanhui.com/"
+#define PUBLISH_DIMAIN_URL @"http://192.168.3.201:1088/"
+//#define PUBLISH_DIMAIN_URL @"http://kq.api.cqlanhui.com/"
 //#define PUBLISH_DIMAIN_URL @"http://kq.cloud.api.cqlanhui.com/"
-
 
 
 /*********公告***********/
@@ -87,6 +86,8 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 #define  HTTP_ATTAPPLEAVEREVOKE_URL   getRequestPath(@"attendance/Att_app_leave/leaveRevoke")
 /*********请假催办***********/
 #define  HTTP_ATTAPPLEAVEURGE_URL   getRequestPath(@"attendance/Att_app_leave/leaveUrge")
+/*********年假请假特殊审批流程***********/
+#define  HTTP_ATTAPPLEAVEGETLEAVEAPPROVAl_URL   getRequestPath(@"attendance/Att_app_leave/getLeaveApproval")
 
 
 /*********补卡申请信息***********/

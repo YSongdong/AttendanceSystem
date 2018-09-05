@@ -20,7 +20,8 @@
 
 @interface RecordMapSelectViewController : SDBaseController
 
-
+//半径
+@property (nonatomic,strong) NSString *rangeStr;
 
 @property (nonatomic,weak) id <RecordMapSelectViewControllerDelegate> delegate;
 

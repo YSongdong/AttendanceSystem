@@ -76,10 +76,7 @@
         [self requestCalendarMondData:self.selectDate];
         //获取当天的数据
         [self requestCalendarDayData:self.selectDate];
-        
     }
-    
-   
 }
 -(void) createView{
     __weak typeof(self) weakSelf = self;
@@ -225,7 +222,7 @@
             }
             detaVC.titleStr = [NSString stringWithFormat:@"%@请假申请",[SDUserInfo obtainWithRealName]];
             //其他
-            detaVC.chenkStatusStr = @"2";
+            detaVC.chenkStatusStr = @"3";
             [weakSelf.navigationController pushViewController:detaVC animated:YES];
         };
         //补卡通过
@@ -253,7 +250,7 @@
             }
             detaVC.titleStr = [NSString stringWithFormat:@"%@外勤申请",[SDUserInfo obtainWithRealName]];
             //其他
-            detaVC.chenkStatusStr = @"2";
+            detaVC.chenkStatusStr = @"3";
             [weakSelf.navigationController pushViewController:detaVC animated:YES];
         };
         //申请补卡
@@ -274,9 +271,9 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *nowStr =[NSString stringWithFormat:@"%@",self.dataDict[@"now"]];
     if ([nowStr isEqualToString:@"3"]) {
-        return 225;
+        return KSIphonScreenH(235);
     }else   {
-        return 145;
+        return KSIphonScreenH(165);
     }
 }
 #pragma mark - CalendarManager delegate------

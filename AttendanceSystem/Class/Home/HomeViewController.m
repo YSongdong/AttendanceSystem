@@ -241,7 +241,6 @@ SGAdvertScrollViewDelegate
         return;
     }
     OverTimeApplyforController *overTimeVC  =[[OverTimeApplyforController alloc]init];
-//    AttendRecordController *recordVC = [[AttendRecordController alloc]init];
     [self.navigationController pushViewController:overTimeVC animated:YES];
 }
 /*********申请************/

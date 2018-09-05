@@ -151,6 +151,7 @@
     [self.showGoOutReasonLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf.showEndTimeLab.mas_bottom).offset(KSIphonScreenH(8));
         make.left.equalTo(weakSelf.showEndTimeLab.mas_left);
+        make.right.equalTo(contentView).offset(-KSIphonScreenW(10));
     }];
     
     self.goOutReasonLab = [[UILabel alloc]init];

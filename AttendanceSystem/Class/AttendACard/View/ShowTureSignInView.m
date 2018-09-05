@@ -23,8 +23,6 @@ UITextViewDelegate
 //备注textview
 @property (nonatomic,strong) UITextView *markTeView;
 
-
-
 @end
 
 
@@ -164,7 +162,7 @@ UITextViewDelegate
     
     self.cardAddressLab = [[UILabel alloc]init];
     [addressConcetView addSubview:self.cardAddressLab];
-    self.cardAddressLab.text = @"打卡地点：渝高。智博中心";
+    self.cardAddressLab.text = @"打卡地点：";
     self.cardAddressLab.font = Font(12);
     self.cardAddressLab.textColor =[UIColor colorTextBg65BlackColor];
     [self.cardAddressLab mas_makeConstraints:^(MASConstraintMaker *make) {

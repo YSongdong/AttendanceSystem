@@ -131,7 +131,7 @@ UITextViewDelegate
         make.left.equalTo(timeImageV.mas_right).offset(KSIphonScreenW(7));
         make.centerY.equalTo(timeImageV.mas_centerY);
     }];
-    self.showTimeLab.text = [NSString stringWithFormat:@"打卡时间 08:30"];
+    self.showTimeLab.text = [NSString stringWithFormat:@"打卡时间 "];
     
     UIImageView *addressImageV = [[UIImageView alloc]init];
     [addressConcetView addSubview:addressImageV];
@@ -143,7 +143,7 @@ UITextViewDelegate
     
     self.cardAddressLab = [[UILabel alloc]init];
     [addressConcetView addSubview:self.cardAddressLab];
-    self.cardAddressLab.text = @"打卡地点：渝高。智博中心";
+    self.cardAddressLab.text = @"打卡地点：";
     self.cardAddressLab.font = Font(12);
     self.cardAddressLab.textColor =[UIColor colorTextBg65BlackColor];
     [self.cardAddressLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -251,7 +251,6 @@ UITextViewDelegate
             self.placeStrLab.hidden = NO;
         }
     }
-    
     return YES;
 }
 
@@ -284,7 +283,6 @@ UITextViewDelegate
     //添加备注
     [self requestAddMarkData];
 }
-
 -(void)setDict:(NSDictionary *)dict{
     _dict = dict;
     //打卡时间

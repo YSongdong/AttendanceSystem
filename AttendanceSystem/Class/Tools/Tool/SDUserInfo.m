@@ -24,7 +24,6 @@
     [userD removeObjectForKey:@"Login"];
     //删除本地字号
     [userD removeObjectForKey:@"Font"];
-    
     //3.强制让数据立刻保存
     [userD synchronize];
 }
@@ -44,7 +43,6 @@
     NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:dict1];
     mutableDict[@"userid"] = dict[@"userid"];
     mutableDict[@"identity_id"] = dict[@"identity_id"];
-    
     [SDUserInfo saveUserData:mutableDict.copy];
 }
 //加入平台修改信息
@@ -134,6 +132,8 @@
     mutableDict[@"leave"] = dict[@"leave"];
     mutableDict[@"overtime"] = dict[@"overtime"];
     mutableDict[@"cardReissue"] = dict[@"cardReissue"];
+    mutableDict[@"appListCount"] = dict[@"appListCount"];
+    mutableDict[@"msgCount"] = dict[@"msgCount"];
     [SDUserInfo saveUserData:mutableDict.copy];
 }
 // -----------------取出数据---------
@@ -209,8 +209,6 @@
     NSDictionary *dict = [userD objectForKey:@"Login"];
     return dict[@"positionName"];
 }
-
-
 //获取departmentName  部门名称
 +(NSString *) obtainWithDepartmentName{
     NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
@@ -290,4 +288,8 @@
     NSDictionary *dict = [userD objectForKey:@"Login"];
     return dict[@"cardReissue"];
 }
+
+
+
+
 @end

@@ -176,7 +176,18 @@
             newVersion = [dic valueForKey:@"version"];
         }
         //对比发现的新版本和本地的版本
-        if (![newVersion  isEqualToString:localVersion]){
+        NSArray *newVersionArr = [newVersion componentsSeparatedByString:@"."];
+        NSArray *localVersionArr = [localVersion componentsSeparatedByString:@"."];
+        
+        BOOL isNewVersion = NO;
+        for (int i=0; i<newVersionArr.count; i++) {
+            NSString *newStr = newVersionArr[i];
+            NSString *localStr = localVersionArr[i];
+            if ([newStr integerValue] > [localStr integerValue]) {
+                isNewVersion = YES;
+            }
+        }
+        if (isNewVersion){
              self.updateLab.hidden = NO;
              self.updateLab.text = [NSString stringWithFormat:@"V%@版",newVersion];
         }else{

@@ -447,7 +447,8 @@
             //隐藏补卡
             self.applyCardBtn.hidden= YES;
             //打卡
-            if ([dict[@"remark"] isEqualToString:@""]) {
+            NSArray *photoArr = (NSArray *)dict[@"photo"];
+            if ([dict[@"remark"] isEqualToString:@""] && photoArr.count == 0) {
                 self.markBtn.hidden = NO;
                 [self.markBtn setTitle:@"添加备注>" forState:UIControlStateNormal];
                 [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -652,7 +653,8 @@
 //            if ([arr containsObject:@"正常"]) {
                 self.applyCardBtn.hidden = YES;
                 //打卡
-                if ([dict[@"remark"] isEqualToString:@""]) {
+                NSArray *photoArr = (NSArray *)dict[@"photo"];
+                if ([dict[@"remark"] isEqualToString:@""] && photoArr.count == 0) {
                     self.markBtn.hidden = NO;
                     [self.markBtn setTitle:@"添加备注>" forState:UIControlStateNormal];
                     [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -910,11 +912,16 @@
         //隐藏
         self.workStatuBtn.hidden = YES;
         self.applyCardBtn.hidden = YES;
+        
+        
+        
 //        if ([arr containsObject:@"正常"]) {
             //隐藏补卡
             self.applyCardBtn.hidden= YES;
+        
+           NSArray *photoArr =(NSArray *)dict[@"photo"];
             //打卡
-            if ([dict[@"remark"] isEqualToString:@""]) {
+            if ([dict[@"remark"] isEqualToString:@""] &&  photoArr.count == 0) {
                 self.markBtn.hidden = NO;
                 [self.markBtn setTitle:@"添加备注>" forState:UIControlStateNormal];
                 [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {

@@ -74,15 +74,16 @@ ApprovalRecordSiftControllerDelegate
     } else if (self.recordType == ApporvalRecordOverTimeType){
         cell.cellType = RecordCellOverTimeType;
     }
+    
     cell.cutTypeStr = @"2";
     cell.dict = self.dataArr[indexPath.row];
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (self.recordType == ApporvalRecordCardType) {
-         return 115;
+        return 115;
     }else{
-         return 140;
+        return 140;
     }
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -96,6 +97,9 @@ ApprovalRecordSiftControllerDelegate
     if ([statusStr isEqualToString:@"1"]) {
         //审核中
         detaVC.chenkStatusStr = @"1";
+    }else  if ([statusStr isEqualToString:@"2"]) {
+        //审批通过
+        detaVC.chenkStatusStr = @"3";
     }else{
         //其他
         detaVC.chenkStatusStr = @"2";

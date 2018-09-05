@@ -51,6 +51,11 @@ AMapSearchDelegate
 @property (nonatomic,strong) NSString *searchStr;
 //选中当前定位
 @property (nonatomic,strong) NSIndexPath *selectIndexPtah;
+//执行一次
+@property (nonatomic,assign) BOOL isOne;
+
+//是不是搜索选择
+@property (nonatomic,assign) BOOL isSearchSelect;
 
 @end
 
@@ -59,6 +64,8 @@ AMapSearchDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.searchStr =@"";
+    self.isOne = YES;
+    self.isSearchSelect = NO;
     [self createNavi];
     [self createSearchView];
     [self createTableView];
@@ -67,11 +74,22 @@ AMapSearchDelegate
     [super viewWillAppear:animated];
     [self createLocationManager];
 }
+-(void)viewWillDisappear:(BOOL)animated{
+    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
+        if (self.selectIndexPtah == nil) {
+            return;
+        }
+        NSDictionary *dict = self.dataArr[self.selectIndexPtah.row];
+        if ([self.delegate respondsToSelector:@selector(selectAddressDict:)]) {
+            [self.delegate selectAddressDict:dict];
+        }
+    }
+}
 #pragma mark ----搜索Pol -----
 -(void) searchStr:(NSString *) str{
     AMapPOIKeywordsSearchRequest *request = [[AMapPOIKeywordsSearchRequest alloc] init];
     request.keywords            = str;
-    request.city                = self.reGeocode.city;
+  //  request.city                = self.reGeocode.city;
   //  request.types               = @"高等院校";
     request.requireExtension    = YES;
     
@@ -80,6 +98,7 @@ AMapSearchDelegate
     request.requireSubPOIs      = YES;
     
     [self.search AMapPOIKeywordsSearch:request];
+
 }
 #pragma mark ----- AMapSearchDelegate-----
 - (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error
@@ -102,15 +121,46 @@ AMapSearchDelegate
     [self.dataArr removeAllObjects];
     
     self.searchSpaceView.hidden = YES;
-    for (POIAnnotation *tation in poiAnnotations) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        dict[@"title"] = tation.title;
-        dict[@"subTitle"] =  tation.subtitle;
-        CLLocation *location = [[CLLocation alloc]initWithLatitude:tation.coordinate.latitude longitude:tation.coordinate.longitude];
-        dict[@"location"] =location;
-        dict[@"isSelect"] = @"2"; //1 选中 2没有选中
-        [self.dataArr addObject:dict];
+    
+    for (int i=0; i<poiAnnotations.count; i++) {
+        POIAnnotation *tation = poiAnnotations[i];
+        if (self.isSearchSelect) {
+            if (i==0) {
+                NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                dict[@"title"] = tation.title;
+                dict[@"subTitle"] =  tation.subtitle;
+                CLLocation *location = [[CLLocation alloc]initWithLatitude:tation.coordinate.latitude longitude:tation.coordinate.longitude];
+                dict[@"location"] =location;
+                dict[@"isSelect"] = @"1"; //1 选中 2没有选中
+                [self.dataArr addObject:dict];
+                
+                [self.mapView addAnnotation:self.pointAnnotaiton];
+                CLLocation *loca = dict[@"location"];
+                [self.mapView setCenterCoordinate:loca.coordinate];
+                [self.pointAnnotaiton setCoordinate:loca.coordinate];
+                
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                self.selectIndexPtah = indexPath;
+            }else{
+                NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                dict[@"title"] = tation.title;
+                dict[@"subTitle"] =  tation.subtitle;
+                CLLocation *location = [[CLLocation alloc]initWithLatitude:tation.coordinate.latitude longitude:tation.coordinate.longitude];
+                dict[@"location"] =location;
+                dict[@"isSelect"] = @"2"; //1 选中 2没有选中
+                [self.dataArr addObject:dict];
+            }
+        }else{
+            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            dict[@"title"] = tation.title;
+            dict[@"subTitle"] =  tation.subtitle;
+            CLLocation *location = [[CLLocation alloc]initWithLatitude:tation.coordinate.latitude longitude:tation.coordinate.longitude];
+            dict[@"location"] =location;
+            dict[@"isSelect"] = @"2"; //1 选中 2没有选中
+            [self.dataArr addObject:dict];
+        }
     }
+
     [self.searchTableView reloadData];
 }
 #pragma mark ---地图Delegate-----
@@ -138,7 +188,10 @@ AMapSearchDelegate
         self.userLocation = location;
         [self.mapView addAnnotation:_pointAnnotaiton];
     }
-     [self.mapView setCenterCoordinate:location.coordinate];
+    if (self.isOne) {
+        [self.mapView setCenterCoordinate:location.coordinate];
+        self.isOne = NO;
+    }
 }
 //监控用户会否授权
 - (void)amapLocationManager:(AMapLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
@@ -182,6 +235,12 @@ AMapSearchDelegate
 }
 #pragma mark  -----点击事件------
 -(void)tap:(UITapGestureRecognizer *) sender{
+    //回滚到表的最顶端
+    NSIndexPath* indexPat = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.searchTableView scrollToRowAtIndexPath:indexPat atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    //默认是搜索选择
+    self.isSearchSelect = YES;
+    
     CLLocationCoordinate2D  location = [self.mapView convertPoint:[sender locationInView:self.mapView] toCoordinateFromView:self.mapView];
     
     CLLocation *loca = [[CLLocation alloc]initWithLatitude:location.latitude longitude:location.longitude];
@@ -228,7 +287,7 @@ AMapSearchDelegate
     if (self.selectIndexPtah == nil) {
         NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:self.dataArr[indexPath.row]];
         mutableDict[@"isSelect"] = @"1";
-        [self.dataArr replaceObjectAtIndex:indexPath.row withObject:mutableDict.copy];
+        [self.dataArr replaceObjectAtIndex:indexPath.row withObject:mutableDict];
         [self.searchTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationNone];
         self.selectIndexPtah = indexPath;
         
@@ -242,12 +301,12 @@ AMapSearchDelegate
     
     NSMutableDictionary *oldDict = [NSMutableDictionary dictionaryWithDictionary:self.dataArr[self.selectIndexPtah.row]];
     oldDict[@"isSelect"] = @"2";
-    [self.dataArr replaceObjectAtIndex:self.selectIndexPtah.row withObject:oldDict.copy];
+    [self.dataArr replaceObjectAtIndex:self.selectIndexPtah.row withObject:oldDict];
     [self.searchTableView reloadRowAtIndexPath:self.selectIndexPtah withRowAnimation:UITableViewRowAnimationNone];
     
     NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:self.dataArr[indexPath.row]];
     mutableDict[@"isSelect"] = @"1";
-    [self.dataArr replaceObjectAtIndex:indexPath.row withObject:mutableDict.copy];
+    [self.dataArr replaceObjectAtIndex:indexPath.row withObject:mutableDict];
     [self.searchTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationNone];
     self.selectIndexPtah = indexPath;
     
@@ -262,8 +321,14 @@ AMapSearchDelegate
     [self.view addSubview:self.searchHeaderView];
      __weak typeof(self) weakSelf = self;
     self.searchHeaderView.searchBlock = ^(NSString *searchStr) {
+        //回滚到表的最顶端
+        [weakSelf.searchTableView setContentOffset:CGPointMake(0,0) animated:NO];
+        //默认是搜索选择
+        weakSelf.isSearchSelect = YES;
+        
         weakSelf.searchStr = searchStr;
         [weakSelf searchStr:searchStr];
+       
     };
 }
 -(void) createTableView{
@@ -292,7 +357,10 @@ AMapSearchDelegate
         make.left.equalTo(headerView).offset(12);
         make.centerY.equalTo(headerView.mas_centerY);
     }];
-    NSString *searchStr = @"设置外出地点 (打卡覆盖半径 1km内)";
+    
+    double rang = [self.rangeStr doubleValue];
+    NSString *searchStr = [NSString stringWithFormat:@"设置外出地点 (打卡覆盖半径 %.1fkm内)",rang/1000];
+    
     NSMutableAttributedString *attribuStr = [[NSMutableAttributedString alloc]initWithString:searchStr];
     [attribuStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorTextBg98BlackColor]
                     range:NSMakeRange(7, searchStr.length-7)];
@@ -401,5 +469,7 @@ AMapSearchDelegate
     }
     return _dataArr;
 }
-
+-(void)setRangeStr:(NSString *)rangeStr{
+    _rangeStr = rangeStr;
+}
 @end

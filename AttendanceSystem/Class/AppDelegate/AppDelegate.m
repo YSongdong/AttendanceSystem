@@ -32,7 +32,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
    
     //地图sdk
-    [AMapServices sharedServices].apiKey = @"f28046f76f4bace772fb4daa312b1bf7";
+    [AMapServices sharedServices].apiKey = @"c3045b1ac30bcfd4bc7ee178ce826e55";
     //人脸识别
     [[FVAppSdk sharedManager] initWithAppID:@"43645806" appKey:@"d39eba36386e3034ae4cc68d0fae3c303459e85b"];
     
@@ -111,7 +111,7 @@
     // init Push
     // notice: 2.1.5版本的SDK新增的注册方法，改成可上报IDFA，如果没有使用IDFA直接传nil
     // 如需继续使用pushConfig.plist文件声明appKey等配置内容，请依旧使用[JPUSHService setupWithOption:launchOptions]方式初始化。
-    [JPUSHService setupWithOption:launchOptions appKey:@"c9a63a1d618e84efc78a6e5f"
+    [JPUSHService setupWithOption:launchOptions appKey:@"7c73b76abb1ef04b7d11942a"
                           channel:@"Publish channel"
                  apsForProduction:1
             advertisingIdentifier:nil];

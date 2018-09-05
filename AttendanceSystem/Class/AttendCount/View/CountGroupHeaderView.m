@@ -54,8 +54,8 @@
     [bgView addSubview:self.leftImageV];
     self.leftImageV.image = [UIImage imageNamed:@"ico_05"];
     [self.leftImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf).offset(KSIphonScreenW(12));
-        make.centerY.equalTo(weakSelf.mas_centerY);
+        make.left.equalTo(bgView).offset(KSIphonScreenW(12));
+        make.centerY.equalTo(bgView.mas_centerY);
     }];
     
     self.groupNameLab  =[[UILabel alloc]init];

@@ -148,13 +148,13 @@ UIImagePickerControllerDelegate
     if (indexPath.row == 0) {
         return 190;
     }else if (indexPath.row ==1){
-        return 135;
+        return KSIphonScreenH(135);
     }else if (indexPath.row == 2){
-        return 135;
+        return KSIphonScreenH(135);
     }else if (indexPath.row ==3){
-        return 165;
+        return KSIphonScreenH(165);
     }else{
-        return 80;
+        return KSIphonScreenH(80);
     }
 }
 -(void) getSubmitData{
@@ -287,6 +287,9 @@ UIImagePickerControllerDelegate
     [self.customNavBar.rightButton setTitle:@"加班记录" forState:UIControlStateNormal];
     self.customNavBar.rightButton.frame = CGRectMake(KScreenW - 70, KSStatusHeight, 70 , 44);
     self.customNavBar.onClickRightButton = ^{
+        //收起键盘
+        [weakSelf commentTableViewTouchInSide];
+        
         GoOutRecordController *recordVC = [[GoOutRecordController alloc]init];
         recordVC.recordType = ApporvalRecordOverTimeType;
         recordVC.titleStr = @"加班记录";
@@ -349,11 +352,13 @@ UIImagePickerControllerDelegate
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
-        if ([showdata isKindOfClass:[NSArray class]]) {
-            self.approvalArr = [NSMutableArray arrayWithArray:showdata];
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
-            ApprovalPersonCell *cell =[self.overTimeTableView cellForRowAtIndexPath:indexPath];
-            [cell updateCellUINSArr:self.approvalArr];
+        if ([showdata isKindOfClass:[NSDictionary class]]) {
+            if ([[showdata allKeys] containsObject:@"rule"]){
+                self.approvalArr = [NSMutableArray arrayWithArray:showdata[@"rule"]];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:0];
+                ApprovalPersonCell *cell =[self.overTimeTableView cellForRowAtIndexPath:indexPath];
+                [cell updateCellUINSArr:self.approvalArr];
+            }
         }
     }];
 }

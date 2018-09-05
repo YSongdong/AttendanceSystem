@@ -62,8 +62,8 @@
                                 <constraint firstAttribute="height" constant="48" id="wXA-WC-2dA"/>
                             </constraints>
                         </view>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="李巧" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zR4-z2-NnU">
-                            <rect key="frame" x="67" y="85" width="33" height="19.5"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="xx" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zR4-z2-NnU">
+                            <rect key="frame" x="67" y="85" width="16.5" height="19.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                             <color key="textColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -207,16 +207,16 @@
                             </connections>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_wc" translatesAutoresizingMaskIntoConstraints="NO" id="aM6-cl-CVY">
-                            <rect key="frame" x="75" y="376.5" width="29" height="31"/>
+                            <rect key="frame" x="75.5" y="376.5" width="29" height="31"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_qj" translatesAutoresizingMaskIntoConstraints="NO" id="fyi-ij-npq">
                             <rect key="frame" x="231.5" y="377" width="31" height="30"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sy_ico_jb" translatesAutoresizingMaskIntoConstraints="NO" id="Dnz-g3-G79">
-                            <rect key="frame" x="387.5" y="378" width="31" height="29"/>
+                            <rect key="frame" x="387" y="378" width="31" height="29"/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="外出" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pnd-jF-Uf4">
-                            <rect key="frame" x="77" y="420.5" width="25" height="14.5"/>
+                            <rect key="frame" x="77.5" y="420.5" width="25" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.39607843139999999" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -228,7 +228,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="加班" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OJ0-PQ-WrZ">
-                            <rect key="frame" x="391" y="421" width="25" height="14.5"/>
+                            <rect key="frame" x="390.5" y="421" width="25" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.39607843139999999" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>

@@ -15,7 +15,7 @@
 #import "ShowRevokeMsgView.h"
 #import "ShowRefuseReasonView.h"
 #import "ShowPromptMsgView.h"
-
+#import "RecordSuessRevokeView.h"
 
 #import "RecordDetaTableViewCell.h"
 #define RECORDDETATABLEVIEW_CELL @"RecordDetaTableViewCell"
@@ -31,6 +31,8 @@ UITableViewDataSource
 @property (nonatomic,strong) ShowRevokeMsgView *showRevokeView;
 
 @property (nonatomic,strong) ShowRefuseReasonView *showRfuseReasonView;
+
+@property (nonatomic,strong) RecordSuessRevokeView *suessRevokeView;
 
 @property (nonatomic,strong) UITableView *detaTableView;
 
@@ -204,6 +206,29 @@ UITableViewDataSource
         self.detaTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-50-KSTabbarH)style:UITableViewStyleGrouped];
         self.detaTableView.backgroundColor =[UIColor colorTextWhiteColor];
         [self.view addSubview:self.detaTableView];
+    }else  if ([self.chenkStatusStr isEqualToString:@"3"]) {
+        [self.view addSubview:self.suessRevokeView];
+        self.suessRevokeView.hidden = YES;
+        self.suessRevokeView.suessRevokeBlock = ^{
+            [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showRevokeView];
+            if (weakSelf.detaType == RecordApproveGoOutDetaType ) {
+                weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条外出申请?";
+            }else if (weakSelf.detaType == RecordApproveLeaveDetaType){
+                weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条请假申请?";
+            }else if (weakSelf.detaType == recordApproveCardDetaType){
+                weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条补卡申请?";
+            }else if (weakSelf.detaType == recordApproveOverTimeDetaType){
+                weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条加班申请?";
+            }
+            __weak typeof(weakSelf) stongSelf = weakSelf;
+            //确定
+            stongSelf.showRevokeView.trueBlock = ^{
+                [stongSelf requestRevokeDate];
+            };
+        };
+        self.detaTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-50-KSTabbarH)style:UITableViewStyleGrouped];
+        self.detaTableView.backgroundColor =[UIColor colorTextWhiteColor];
+        [self.view addSubview:self.detaTableView];
     }else{
         self.detaTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-KSTabbarH)style:UITableViewStyleGrouped];
         self.detaTableView.backgroundColor =[UIColor colorTextWhiteColor];
@@ -264,6 +289,12 @@ UITableViewDataSource
         _toolView =[[RecordToolView alloc]initWithFrame:CGRectMake(0, KScreenH-50-KSTabbarH, KScreenW, 50)];
     }
     return _toolView;
+}
+-(RecordSuessRevokeView *)suessRevokeView{
+    if (!_suessRevokeView) {
+        _suessRevokeView = [[RecordSuessRevokeView alloc]initWithFrame:CGRectMake(0, KScreenH-50-KSTabbarH, KScreenW, 50)];
+    }
+    return _suessRevokeView;
 }
 -(ShowPromptMsgView *)showPromptMsgView{
     if (!_showPromptMsgView) {
@@ -330,11 +361,14 @@ UITableViewDataSource
     
     //当所有的任务都完成后会发送这个通知
     dispatch_group_notify(_group, dispatch_get_main_queue(), ^{
-        if ([weakSelf.chenkStatusStr isEqualToString:@"1"]) {
+        if ([weakSelf.chenkStatusStr isEqualToString:@"1"] ) {
             weakSelf.toolView.hidden = NO;
-        }else{
+        }else if ([weakSelf.chenkStatusStr isEqualToString:@"3"]){
+            weakSelf.suessRevokeView.hidden = NO;
+        }else {
             [weakSelf.showPromptMsgView removeFromSuperview];
             weakSelf.toolView.hidden = YES;
+            weakSelf.suessRevokeView.hidden = YES;
             [weakSelf.detaTableView mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(weakSelf.view).offset(KSNaviTopHeight);
                 make.left.right.bottom.equalTo(weakSelf.view);

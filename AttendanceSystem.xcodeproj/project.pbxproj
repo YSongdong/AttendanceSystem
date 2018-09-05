@@ -87,6 +87,7 @@
 		155900B42112FC3700244956 /* ShowRevokeMsgView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155900B32112FC3700244956 /* ShowRevokeMsgView.m */; };
 		155900B82113227C00244956 /* ShowRefuseReasonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155900B72113227C00244956 /* ShowRefuseReasonView.m */; };
 		155900BB2113329A00244956 /* ShowBlankSpaceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155900BA2113329A00244956 /* ShowBlankSpaceView.m */; };
+		155C235E213E773300144DA8 /* RecordSuessRevokeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155C235D213E773300144DA8 /* RecordSuessRevokeView.m */; };
 		155CEC1620F9A26900066FDD /* SDUserInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 155CEC1420F9A26900066FDD /* SDUserInfoController.m */; };
 		155CEC1F20F9A2A400066FDD /* SDUserLeaveTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 155CEC1920F9A2A300066FDD /* SDUserLeaveTableViewCell.xib */; };
 		155CEC2020F9A2A400066FDD /* SDUserInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 155CEC1A20F9A2A300066FDD /* SDUserInfoTableViewCell.m */; };
@@ -313,6 +314,8 @@
 		155900B72113227C00244956 /* ShowRefuseReasonView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowRefuseReasonView.m; sourceTree = "<group>"; };
 		155900B92113329A00244956 /* ShowBlankSpaceView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowBlankSpaceView.h; sourceTree = "<group>"; };
 		155900BA2113329A00244956 /* ShowBlankSpaceView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowBlankSpaceView.m; sourceTree = "<group>"; };
+		155C235C213E773300144DA8 /* RecordSuessRevokeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecordSuessRevokeView.h; sourceTree = "<group>"; };
+		155C235D213E773300144DA8 /* RecordSuessRevokeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RecordSuessRevokeView.m; sourceTree = "<group>"; };
 		155CEC1420F9A26900066FDD /* SDUserInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDUserInfoController.m; sourceTree = "<group>"; };
 		155CEC1520F9A26900066FDD /* SDUserInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDUserInfoController.h; sourceTree = "<group>"; };
 		155CEC1920F9A2A300066FDD /* SDUserLeaveTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SDUserLeaveTableViewCell.xib; sourceTree = "<group>"; };
@@ -675,6 +678,8 @@
 				155900B72113227C00244956 /* ShowRefuseReasonView.m */,
 				15FD66BC211939B9009A132B /* ShowPromptMsgView.h */,
 				15FD66BD211939B9009A132B /* ShowPromptMsgView.m */,
+				155C235C213E773300144DA8 /* RecordSuessRevokeView.h */,
+				155C235D213E773300144DA8 /* RecordSuessRevokeView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1491,6 +1496,7 @@
 				1509AEFA211040F600D45EE3 /* SearchSpaceView.m in Sources */,
 				155CEC2020F9A2A400066FDD /* SDUserInfoTableViewCell.m in Sources */,
 				155CEC1620F9A26900066FDD /* SDUserInfoController.m in Sources */,
+				155C235E213E773300144DA8 /* RecordSuessRevokeView.m in Sources */,
 				1556A39F20F49CBF00F64523 /* SDBaseController.m in Sources */,
 				150C0DB921002F9400A18C41 /* LocatToolView.m in Sources */,
 				15018954210F1682005673FF /* SupplementCardController.m in Sources */,
@@ -1761,7 +1767,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "bea01ce7-bb31-4209-bfbf-2b39a22e5391";
+				PROVISIONING_PROFILE = "ddc6a10d-5377-46ea-beb1-2f403288123d";
 				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1821,7 +1827,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "bea01ce7-bb31-4209-bfbf-2b39a22e5391";
+				PROVISIONING_PROFILE = "ddc6a10d-5377-46ea-beb1-2f403288123d";
 				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

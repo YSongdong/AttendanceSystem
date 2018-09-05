@@ -104,6 +104,9 @@ ApprovalRecordSiftControllerDelegate
     if ([statusStr isEqualToString:@"1"]) {
         //审核中
         detaVC.chenkStatusStr = @"1";
+    }else  if ([statusStr isEqualToString:@"2"]) {
+        //审批通过
+        detaVC.chenkStatusStr = @"3";
     }else{
         //其他
         detaVC.chenkStatusStr = @"2";

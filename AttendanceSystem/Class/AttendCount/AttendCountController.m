@@ -99,7 +99,7 @@ UITableViewDataSource
     return nil;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 60;
+    return KSIphonScreenH(60);
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     NSDictionary *dict = self.dataArr[section];

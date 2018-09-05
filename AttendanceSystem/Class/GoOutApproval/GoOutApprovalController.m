@@ -61,6 +61,9 @@ UIImagePickerControllerDelegate
 //审批人数据源
 @property (nonatomic,strong) NSMutableArray *approvalArr;
 
+//半径
+@property (nonatomic,strong) NSString *rangeStr;
+
 @end
 
 @implementation GoOutApprovalController
@@ -76,6 +79,7 @@ UIImagePickerControllerDelegate
     [self requestApprovalMemberData];
     //监听当键将要退出时
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)  name:UIKeyboardWillHideNotification object:nil];
+   
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 6;
@@ -122,6 +126,7 @@ UIImagePickerControllerDelegate
             __weak typeof(weakSelf) stongSelf = weakSelf;
             RecordMapSelectViewController *mapSelectVC = [[RecordMapSelectViewController alloc]init];
             mapSelectVC.delegate = stongSelf;
+            mapSelectVC.rangeStr = self.rangeStr;
             [weakSelf.navigationController pushViewController:mapSelectVC animated:YES];
         };
         return cell;
@@ -160,15 +165,15 @@ UIImagePickerControllerDelegate
     if (indexPath.row == 0) {
         return 190;
     }else if (indexPath.row ==1){
-        return 135;
+        return KSIphonScreenH(135);
     }else if (indexPath.row ==2){
-        return 115;
+        return KSIphonScreenH(115);
     }else if (indexPath.row == 3){
-        return 135;
+        return KSIphonScreenH(135);
     }else if (indexPath.row ==4){
-        return 165;
+        return KSIphonScreenH(165);
     }else{
-        return 80;
+        return KSIphonScreenH(80);
     }
 }
 -(void) getSubmitData{
@@ -315,6 +320,9 @@ UIImagePickerControllerDelegate
     self.customNavBar.rightButton.frame = CGRectMake(KScreenW - 70, KSStatusHeight, 70 , 44);
     
     self.customNavBar.onClickRightButton = ^{
+        //收起键盘
+        [weakSelf commentTableViewTouchInSide];
+    
         GoOutRecordController *recordVC = [[GoOutRecordController alloc]init];
         recordVC.recordType = ApporvalRecordOutType;
         recordVC.titleStr = @"外出记录";
@@ -386,11 +394,21 @@ UIImagePickerControllerDelegate
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
-        if ([showdata isKindOfClass:[NSArray class]]) {
-            self.approvalArr = [NSMutableArray arrayWithArray:showdata];
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:4 inSection:0];
-            ApprovalPersonCell *cell =[self.leaveTableView cellForRowAtIndexPath:indexPath];
-            [cell updateCellUINSArr:self.approvalArr];
+        if ([showdata isKindOfClass:[NSDictionary class]]) {
+            //获取半径
+            if ([[showdata allKeys] containsObject:@"range"]) {
+                self.rangeStr = [NSString stringWithFormat:@"%@",showdata[@"range"]];
+                NSIndexPath *rangIndexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+                LeaveInDestinAddressCell *rangCell = [self.leaveTableView cellForRowAtIndexPath:rangIndexPath];
+                rangCell.showAttandRadiusLab.text = [NSString stringWithFormat:@"打卡覆盖半径：%.1fkm",[showdata[@"range"]doubleValue]/1000];
+            }
+          
+             if ([[showdata allKeys] containsObject:@"rule"]) {
+                 self.approvalArr = [NSMutableArray arrayWithArray:showdata[@"rule"]];
+                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:4 inSection:0];
+                 ApprovalPersonCell *cell =[self.leaveTableView cellForRowAtIndexPath:indexPath];
+                 [cell updateCellUINSArr:self.approvalArr];
+            }
         }
     }];
 }
