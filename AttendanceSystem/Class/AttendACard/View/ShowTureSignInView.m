@@ -14,6 +14,8 @@ UITextViewDelegate
 >
 //打卡地点
 @property (nonatomic,strong) UILabel *cardAddressLab;
+//地址异常
+@property (nonatomic,strong) UILabel  *addressStatuLab;
 //人脸状态
 @property (nonatomic,strong)UILabel *faceStatuLab;
 //重新验证
@@ -125,6 +127,7 @@ UITextViewDelegate
     //地点view
     UIView *addressConcetView  = [[UIView alloc]init];
     [samilView addSubview:addressConcetView];
+    addressConcetView.tag =400;
     addressConcetView.backgroundColor  =[UIColor colorTextWhiteColor];
     [addressConcetView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(titleView.mas_bottom).offset(1);
@@ -145,6 +148,7 @@ UITextViewDelegate
     UILabel *showTimeLab = [[UILabel alloc]init];
     [addressConcetView addSubview:showTimeLab];
     showTimeLab.font = Font(12);
+    showTimeLab.tag = 401;
     showTimeLab.textColor = [UIColor colorTextBg65BlackColor];
     [showTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(timeImageV.mas_right).offset(7);
@@ -154,6 +158,7 @@ UITextViewDelegate
     
     UIImageView *addressImageV = [[UIImageView alloc]init];
     [addressConcetView addSubview:addressImageV];
+    addressImageV.tag = 402;
     addressImageV.image = [UIImage imageNamed:@"qrxx_ico_dw"];
     [addressImageV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(timeImageV.mas_bottom).offset(KSIphonScreenH(12));
@@ -168,7 +173,17 @@ UITextViewDelegate
     [self.cardAddressLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(showTimeLab.mas_left);
         make.centerY.equalTo(addressImageV.mas_centerY);
-        make.right.equalTo(addressConcetView).offset(-KSIphonScreenW(15));
+    }];
+    
+    self.addressStatuLab =  [[UILabel alloc]init];
+    [addressConcetView addSubview:self.addressStatuLab];
+    self.addressStatuLab.font = Font(12);
+    self.addressStatuLab.textColor = [UIColor colorWithHexString:@"#ffb046"];
+    self.addressStatuLab.text = @"地点异常";
+    [self.addressStatuLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(weakSelf.cardAddressLab.mas_right).offset(5);
+        make.right.equalTo(addressConcetView).offset(-KSIphonScreenW(10));
+        make.centerY.equalTo(weakSelf.cardAddressLab.mas_centerY);
     }];
     
     //开启验证
@@ -363,6 +378,37 @@ UITextViewDelegate
     
     self.trueInfoBlock(param.copy);
 }
+-(void)updateAddress:(NSString *)addressStr andAddressStaute:(BOOL)addressStatu{
+    UILabel *showTimeLab = [self viewWithTag:401];
+    UIImageView *addressImageV = [self viewWithTag:402];
+    UIView *addressConcetView = [self viewWithTag:400];
+    if (addressStatu) {
+        self.addressStatuLab.hidden = YES;
+        self.cardAddressLab.text = [NSString stringWithFormat:@"打卡地点  %@",addressStr];
+        [self.cardAddressLab mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(showTimeLab.mas_left);
+            make.centerY.equalTo(addressImageV.mas_centerY);
+            make.right.equalTo(addressConcetView).offset(-KSIphonScreenW(15));
+        }];
+    }else{
+        
+        self.cardAddressLab.text = [NSString stringWithFormat:@"打卡地点  %@",addressStr];
+        [self.cardAddressLab mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(showTimeLab.mas_left);
+            make.centerY.equalTo(addressImageV.mas_centerY);
+        }];
+        
+        self.addressStatuLab.hidden = NO;
+        [self.addressStatuLab mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.cardAddressLab.mas_right).offset(5);
+            make.right.equalTo(addressConcetView).offset(-KSIphonScreenW(15));
+            make.width.equalTo(@60);
+            make.centerY.equalTo(self.cardAddressLab.mas_centerY);
+        }];
+    }
+}
+
+
 //更新UI
 -(void)updateUI{
     UIView *markView =  [self viewWithTag:300];

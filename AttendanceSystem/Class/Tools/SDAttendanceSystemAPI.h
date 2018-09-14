@@ -14,6 +14,7 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 
 //测试域名
 #define PUBLISH_DIMAIN_URL @"http://192.168.3.201:1088/"
+//#define PUBLISH_DIMAIN_URL @"http://192.168.2.56/"
 //#define PUBLISH_DIMAIN_URL @"http://kq.api.cqlanhui.com/"
 //#define PUBLISH_DIMAIN_URL @"http://kq.cloud.api.cqlanhui.com/"
 

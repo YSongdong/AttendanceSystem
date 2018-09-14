@@ -46,6 +46,7 @@
 
 //图片显示
 +(void)sd_setImageView:(UIImageView *)imageView WithURL:(NSString*)str;
-
+//手机型号
++ (NSString*)deviceModelName;
 
 @end

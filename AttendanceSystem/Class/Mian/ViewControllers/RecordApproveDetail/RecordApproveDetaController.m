@@ -9,6 +9,9 @@
 #import "RecordApproveDetaController.h"
 
 #import "LoockGoOutAddressController.h"
+#import "GoOutApprovalController.h"
+#import "LeaveApprovalController.h"
+#import "OverTimeApplyforController.h"
 
 #import "RecordDetailHeaderView.h"
 #import "RecordToolView.h"
@@ -209,6 +212,7 @@ UITableViewDataSource
     }else  if ([self.chenkStatusStr isEqualToString:@"3"]) {
         [self.view addSubview:self.suessRevokeView];
         self.suessRevokeView.hidden = YES;
+        //撤销
         self.suessRevokeView.suessRevokeBlock = ^{
             [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showRevokeView];
             if (weakSelf.detaType == RecordApproveGoOutDetaType ) {
@@ -225,6 +229,27 @@ UITableViewDataSource
             stongSelf.showRevokeView.trueBlock = ^{
                 [stongSelf requestRevokeDate];
             };
+        };
+        // 修改
+        self.suessRevokeView.sueccAlterBlcok = ^{
+            if (weakSelf.detaType == RecordApproveGoOutDetaType ) {
+                GoOutApprovalController *goOutVC = [[GoOutApprovalController alloc]init];
+                goOutVC.isAlter = YES;
+                goOutVC.alterDataDict = weakSelf.dataDict;
+                [weakSelf.navigationController pushViewController:goOutVC animated:YES];
+            }else if (weakSelf.detaType == RecordApproveLeaveDetaType){
+                LeaveApprovalController *leaveVC = [[LeaveApprovalController alloc]init];
+                leaveVC.isAlter = YES;
+                leaveVC.alterDataDict = weakSelf.dataDict;
+                [weakSelf.navigationController pushViewController:leaveVC animated:YES];
+            }else if (weakSelf.detaType == recordApproveCardDetaType){
+                weakSelf.showRevokeView.showLab.text =@"您是否确认撤销该条补卡申请?";
+            }else if (weakSelf.detaType == recordApproveOverTimeDetaType){
+                OverTimeApplyforController *overTimeVC = [[OverTimeApplyforController alloc]init];
+                overTimeVC.isAlter = YES;
+                overTimeVC.alterDataDict = weakSelf.dataDict;
+                [weakSelf.navigationController pushViewController:overTimeVC animated:YES];
+            }
         };
         self.detaTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-50-KSTabbarH)style:UITableViewStyleGrouped];
         self.detaTableView.backgroundColor =[UIColor colorTextWhiteColor];
@@ -338,6 +363,9 @@ UITableViewDataSource
 -(void)setIsApplyFor:(BOOL)isApplyFor{
     _isApplyFor = isApplyFor;
 }
+-(void)setIsShowSuessRevoke:(BOOL)isShowSuessRevoke{
+    _isShowSuessRevoke = isShowSuessRevoke;
+}
 #pragma mark ----数据相关------
 //创建一个多线程任务组
 -(void)createGCDGroup{
@@ -364,7 +392,16 @@ UITableViewDataSource
         if ([weakSelf.chenkStatusStr isEqualToString:@"1"] ) {
             weakSelf.toolView.hidden = NO;
         }else if ([weakSelf.chenkStatusStr isEqualToString:@"3"]){
-            weakSelf.suessRevokeView.hidden = NO;
+            if (weakSelf.isShowSuessRevoke) {
+                weakSelf.suessRevokeView.hidden = YES;
+                [weakSelf.detaTableView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.top.equalTo(weakSelf.view).offset(KSNaviTopHeight);
+                    make.left.right.bottom.equalTo(weakSelf.view);
+                    make.bottom.equalTo(weakSelf.view);
+                }];
+            }else{
+                 weakSelf.suessRevokeView.hidden = NO;
+            }
         }else {
             [weakSelf.showPromptMsgView removeFromSuperview];
             weakSelf.toolView.hidden = YES;

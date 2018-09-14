@@ -35,6 +35,9 @@ typedef  enum{
 //审批列表
 @property (nonatomic,strong)NSString *cardIdStr;
 
+//是否显示通过撤销按钮  NO 显示自己发起， YES 审批的
+@property (nonatomic,assign) BOOL isShowSuessRevoke;
+
 //审批状态  1 审核中  2 其他 3 审批通过
 @property (nonatomic,strong) NSString *chenkStatusStr;
 //是否要越级跳转  YES 是  NO 否

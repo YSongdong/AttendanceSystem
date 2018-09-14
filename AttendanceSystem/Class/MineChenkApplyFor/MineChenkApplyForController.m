@@ -142,6 +142,7 @@ ApprovalRecordSiftControllerDelegate
     detaVC.titleStr = cell.showNameLab.text;
     detaVC.recordIdStr = dict[@"recordId"];
     detaVC.cardIdStr = dict[@"cardId"];
+    detaVC.isShowSuessRevoke = YES;
     detaVC.isApplyFor = YES;
     NSString *statusStr  =[NSString stringWithFormat:@"%@",dict[@"status"]];
     if ([statusStr isEqualToString:@"1"]) {

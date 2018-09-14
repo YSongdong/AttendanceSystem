@@ -11,4 +11,9 @@
 #import "SDBaseController.h"
 @interface GoOutApprovalController : SDBaseController
 
+//判断是不是修改 YES 是 NO不是
+@property (nonatomic,assign) BOOL isAlter;
+//修改数据源
+@property (nonatomic,strong) NSDictionary *alterDataDict;
+
 @end

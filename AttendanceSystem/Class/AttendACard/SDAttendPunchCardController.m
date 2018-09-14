@@ -14,12 +14,12 @@
 #import "RecordApproveDetaController.h"
 #import "SupplementCardController.h"
 
-
 #import "DateTimePickerView.h"
 #import "ShowTwoTimeDifferBigView.h"
 #import "ShowTureSignInView.h"
 #import "ShowMarkView.h"
 #import "ShowLocatErrorView.h"
+#import "ShowUnAttendaceMarkView.h"
 
 #import "AttendCardHeaderView.h"
 #import "ShowLocatPromentView.h"
@@ -73,6 +73,9 @@ AMapLocationManagerDelegate
 @property (nonatomic,strong)ShowTureSignInView *showTureSingInView;
 //备注view
 @property (nonatomic,strong) ShowMarkView *showMarkView;
+//不需要打开的备注view
+@property (nonatomic,strong) ShowUnAttendaceMarkView *showUnAttendMarkView;
+
 //数据源字典
 @property (nonatomic,strong) NSDictionary *dataDict;
 //打卡次数
@@ -81,7 +84,8 @@ AMapLocationManagerDelegate
 @property (nonatomic,strong) UIImage *faceImage;
 //记录定位地址
 @property (nonatomic,strong)AMapLocationReGeocode *reGeocode;
-
+//记录定位的经纬度
+@property (nonatomic, strong) CLLocation *userLocation;
 //记录选择日期
 @property (nonatomic,strong) NSString *selectCalendarStr;
 //---------------打卡请求数据---------//
@@ -95,6 +99,9 @@ AMapLocationManagerDelegate
 //记录face 1上班 2下班
 @property (nonatomic,assign) NSInteger faceClockinType;
 
+//选择照片类型  1 确认打卡view 2不用打卡添加备注view
+@property (nonatomic,strong) NSString *selectPhotoType;
+
 @end
 
 @implementation SDAttendPunchCardController
@@ -102,20 +109,27 @@ AMapLocationManagerDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorTextWhiteColor];
+    self.selectCalendarStr = @"";
+    self.selectPhotoType = @"0";
     [self createNavi];
     [self createTableView];
     self.isTureAgainFace = NO;
-    self.selectCalendarStr = @"";
+   
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     //开启定位
-    [self mobilePhonePositioning];
-    //请求当天的日期
-    NSString *dateStr = [[self requestDateFormatter]stringFromDate:[NSDate date]];
-    self.selectCalendarStr = dateStr;
-    [self.headerView.selectBtn setTitle:dateStr forState:UIControlStateNormal];
-    [self requestAttendInfo:self.selectCalendarStr];
+  //  [self mobilePhonePositioning];
+    
+    if ([self.selectCalendarStr isEqualToString:@""]) {
+        //请求当天的日期
+        NSString *dateStr = [[self requestDateFormatter]stringFromDate:[NSDate date]];
+        [self.headerView.selectBtn setTitle:dateStr forState:UIControlStateNormal];
+        [self requestAttendInfo:dateStr];
+    }else{
+        [self.headerView.selectBtn setTitle:self.selectCalendarStr forState:UIControlStateNormal];
+        [self requestAttendInfo:self.selectCalendarStr];
+    }
 }
 //视图已经消失
 - (void)viewDidDisappear:(BOOL)animated {
@@ -128,6 +142,8 @@ AMapLocationManagerDelegate
             [view removeFromSuperview];
         }
     }
+    //关闭定位
+    [[GDLocationManager shareManager] stopUpdateLocation];
 }
 //设置navi
 -(void) createNavi{
@@ -172,6 +188,35 @@ AMapLocationManagerDelegate
     self.showTimeBigView = [[ShowTwoTimeDifferBigView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, CGRectGetHeight(self.cardTableView.frame))];
     [self.cardTableView addSubview:self.showTimeBigView];
     self.showTimeBigView.hidden = YES;
+    
+    __weak typeof(self) weakSelf = self;
+    //获取地址信息
+    [[GDLocationManager shareManager] startUpdateLocation];
+    [[GDLocationManager shareManager] startReportLocation];
+    
+    [GDLocationManager shareManager].locationBlock = ^(NSDictionary *dict) {
+        weakSelf.userLocation=dict[@"location"];
+        weakSelf.reGeocode =dict[@"reGeocode"];
+        if (weakSelf.userLocation ==nil && weakSelf.reGeocode == nil ) {
+            return ;
+        }
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSString *nowStr =[NSString stringWithFormat:@"%@",self.dataDict[@"now"]];
+            if ([nowStr isEqualToString:@"1"]) {
+                if (self.cardArr.count > 0) {
+                    NSDictionary *dict = self.cardArr[self.attendCardIndexPath.row];
+                    NSString *titleStr = [NSString stringWithFormat:@"%@",dict[@"title"]];
+                    //1 打卡 2还未到打卡时间 3已过打卡时间
+                    if ([titleStr isEqualToString:@"1"]) {
+                        AttendCardTableViewCell  *cell =[strongSelf.cardTableView cellForRowAtIndexPath:strongSelf.attendCardIndexPath];
+                        //更新UI显示状态
+                        [cell updateAddress:strongSelf.reGeocode.formattedAddress location:strongSelf.userLocation];
+                    }
+                }
+            }
+        });
+    };
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.cardArr.count;
@@ -199,18 +244,59 @@ AMapLocationManagerDelegate
         ShowPunchCardCell *cell = [tableView dequeueReusableCellWithIdentifier:SHOWPUNCHCARD_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.dict = dict;
+        //是否打卡
+        NSString *timeClockinHiStr =[NSString stringWithFormat:@"%@",dict[@"timeClockinHi"]];
         //备注
         cell.markBlock = ^{
             __weak typeof(weakSelf) stongSelf = weakSelf;
-            [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showMarkView];
-            weakSelf.showMarkView.dict = dict;
-            weakSelf.showMarkView.addMarkBlock = ^(NSString *markStr) {
-                NSMutableDictionary *mutableDict =  [NSMutableDictionary dictionaryWithDictionary:dict];
-                mutableDict[@"remark"]= markStr;
-                //贴换元素
-                [stongSelf.cardArr replaceObjectAtIndex:indexPath.row withObject:mutableDict.copy];
-                [stongSelf.cardTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
-            };
+            if (![timeClockinHiStr isEqualToString:@""]) {
+                
+                [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showMarkView];
+                weakSelf.showMarkView.dict = dict;
+                weakSelf.showMarkView.addMarkBlock = ^(NSString *markStr) {
+                    NSMutableDictionary *mutableDict =  [NSMutableDictionary dictionaryWithDictionary:dict];
+                    mutableDict[@"remark"]= markStr;
+                    //贴换元素
+                    [stongSelf.cardArr replaceObjectAtIndex:indexPath.row withObject:mutableDict.copy];
+                    [stongSelf.cardTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
+                };
+            }else{
+                __weak typeof(weakSelf) stongSelf = weakSelf;
+                 weakSelf.showUnAttendMarkView = [[ ShowUnAttendaceMarkView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
+                [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showUnAttendMarkView];
+                NSString *markStr = dict[@"remark"];
+                NSArray *photoArr = dict[@"photo"];
+                weakSelf.showUnAttendMarkView.isLookMark = NO;
+                if (![markStr isEqualToString:@""] || photoArr.count > 0) {
+                    weakSelf.showUnAttendMarkView.dict = dict;
+                    weakSelf.showUnAttendMarkView.isLookMark = YES;
+                }
+                weakSelf.showUnAttendMarkView.selectPhotoBlock = ^{
+                    //隐藏
+                    stongSelf.showUnAttendMarkView.hidden = YES;
+                    //选择照片类型  1 确认打卡view 2不用打卡添加备注view
+                    stongSelf.selectPhotoType = @"2";
+                    
+                    UIImagePickerController* picker = [[UIImagePickerController alloc] init];
+                    picker.delegate = weakSelf;
+                    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                    //设定图像缩放比例
+                    picker.cameraViewTransform = CGAffineTransformScale(picker.cameraViewTransform, 1.0, 1.0);
+                    
+                    //打开摄像画面作为背景
+                    [stongSelf presentViewController:picker animated:YES completion:nil];
+                };
+               
+                weakSelf.showUnAttendMarkView.addMarkBlock = ^(NSDictionary *markDict) {
+                    NSMutableDictionary *mutableDict =  [NSMutableDictionary dictionaryWithDictionary:dict];
+                    mutableDict[@"remark"]= markDict[@"remark"];
+                    mutableDict[@"photo"] = markDict[@"photo"];
+                    //贴换元素
+                    [stongSelf.cardArr replaceObjectAtIndex:indexPath.row withObject:mutableDict];
+                    [stongSelf.cardTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
+                };
+            }
+
         };
         //请假
         cell.askForLeaveBlock = ^{
@@ -280,7 +366,8 @@ AMapLocationManagerDelegate
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.dataDict = self.dataDict;
             cell.dict = dict;
-            
+           
+
             //重新定位
             cell.againLocationBlcok = ^(NSDictionary *dict) {
                 SDAgainLocatController *againVC = [[SDAgainLocatController alloc]init];
@@ -290,6 +377,7 @@ AMapLocationManagerDelegate
             };
             //打卡
             cell.selectCardBlcok = ^(NSDictionary *addressDict) {
+                
                 //判断有没有开启定位权限
                  if ([CLLocationManager authorizationStatus] ==kCLAuthorizationStatusDenied) {
                     //不可用
@@ -297,6 +385,7 @@ AMapLocationManagerDelegate
                      [weakSelf.view addSubview:weakSelf.showLocatView];
                      return ;
                 }
+                
                 //判断是否开启人脸识别
                 if ([dict[@"faceStatus"] isEqualToString:@"1"]) {
                     //判断是否有留底
@@ -306,6 +395,12 @@ AMapLocationManagerDelegate
                         return ;
                     }
                 }
+                //判断有没有位置信息
+                if (![[addressDict allKeys] containsObject:@"title"]) {
+                    [SDShowSystemPrompView showSystemPrompStr:@"还未获取到定位信息"];
+                    return ;
+                }
+                
                 if ([addressDict[@"title"] isEqualToString:@""]) {
                     [SDShowSystemPrompView showSystemPrompStr:@"还未获取到定位信息"];
                     return ;
@@ -316,7 +411,7 @@ AMapLocationManagerDelegate
                 weakSelf.cardDataDict[@"coordinateSure"] = [SDTool convertToJsonData:dict[@"coordinate"]];
                 weakSelf.cardDataDict[@"agId"] =[SDUserInfo obtainWithProGroupId];
                 weakSelf.cardDataDict[@"agName"] =[SDUserInfo obtainWithProGroupName];
-                weakSelf.cardDataDict[@"plaformId"] =[SDUserInfo obtainWithPlafrmId];
+                weakSelf.cardDataDict[@"platformId"] =[SDUserInfo obtainWithPlafrmId];
                 weakSelf.cardDataDict[@"unitId"] =[SDUserInfo obtainWithUniId];
                 weakSelf.cardDataDict[@"userId"] =[SDUserInfo obtainWithUserId];
                 weakSelf.cardDataDict[@"clockinNum"] =dict[@"clockinNum"];
@@ -345,7 +440,7 @@ AMapLocationManagerDelegate
                     weakSelf.faceClockinType = [clockinTypeStr integerValue];
                 }else{
                     if ([abnormalCoordinateIsStr isEqualToString:@"2"] ) {
-                        weakSelf.cardDataDict[@"abnormalIdentityIs"] =[NSNumber numberWithInteger:3];
+                        weakSelf.cardDataDict[@"abnormalIdentityIs"] =[NSNumber numberWithInteger:0];
                         [weakSelf showTureSingView:nil];
                         return ;
                     }
@@ -363,18 +458,58 @@ AMapLocationManagerDelegate
             ShowPunchCardCell *cell = [tableView dequeueReusableCellWithIdentifier:SHOWPUNCHCARD_CELL forIndexPath:indexPath];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.dict = dict;
+            //是否打卡
+            NSString *timeClockinHiStr =[NSString stringWithFormat:@"%@",dict[@"timeClockinHi"]];
             //备注
             cell.markBlock = ^{
                 __weak typeof(weakSelf) stongSelf = weakSelf;
-                [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showMarkView];
-                weakSelf.showMarkView.dict = dict;
-                weakSelf.showMarkView.addMarkBlock = ^(NSString *markStr) {
-                    NSMutableDictionary *mutableDict =  [NSMutableDictionary dictionaryWithDictionary:dict];
-                    mutableDict[@"remark"]= markStr;
-                    //贴换元素
-                    [stongSelf.cardArr replaceObjectAtIndex:indexPath.row withObject:mutableDict.copy];
-                    [stongSelf.cardTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
-                };
+                if (![timeClockinHiStr isEqualToString:@""]) {
+                    
+                    [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showMarkView];
+                    weakSelf.showMarkView.dict = dict;
+                    weakSelf.showMarkView.addMarkBlock = ^(NSString *markStr) {
+                        NSMutableDictionary *mutableDict =  [NSMutableDictionary dictionaryWithDictionary:dict];
+                        mutableDict[@"remark"]= markStr;
+                        //贴换元素
+                        [stongSelf.cardArr replaceObjectAtIndex:indexPath.row withObject:mutableDict.copy];
+                        [stongSelf.cardTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
+                    };
+                }else{
+                    __weak typeof(weakSelf) stongSelf = weakSelf;
+                    weakSelf.showUnAttendMarkView = [[ ShowUnAttendaceMarkView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
+                    [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showUnAttendMarkView];
+                    NSString *markStr = dict[@"remark"];
+                    NSArray *photoArr = dict[@"photo"];
+                    weakSelf.showUnAttendMarkView.isLookMark = NO;
+                    if (![markStr isEqualToString:@""] || photoArr.count > 0) {
+                        weakSelf.showUnAttendMarkView.dict = dict;
+                        weakSelf.showUnAttendMarkView.isLookMark = YES;
+                    }
+                    weakSelf.showUnAttendMarkView.selectPhotoBlock = ^{
+                        //隐藏
+                        stongSelf.showUnAttendMarkView.hidden = YES;
+                        //选择照片类型  1 确认打卡view 2不用打卡添加备注view
+                        stongSelf.selectPhotoType = @"2";
+                        
+                        UIImagePickerController* picker = [[UIImagePickerController alloc] init];
+                        picker.delegate = weakSelf;
+                        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                        //设定图像缩放比例
+                        picker.cameraViewTransform = CGAffineTransformScale(picker.cameraViewTransform, 1.0, 1.0);
+                        
+                        //打开摄像画面作为背景
+                        [stongSelf presentViewController:picker animated:YES completion:nil];
+                    };
+                    
+                    weakSelf.showUnAttendMarkView.addMarkBlock = ^(NSDictionary *markDict) {
+                        NSMutableDictionary *mutableDict =  [NSMutableDictionary dictionaryWithDictionary:dict];
+                        mutableDict[@"remark"]= markDict[@"remark"];
+                        mutableDict[@"photo"] = markDict[@"photo"];
+                        //贴换元素
+                        [stongSelf.cardArr replaceObjectAtIndex:indexPath.row withObject:mutableDict];
+                        [stongSelf.cardTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
+                    };
+                }
             };
             //请假
             cell.askForLeaveBlock = ^{
@@ -446,7 +581,6 @@ AMapLocationManagerDelegate
     //1 今天 2 过去 3未来
    if ([nowStr isEqualToString:@"3"]) {
        if (indexPath.row == 0) {
-         // return  KSIphonScreenH(230);
            return 230;
        }else{
            return KSIphonScreenH(44);
@@ -483,11 +617,17 @@ AMapLocationManagerDelegate
         //获取照片
         [[FVAppSdk sharedManager]gatherWithParentController:self];
         [FVAppSdk sharedManager].fvLanderDelegate =  self;
-    }else{
+    }else if ([faceTypeStr isEqualToString:@"1"]) {
         //眨眼
          [[FVAppSdk sharedManager]livingWithParentController:self mode:FVAppLivingFastMode level:FVAppLivingSafeMiddleMode];
         [FVAppSdk sharedManager].fvLanderDelegate =  self;
-    }//确认信息重新验证
+    }else if ([faceTypeStr isEqualToString:@"3"]) {
+        //眨眼 + 随机
+        [[FVAppSdk sharedManager]livingWithParentController:self mode:FVAppLivingBaseMode level:FVAppLivingSafeMiddleMode];
+        [FVAppSdk sharedManager].fvLanderDelegate =  self;
+    }
+    
+    //确认信息重新验证
     if (self.isTureAgainFace) {
         self.showTureSingInView.hidden= NO;
     }
@@ -508,7 +648,6 @@ AMapLocationManagerDelegate
  * 活体取消时的委托方法。
  */
 -(void)FVLivingDetectDidCancel:(FVAppSdk*)detector{
-    
     //确认信息重新验证
     if (self.isTureAgainFace) {
         self.showTureSingInView.hidden= NO;
@@ -538,19 +677,36 @@ AMapLocationManagerDelegate
 - (void)imagePickerController:(UIImagePickerController *)aPicker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [aPicker dismissViewControllerAnimated:YES completion:nil];
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
-    //显示
-    _showTureSingInView.hidden = NO;
-    [self.showTureSingInView.imageArr insertObject:image atIndex:0];
-    //更新UI
-    [self.showTureSingInView updateUI];
+    
+    //选择照片类型  1 确认打卡view 2不用打卡添加备注view
+    if ([self.selectPhotoType isEqualToString:@"1"]) {
+        //显示
+        _showTureSingInView.hidden = NO;
+        [self.showTureSingInView.imageArr insertObject:image atIndex:0];
+        //更新UI
+        [self.showTureSingInView updateUI];
+    }else  if ([self.selectPhotoType isEqualToString:@"2"]) {
+        //显示
+        _showUnAttendMarkView.hidden = NO;
+        [self.showUnAttendMarkView.imageArr insertObject:image atIndex:0];
+        //更新UI
+        [self.showUnAttendMarkView updateUI];
+
+    }
     return;
 }
 //相机或相册的取消代理方法
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-    //显示确认信息view
-    self.showTureSingInView.hidden = NO;
+    //选择照片类型  1 确认打卡view 2不用打卡添加备注view
+    if ([self.selectPhotoType isEqualToString:@"1"]) {
+        //显示确认信息view
+        self.showTureSingInView.hidden = NO;
+    }else  if ([self.selectPhotoType isEqualToString:@"2"]) {
+        //显示不用打卡备注view
+        self.showUnAttendMarkView.hidden = NO;
+    }
 }
 #pragma mark --------定位相关---------
 // 手机定位你当前的位置，并获得你位置的信息
@@ -651,18 +807,50 @@ AMapLocationManagerDelegate
     //请求数据
     [self requestAttendInfo:date];
 }
+
+//通过地址和经纬度 返回是否在正常考勤范围内
+-(BOOL)updateAddress:(NSString *)addressStr location:(CLLocation *)location{
+    NSString *nowStr =[NSString stringWithFormat:@"%@",self.dataDict[@"now"]];
+     BOOL isScope = NO;
+    if ([nowStr isEqualToString:@"1"]) {
+        if (self.cardArr.count > 0) {
+            NSDictionary *dict = self.cardArr[self.attendCardIndexPath.row];
+            NSString *titleStr = [NSString stringWithFormat:@"%@",dict[@"title"]];
+            //1 打卡 2还未到打卡时间 3已过打卡时间
+            if ([titleStr isEqualToString:@"1"]) {
+                NSDictionary *dict = self.cardArr[self.attendCardIndexPath.row];
+                NSArray *arr = [SDTool getData:dict Locat:location];
+                for (NSDictionary *dict in arr) {
+                    NSString *isScopeStr  = dict[@"isScope"];
+                    if ([isScopeStr isEqualToString:@"1"]) {
+                        isScope = YES;
+                    }
+                }
+            }
+        }
+    }
+    return isScope;
+}
+
 //打卡确认信息
 -(void)showTureSingView:(NSString*)faceStatusStr{
      __weak typeof(self) weakSelf = self;
     weakSelf.showTureSingInView = [[ShowTureSignInView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
     [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showTureSingInView];
     if (self.reGeocode != nil) {
-        weakSelf.showTureSingInView.addressStr = self.reGeocode.formattedAddress;
+        if ([self updateAddress:self.reGeocode.formattedAddress location:self.userLocation]) {
+            [weakSelf.showTureSingInView updateAddress:weakSelf.reGeocode.formattedAddress andAddressStaute:YES];
+        }else{
+            [weakSelf.showTureSingInView updateAddress:weakSelf.reGeocode.formattedAddress andAddressStaute:NO];
+        }
     }
+    
     weakSelf.showTureSingInView.faceStatusStr = faceStatusStr;
     weakSelf.showTureSingInView.selectPhotoBlock = ^{
         //隐藏
         weakSelf.showTureSingInView.hidden = YES;
+        //选择照片类型  1 确认打卡view 2不用打卡添加备注view
+        weakSelf.selectPhotoType = @"1";
         
         UIImagePickerController* picker = [[UIImagePickerController alloc] init];
         picker.delegate = weakSelf;
@@ -741,6 +929,7 @@ AMapLocationManagerDelegate
     }
     return _showMarkView;
 }
+
 - (NSDateFormatter *)requestDateFormatter{
     static NSDateFormatter *dateFormatter;
     if(!dateFormatter){
@@ -828,9 +1017,20 @@ AMapLocationManagerDelegate
     param[@"agId"] = [SDUserInfo obtainWithProGroupId];
     param[@"clockinNum"] = [NSNumber numberWithInteger:self.faceClockinNum];
     param[@"clockinType"] = [NSNumber numberWithInteger:self.faceClockinType];
+    //获取系统版本 例如：9.2
+    NSString *sysVersion = [[UIDevice currentDevice] systemVersion];
+    param[@"versionNumber"] =sysVersion;
+    
+    param[@"version"] =[SDTool deviceModelName];
+    
     NSMutableArray *dataArr= [NSMutableArray array];
     //图片旋转90度
     [dataArr addObject:[self.faceImage fixOrientation]];
+    
+    if (self.faceImage == nil) {
+        [SDShowSystemPrompView showSystemPrompStr:@"人脸验证失败，请重新验证人脸！"];
+        return;
+    }
  
     [[KRMainNetTool sharedKRMainNetTool] upLoadData:HTTP_APPATTENDFACERECOGNITION_URL params:param.copy andData:dataArr.copy waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
@@ -842,6 +1042,8 @@ AMapLocationManagerDelegate
            
             // 1人脸验证通过 0未通过
             if ([succStr isEqualToString:@"1"]) {
+                self.cardDataDict[@"abnormalIdentityIs"] = [NSNumber numberWithInteger:1];
+                self.cardDataDict[@"vioLationId"] = showdata[@"id"];
                 //确认信息重新验证
                 if (self.isTureAgainFace) {
                     [self showTureSingView:@"1"];
@@ -852,16 +1054,15 @@ AMapLocationManagerDelegate
                         [self showTureSingView:@"1"];
                         return ;
                     }
-                    self.cardDataDict[@"abnormalIdentityIs"] = [NSNumber numberWithInteger:1];
-                    self.cardDataDict[@"vioLationId"] = showdata[@"id"];
                     //请求数据
                     [self requsetAttendSignIn];
                 }
             }else{
+                self.cardDataDict[@"abnormalIdentityIs"] = [NSNumber numberWithInteger:2];
+                self.cardDataDict[@"vioLationId"] = showdata[@"id"];
                 //确认信息重新验证
                 if (!self.isTureAgainFace) {
-                    self.cardDataDict[@"abnormalIdentityIs"] = [NSNumber numberWithInteger:2];
-                    self.cardDataDict[@"vioLationId"] = showdata[@"id"];
+                   
                     [self showTureSingView:@"2"];
                 }else{
                     NSNumber *abnormalCoordinateIs = self.cardDataDict[@"abnormalCoordinateIs"];
@@ -882,12 +1083,16 @@ AMapLocationManagerDelegate
     NSMutableArray *imageArr = self.showTureSingInView.imageArr;
     //移除最后一个
     [imageArr removeLastObject];
-
+    
     [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_APPATTENDANCEAPPDOSIGNIN_URL params:self.cardDataDict.copy andData:imageArr.copy waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
-            if (self.showTureSingInView) {
-                //显示确认打卡信息view
-                self.showTureSingInView.hidden = NO;
+            if ([error isEqualToString:@"打卡失败，请重新打卡！"]) {
+                 [self.showTureSingInView removeFromSuperview];
+            }else{
+                if (self.showTureSingInView) {
+                    //显示确认打卡信息view
+                    self.showTureSingInView.hidden = NO;
+                }
             }
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
@@ -898,7 +1103,6 @@ AMapLocationManagerDelegate
         //请求数据
         [self requestAttendInfo:self.selectCalendarStr];
     }];
-   
 }
 
 

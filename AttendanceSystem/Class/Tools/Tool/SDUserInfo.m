@@ -118,7 +118,7 @@
     mutableDict[@"phone"] = dict[@"phone"];
     mutableDict[@"photo"] = dict[@"photo"];
     mutableDict[@"photoStatus"] = dict[@"photoStatus"];
-    mutableDict[@"plaformId"] = dict[@"plaformId"];
+    mutableDict[@"platformId"] = dict[@"platformId"];
     mutableDict[@"positionName"] = dict[@"positionName"];
     mutableDict[@"proGroupId"] = dict[@"proGroupId"];
     mutableDict[@"proGroupName"] = dict[@"proGroupName"];
@@ -227,7 +227,7 @@
     NSDictionary *dict = [userD objectForKey:@"Login"];
     return dict[@"msgCount"];
 }
-//获取plaformId
+//获取platformId
 +(NSString *) obtainWithPlafrmId{
     NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
     NSDictionary *dict = [userD objectForKey:@"Login"];

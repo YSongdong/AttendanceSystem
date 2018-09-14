@@ -81,15 +81,21 @@ UIImagePickerControllerDelegate
 @property (nonatomic,assign) NSInteger faceClockinNum;
 //记录face 1上班 2下班
 @property (nonatomic,assign) NSInteger faceClockinType;
+//记录地点是否异常  1 正常 2异常
+@property (nonatomic,strong) NSString *addrssStatus;
+
 @end
 
 @implementation SDAgainLocatController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.nowLocatIndex = 0;
+    self.addrssStatus = @"2";
     [self createNavi];
     [self createLocatView];
 }
+
 -(void)createLocatView{
     __weak typeof(self) weakSelf = self;
     //添加toolview
@@ -125,7 +131,7 @@ UIImagePickerControllerDelegate
         weakSelf.cardDataDict = [NSMutableDictionary dictionary];
         weakSelf.cardDataDict[@"agId"] =[SDUserInfo obtainWithProGroupId];
         weakSelf.cardDataDict[@"agName"] =[SDUserInfo obtainWithProGroupName];
-        weakSelf.cardDataDict[@"plaformId"] =[SDUserInfo obtainWithPlafrmId];
+        weakSelf.cardDataDict[@"platformId"] =[SDUserInfo obtainWithPlafrmId];
         weakSelf.cardDataDict[@"unitId"] =[SDUserInfo obtainWithUniId];
         weakSelf.cardDataDict[@"userId"] =[SDUserInfo obtainWithUserId];
         weakSelf.cardDataDict[@"clockinNum"] =weakSelf.dict[@"clockinNum"];
@@ -210,6 +216,18 @@ UIImagePickerControllerDelegate
     [self.locationManager setLocatingWithReGeocode:YES];
     //开始持续定位
     [self.locationManager startUpdatingLocation];
+    
+//    [[GDLocationManager shareManager] startUpdateLocation];
+//    [[GDLocationManager shareManager] startReportLocation];
+//
+//    [GDLocationManager shareManager].locationBlock = ^(NSDictionary *dict) {
+//        weakSelf.userLocation=dict[@"location"];
+//        weakSelf.reGeocode =dict[@"reGeocode"];
+//       // dispatch_async(dispatch_get_main_queue(), ^{
+//            [weakSelf updateAddress:weakSelf.reGeocode.formattedAddress location:weakSelf.userLocation];
+//       // });
+//    };
+    
 #pragma mark ----设置围栏----
     self.geoFenceManager = [[AMapGeoFenceManager alloc] init];
     self.geoFenceManager.delegate = self;
@@ -303,14 +321,14 @@ UIImagePickerControllerDelegate
     NSMutableArray *minArr = [NSMutableArray array];
     //取出在范围的数据源Index
     NSMutableArray *indexArr =[NSMutableArray array];
-    BOOL isScope = NO;
+    self.addrssStatus = @"2";
     //默认不是外勤
     NSString *isGoStr = @"1";
     for (int i=0; i<arr.count; i++) {
         NSDictionary *dict = arr[i];
         NSString *isScopeStr = dict[@"isScope"];
         if ([isScopeStr isEqualToString:@"1"]) {
-            isScope = YES;
+            self.addrssStatus = @"1";
             self.nowLocatIndex = [dict[@"index"]integerValue];
             [indexArr addObject:[NSString stringWithFormat:@"%d",i]];
             NSString *isGoStr = [NSString stringWithFormat:@"%@",dict[@"isGo"]];
@@ -321,7 +339,45 @@ UIImagePickerControllerDelegate
         NSString *minStr = dict[@"distance"];
         [minArr addObject:minStr];
     }
-    if (isScope) {
+    if ([self.addrssStatus isEqualToString:@"1"]) {
+        [self.toolView updateAddressStatu:@"1" address:self.reGeocode.formattedAddress isGo:isGoStr];
+    }else{
+        //计算最近离打卡距离
+        CGFloat min =[[minArr valueForKeyPath:@"@min.floatValue"] floatValue];
+        self.toolView.minDistance = min;
+        [self.toolView updateAddressStatu:@"2" address:self.reGeocode.formattedAddress isGo:isGoStr];
+        //地图上标注点view
+        self.annotationView.calloutView.concetLab.text = @"未进入考勤范围";
+    }
+}
+
+//通过地址和经纬度 返回是否在正常考勤范围内
+-(void)updateAddress:(NSString *)addressStr location:(CLLocation *)location{
+    NSArray *arr = [SDTool getData:self.dict Locat:location];
+    self.scopeDataArr = [NSMutableArray arrayWithArray:arr];
+    //取出半径
+    NSMutableArray *minArr = [NSMutableArray array];
+    //取出在范围的数据源Index
+    NSMutableArray *indexArr =[NSMutableArray array];
+   self.addrssStatus = @"2";
+    //默认不是外勤
+    NSString *isGoStr = @"1";
+    for (int i=0; i<arr.count; i++) {
+        NSDictionary *dict = arr[i];
+        NSString *isScopeStr = dict[@"isScope"];
+        if ([isScopeStr isEqualToString:@"1"]) {
+            self.addrssStatus = @"1";
+            self.nowLocatIndex = [dict[@"index"]integerValue];
+            [indexArr addObject:[NSString stringWithFormat:@"%d",i]];
+            NSString *isGoStr = [NSString stringWithFormat:@"%@",dict[@"isGo"]];
+            if ([isGoStr isEqualToString:@"2"]) {
+                isGoStr = @"2";
+            }
+        }
+        NSString *minStr = dict[@"distance"];
+        [minArr addObject:minStr];
+    }
+    if ([self.addrssStatus  isEqualToString:@"1"]) {
         [self.toolView updateAddressStatu:@"1" address:self.reGeocode.formattedAddress isGo:isGoStr];
     }else{
         //计算最近离打卡距离
@@ -357,10 +413,14 @@ UIImagePickerControllerDelegate
         //获取照片
         [[FVAppSdk sharedManager]gatherWithParentController:self];
         [FVAppSdk sharedManager].fvLanderDelegate= self;
-    }else{
+    }else if ([self.faceTypeStr isEqualToString:@"1"]) {
         //眨眼
         [[FVAppSdk sharedManager]livingWithParentController:self mode:FVAppLivingFastMode level:FVAppLivingSafeMiddleMode];
         [FVAppSdk sharedManager].fvLanderDelegate= self;
+    }else if ([self.faceTypeStr isEqualToString:@"3"]){
+        //眨眼 + 随机
+        [[FVAppSdk sharedManager]livingWithParentController:self mode:FVAppLivingBaseMode level:FVAppLivingSafeMiddleMode];
+        [FVAppSdk sharedManager].fvLanderDelegate =  self;
     }
 }
 #pragma mark -----人脸-----
@@ -409,7 +469,11 @@ UIImagePickerControllerDelegate
     weakSelf.showTureSingInView = [[ShowTureSignInView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
     [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showTureSingInView];
     if (self.reGeocode != nil) {
-        weakSelf.showTureSingInView.addressStr = self.reGeocode.formattedAddress;
+        if ([self.addrssStatus isEqualToString:@"1"]) {
+            [weakSelf.showTureSingInView updateAddress:weakSelf.reGeocode.formattedAddress andAddressStaute:YES];
+        }else{
+            [weakSelf.showTureSingInView updateAddress:weakSelf.reGeocode.formattedAddress andAddressStaute:NO];
+        }
     }
     weakSelf.showTureSingInView.faceStatusStr = faceStatusStr;
     weakSelf.showTureSingInView.selectPhotoBlock = ^{
@@ -580,9 +644,21 @@ UIImagePickerControllerDelegate
     param[@"agId"] = [SDUserInfo obtainWithProGroupId];
     param[@"clockinNum"] = [NSNumber numberWithInteger:self.faceClockinNum];
     param[@"clockinType"] = [NSNumber numberWithInteger:self.faceClockinType];
+    //获取系统版本 例如：9.2
+    NSString *sysVersion = [[UIDevice currentDevice] systemVersion];
+    param[@"versionNumber"] =sysVersion;
+
+    param[@"version"] =[SDTool deviceModelName];
+    
     NSMutableArray *dataArr= [NSMutableArray array];
     //图片旋转90度
     [dataArr addObject:[self.faceImage fixOrientation]];
+    
+    if (self.faceImage == nil) {
+        [SDShowSystemPrompView showSystemPrompStr:@"人脸验证失败，请重新验证人脸！"];
+        return;
+    }
+    
     [[KRMainNetTool sharedKRMainNetTool] upLoadData:HTTP_APPATTENDFACERECOGNITION_URL params:param.copy andData:dataArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
        
         if (error) {
@@ -593,6 +669,8 @@ UIImagePickerControllerDelegate
             NSString *succStr = [NSString stringWithFormat:@"%@",showdata[@"succ"]];
             // 1人脸验证通过 0未通过
             if ([succStr isEqualToString:@"1"]) {
+                self.cardDataDict[@"abnormalIdentityIs"] = [NSNumber numberWithInteger:1];
+                self.cardDataDict[@"vioLationId"] = showdata[@"id"];
                 //确认信息重新验证
                 if (self.isTureAgainFace) {
                     [self showTureSingView:@"1"];
@@ -603,18 +681,17 @@ UIImagePickerControllerDelegate
                         [self showTureSingView:@"1"];
                         return;
                     }
-                    self.cardDataDict[@"abnormalIdentityIs"] = [NSNumber numberWithInteger:1];
-                    self.cardDataDict[@"vioLationId"] = showdata[@"id"];
                     //请求数据
                     [self requsetAttendSignIn];
                 }
             }else{
+                self.cardDataDict[@"abnormalIdentityIs"] = [NSNumber numberWithInteger:2];
+                self.cardDataDict[@"vioLationId"] = showdata[@"id"];
                 //确认信息重新验证
                 if (!self.isTureAgainFace) {
-                    self.cardDataDict[@"abnormalIdentityIs"] = [NSNumber numberWithInteger:1];
-                    self.cardDataDict[@"vioLationId"] = showdata[@"id"];
                     [self showTureSingView:@"2"];
                 }else{
+                    
                     NSDictionary *nowDict =  self.scopeDataArr[self.nowLocatIndex];
                     if ([nowDict[@"isScope"] isEqualToString:@"2"]) {
                         [self showTureSingView:@"2"];
@@ -638,9 +715,13 @@ UIImagePickerControllerDelegate
     
     [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_APPATTENDANCEAPPDOSIGNIN_URL params:self.cardDataDict andData:imageArr.copy waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
-            if (self.showTureSingInView) {
-                //显示确认打卡信息view
-                self.showTureSingInView.hidden = NO;
+            if ([error isEqualToString:@"打卡失败，请重新打卡！"]) {
+                [self.showTureSingInView removeFromSuperview];
+            }else{
+                if (self.showTureSingInView) {
+                    //显示确认打卡信息view
+                    self.showTureSingInView.hidden = NO;
+                }
             }
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;

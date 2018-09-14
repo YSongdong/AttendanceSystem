@@ -109,11 +109,13 @@
     NSDictionary *dict = self.dataArr[indexPath.row];
     NSString *allTypeStr = [NSString stringWithFormat:@"%@",dict[@"allType"]];
     RecordApproveDetaController *detaVC = [[RecordApproveDetaController alloc]init];
+    detaVC.isShowSuessRevoke =NO;
     if ([allTypeStr isEqualToString:@"3"]) {
          NSInteger type =[dict[@"type"] integerValue];
         if (type > 0 && type < 9) {
             detaVC.cardIdStr = dict[@"approvalId"];
             detaVC.isApplyFor = YES;
+            detaVC.isShowSuessRevoke = YES;
         }
         NSString *statusStr  =[NSString stringWithFormat:@"%@",dict[@"status"]];
         if ([statusStr isEqualToString:@"1"]) {

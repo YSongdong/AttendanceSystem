@@ -25,7 +25,6 @@ singleton_implementation(KRMainNetTool)
 - (void)postRequstWith:(NSString *)url params:(NSDictionary *)dic withModel:(Class)model waitView:(UIView *)waitView complateHandle:(void(^)(id showdata,NSString *error))complet {
     
  //   NSLog(@"-----url--%@----",url);
-    
     //定义需要加载动画的HUD
     __block MBProgressHUD *HUD;
     if (waitView != nil) {
@@ -53,7 +52,6 @@ singleton_implementation(KRMainNetTool)
         dispatch_async(dispatch_get_main_queue(), ^{
             [HUD hideAnimated:YES];
         });
-       
        //判断返回的状态，200即为服务器查询成功，1服务器查询失败
        NSNumber  *code = responseObject[@"code"];
        
@@ -89,7 +87,6 @@ singleton_implementation(KRMainNetTool)
         });
         complet(nil,@"网络错误");
     }];
-
 }
 // get  需要显示加载动画的接口方法
 - (void)getRequstWith:(NSString *)url params:(NSDictionary *)dic withModel:(Class)model waitView:(UIView *)waitView complateHandle:(void(^)(id showdata,NSString *error))complet{

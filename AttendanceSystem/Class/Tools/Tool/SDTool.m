@@ -8,6 +8,9 @@
 
 #import "SDTool.h"
 #import <CommonCrypto/CommonDigest.h>
+
+#import <sys/utsname.h>
+
 @implementation SDTool
 
 //touken和userid 返回新touken
@@ -28,9 +31,6 @@
     }
     return result;
 }
-
-
-
 
 #pragma mark - 将某个时间戳转化成 时间
 //将某个时间戳转化成 时间
@@ -192,8 +192,12 @@
 +(NSArray *) getData:(NSDictionary *)Datadict Locat:(CLLocation *)location{
     NSMutableArray *coordArr  = [NSMutableArray array];
     
+    if (![Datadict[@"coordinate"]isKindOfClass:[NSArray class]]) {
+        return @[];
+    }
+    
     NSArray *coordinateArr = Datadict[@"coordinate"];
-
+    
     if ( coordinateArr.count > 0 ) {
         for (int i=0; i<coordinateArr.count; i++) {
             NSDictionary *coorDict = coordinateArr[i];
@@ -231,5 +235,37 @@
     [imageView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"nomalImage"]options:SDWebImageRetryFailed];
 }
 
+//手机型号
++ (NSString*)deviceModelName
+{
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    NSString *deviceModel = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+    
+    if ([deviceModel isEqualToString:@"iPhone5,1"])    return @"iPhone 5";
+    if ([deviceModel isEqualToString:@"iPhone5,2"])    return @"iPhone 5 (GSM+CDMA)";
+    if ([deviceModel isEqualToString:@"iPhone5,3"])    return @"iPhone 5c (GSM)";
+    if ([deviceModel isEqualToString:@"iPhone5,4"])    return @"iPhone 5c (GSM+CDMA)";
+    if ([deviceModel isEqualToString:@"iPhone6,1"])    return @"iPhone 5s (GSM)";
+    if ([deviceModel isEqualToString:@"iPhone6,2"])    return @"iPhone 5s (GSM+CDMA)";
+    if ([deviceModel isEqualToString:@"iPhone7,1"])    return @"iPhone 6 Plus";
+    if ([deviceModel isEqualToString:@"iPhone7,2"])    return @"iPhone 6";
+    if ([deviceModel isEqualToString:@"iPhone8,1"])    return @"iPhone 6s";
+    if ([deviceModel isEqualToString:@"iPhone8,2"])    return @"iPhone 6s Plus";
+    if ([deviceModel isEqualToString:@"iPhone8,4"])    return @"iPhone SE";
+    // 日行两款手机型号均为日本独占，可能使用索尼FeliCa支付方案而不是苹果支付
+    if ([deviceModel isEqualToString:@"iPhone9,1"])    return @"国行、日版、港行iPhone 7";
+    if ([deviceModel isEqualToString:@"iPhone9,2"])    return @"港行、国行iPhone 7 Plus";
+    if ([deviceModel isEqualToString:@"iPhone9,3"])    return @"美版、台版iPhone 7";
+    if ([deviceModel isEqualToString:@"iPhone9,4"])    return @"美版、台版iPhone 7 Plus";
+    if ([deviceModel isEqualToString:@"iPhone10,1"])   return @"iPhone_8";
+    if ([deviceModel isEqualToString:@"iPhone10,4"])   return @"iPhone_8";
+    if ([deviceModel isEqualToString:@"iPhone10,2"])   return @"iPhone_8_Plus";
+    if ([deviceModel isEqualToString:@"iPhone10,5"])   return @"iPhone_8_Plus";
+    if ([deviceModel isEqualToString:@"iPhone10,3"])   return @"iPhone_X";
+    if ([deviceModel isEqualToString:@"iPhone10,6"])   return @"iPhone_X";
+    
+    return deviceModel;
+}
 
 @end

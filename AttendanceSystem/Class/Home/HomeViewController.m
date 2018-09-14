@@ -21,17 +21,15 @@
 #import "MineChenkApplyForController.h"
 #import "OverTimeApplyforController.h"
 
-
 #import "MessageCentreController.h"
 #import "AnnouncentViewController.h"
 #import "AttendCountController.h"
-
-
 
 @interface HomeViewController ()
 <
 SGAdvertScrollViewDelegate
 >
+
 //考勤专区高
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *attendaceConstraintHeight;
 //申请专区高
@@ -101,18 +99,22 @@ SGAdvertScrollViewDelegate
     [super viewDidLoad];
     //更新ui
     [self updateView];
-    
+
 }
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
     //隐藏Tabbar
     self.tabBarController.tabBar.hidden = YES;
-    //请求数据
-    [weakSelf requestUserInfoData];
-    //请求公告
-    [weakSelf requestBulletinDataList];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //请求数据
+        [weakSelf requestUserInfoData];
+    });
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //请求公告
+        [weakSelf requestBulletinDataList];
+    });
 }
 //更新ui
 -(void) updateView{

@@ -30,4 +30,6 @@
 //更新UI
 -(void)updateUI;
 
+-(void)updateAddress:(NSString *) addressStr andAddressStaute:(BOOL)addressStatu;
+
 @end

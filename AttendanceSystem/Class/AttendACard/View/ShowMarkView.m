@@ -16,6 +16,8 @@ UITextViewDelegate
 @property (nonatomic,strong)UILabel *showTimeLab;
 //打卡地点
 @property (nonatomic,strong) UILabel *cardAddressLab;
+//地址异常
+@property (nonatomic,strong) UILabel  *addressStatuLab;
 //人脸状态
 @property (nonatomic,strong)UILabel *faceStatuLab;
 //提示信息
@@ -106,6 +108,7 @@ UITextViewDelegate
     //地点view
     UIView *addressConcetView  = [[UIView alloc]init];
     [samilView addSubview:addressConcetView];
+    addressConcetView.tag = 500;
     addressConcetView.backgroundColor  =[UIColor colorTextWhiteColor];
     [addressConcetView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(titleView.mas_bottom).offset(1);
@@ -135,6 +138,7 @@ UITextViewDelegate
     
     UIImageView *addressImageV = [[UIImageView alloc]init];
     [addressConcetView addSubview:addressImageV];
+    addressImageV.tag = 502;
     addressImageV.image = [UIImage imageNamed:@"qrxx_ico_dw"];
     [addressImageV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(timeImageV.mas_bottom).offset(KSIphonScreenH(12));
@@ -150,6 +154,17 @@ UITextViewDelegate
         make.left.equalTo(weakSelf.showTimeLab.mas_left);
         make.centerY.equalTo(addressImageV.mas_centerY);
         make.right.equalTo(addressConcetView).offset(-KSIphonScreenW(15));
+    }];
+    
+    self.addressStatuLab =  [[UILabel alloc]init];
+    [addressConcetView addSubview:self.addressStatuLab];
+    self.addressStatuLab.font = Font(12);
+    self.addressStatuLab.textColor = [UIColor colorWithHexString:@"#ffb046"];
+    self.addressStatuLab.text = @"地点异常";
+    [self.addressStatuLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(weakSelf.cardAddressLab.mas_right).offset(5);
+        make.right.equalTo(addressConcetView).offset(-KSIphonScreenW(10));
+        make.centerY.equalTo(weakSelf.cardAddressLab.mas_centerY);
     }];
     
     //开启验证
@@ -285,10 +300,32 @@ UITextViewDelegate
 }
 -(void)setDict:(NSDictionary *)dict{
     _dict = dict;
+    
+    UIImageView *addressImageV = [self viewWithTag:502];
+    UIView *addressConcetView = [self viewWithTag:500];
     //打卡时间
      self.showTimeLab.text = [NSString stringWithFormat:@"打卡时间 %@",dict[@"timeClockinHi"]];
+    
+    NSString *abnormalCoordinateIsStr = [NSString stringWithFormat:@"%@",dict[@"abnormalCoordinateIs"]];
     //打卡地点
     self.cardAddressLab.text = [NSString stringWithFormat:@"打卡地点 %@",dict[@"clockinCoordinate"][@"title"]];
+    if ([abnormalCoordinateIsStr isEqualToString:@"1"]) {
+        self.addressStatuLab.hidden = YES;
+    }else{
+        
+        [self.cardAddressLab mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.showTimeLab.mas_left);
+            make.centerY.equalTo(addressImageV.mas_centerY);
+        }];
+        self.addressStatuLab.hidden = NO;
+        [self.addressStatuLab mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.cardAddressLab.mas_right).offset(5);
+            make.right.equalTo(addressConcetView).offset(-KSIphonScreenW(15));
+            make.width.equalTo(@60);
+            make.centerY.equalTo(self.cardAddressLab.mas_centerY);
+        }];
+    }
+    
     //身份验证
     NSString *faceStatuStr = [NSString stringWithFormat:@"%@",dict[@"faceStatus"]];
     UIImageView *faceImageV  = [self viewWithTag:200];

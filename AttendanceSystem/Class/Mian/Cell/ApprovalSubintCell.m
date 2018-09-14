@@ -30,19 +30,19 @@
         make.right.left.bottom.equalTo(weakSelf);
     }];
     
-    UIButton *subimtBtn  =[UIButton buttonWithType:UIButtonTypeCustom];
-    [bgView addSubview:subimtBtn];
-    [subimtBtn setTitle:@"提交" forState:UIControlStateNormal];
-    [subimtBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
-    subimtBtn.titleLabel.font = Font(16);
-    [subimtBtn setBackgroundImage:[UIImage imageNamed:@"btn_01"] forState:UIControlStateNormal];
-    [subimtBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.subimtBtn  =[UIButton buttonWithType:UIButtonTypeCustom];
+    [bgView addSubview:self.subimtBtn];
+    [self.subimtBtn setTitle:@"提交" forState:UIControlStateNormal];
+    [self.subimtBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
+    self.subimtBtn.titleLabel.font = Font(16);
+    [self.subimtBtn setBackgroundImage:[UIImage imageNamed:@"btn_01"] forState:UIControlStateNormal];
+    [self.subimtBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(bgView).offset(17);
         make.left.equalTo(bgView).offset(25);
         make.right.equalTo(bgView).offset(-25);
         make.height.equalTo(@44);
     }];
-    [subimtBtn addTarget:self action:@selector(selectSubimtAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.subimtBtn addTarget:self action:@selector(selectSubimtAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 -(void)selectSubimtAction:(UIButton *) sender{
     

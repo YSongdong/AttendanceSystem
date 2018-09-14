@@ -81,6 +81,19 @@ UIImagePickerControllerDelegate
     if (indexPath.row == 0) {
         SelectLeaveInTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:SELECTLEAVEINTIME_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //判断修改
+        if (self.isAlter) {
+            // 开始时间
+            cell.showSelectBeginTimeLab.text = self.alterDataDict[@"startTime"];
+            cell.showSelectBeginTimeLab.textColor = [UIColor colorTextBg65BlackColor];
+            self.beginTimeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"startTime"]];
+            //结束时间
+            cell.showSelectEndTimeLab.text = self.alterDataDict[@"endTime"];
+            cell.showSelectEndTimeLab.textColor = [UIColor colorTextBg65BlackColor];
+            self.endTimeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"endTime"]];
+            //时长
+            cell.showTimeLongLab.text = [NSString stringWithFormat:@"%@",self.alterDataDict[@"numbers"]];
+        }
         //开始时间
         cell.beginTimeBlock = ^{
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
@@ -109,6 +122,12 @@ UIImagePickerControllerDelegate
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.showReasonLab.text = @"加班事由";
         cell.showPropentReasonLab.text = @"请输入加班事由";
+        //判断修改
+        if (self.isAlter) {
+            cell.showReasonLab.hidden= NO;
+            cell.showPropentReasonLab.text = [NSString stringWithFormat:@"%@",self.alterDataDict[@"overTimeInfo"]];
+            self.leaveReasonStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"overTimeInfo"]];
+        }
         cell.reasonBlock = ^(NSString *reasonStr) {
             weakSelf.leaveReasonStr = reasonStr;
         };
@@ -116,6 +135,17 @@ UIImagePickerControllerDelegate
     }else if(indexPath.row ==2){
         ApprovalSelectPhotoCell *cell = [tableView dequeueReusableCellWithIdentifier:APPROVALSELECTPHOTO_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //判断修改
+        if (self.isAlter) {
+            NSArray *imageArr = self.alterDataDict[@"images"];
+            if (imageArr.count > 0) {
+                for (int i=0; i<imageArr.count; i++) {
+                    [cell.imageArr insertObject:imageArr[i] atIndex:0];
+                }
+                //更新UI
+                [cell updateUI];
+            }
+        }
         //选择相机
         cell.selectPhotoBlock = ^{
             [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showSelectCameraView];
@@ -137,6 +167,11 @@ UIImagePickerControllerDelegate
     }else{
         ApprovalSubintCell *cell  = [tableView dequeueReusableCellWithIdentifier:APPROVALSUBINT_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //判断修改
+        if (self.isAlter) {
+            [cell.subimtBtn setTitle:@"确定修改" forState:UIControlStateNormal];
+            [cell.subimtBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
+        }
         cell.subimtBlock = ^{
             //提交
             [weakSelf getSubmitData];
@@ -337,7 +372,12 @@ UIImagePickerControllerDelegate
     }
     return _approvalArr;
 }
-
+-(void)setIsAlter:(BOOL)isAlter{
+    _isAlter = isAlter;
+}
+-(void)setAlterDataDict:(NSDictionary *)alterDataDict{
+    _alterDataDict = alterDataDict;
+}
 #pragma  mark ------数据相关------
 //申请页审批流程
 -(void)requestApprovalMemberData{

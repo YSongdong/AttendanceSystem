@@ -10,6 +10,8 @@
 
 @interface ApprovalSubintCell : UITableViewCell
 
+@property (nonatomic,strong)UIButton *subimtBtn;
+
 //提交按钮点击事件
 @property (nonatomic,copy) void(^subimtBlock)(void);
 

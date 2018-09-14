@@ -10,12 +10,10 @@
 
 @interface LeaveInDestinAddressCell ()
 
-//点击选择地点
-@property (weak, nonatomic) IBOutlet UIButton *selectSettingAddressBtn;
 
 
-//重新选择地址
-@property (weak, nonatomic) IBOutlet UIButton *againSelectAddressBtn;
+
+
 
 @end
 

@@ -363,8 +363,7 @@
             testImageV.hidden= YES;
             testView.hidden = YES;
             addressImageV.hidden= YES;
-            /// 隐藏备注
-            self.markBtn.hidden = YES;
+          
             /// 补卡
             self.applyCardBtn.hidden = YES;
             //请假已通过
@@ -377,6 +376,25 @@
             }];
             [self.workStatuBtn addTarget:self action:@selector(selectLeavaAction:) forControlEvents:UIControlEventTouchUpInside];
             
+            /// 显示备注
+            self.markBtn.hidden = NO;
+            NSArray *photoArr = (NSArray *)dict[@"photo"];
+            if ([dict[@"remark"] isEqualToString:@""] && photoArr.count == 0) {
+                self.markBtn.hidden = NO;
+                [self.markBtn setTitle:@"添加备注>" forState:UIControlStateNormal];
+                [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(KSIphonScreenW(20));
+                    make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
+                }];
+            }else{
+                self.markBtn.hidden = NO;
+                [self.markBtn setTitle:@"查看备注>" forState:UIControlStateNormal];
+                [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(KSIphonScreenW(20));
+                    make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
+                }];
+            }
+            [self.markBtn addTarget:self action:@selector(nomalLookMark:) forControlEvents:UIControlEventTouchUpInside];
             return;
         }
 #pragma mark -----------是请假，打卡----------------
@@ -479,8 +497,7 @@
             //没有打卡
             addressView.hidden = YES;
             testView.hidden = YES;
-            /// 隐藏备注
-            self.markBtn.hidden = YES;
+          
             self.showCardTimeLab.hidden= YES;
             
             //判断是否标记不做异常处理
@@ -521,6 +538,27 @@
             
 //            /// 补卡
             self.applyCardBtn.hidden = YES;
+            
+            /// 显示备注
+            self.markBtn.hidden = NO;
+            NSArray *photoArr = (NSArray *)dict[@"photo"];
+            if ([dict[@"remark"] isEqualToString:@""] && photoArr.count == 0) {
+                self.markBtn.hidden = NO;
+                [self.markBtn setTitle:@"添加备注>" forState:UIControlStateNormal];
+                [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(KSIphonScreenW(20));
+                    make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
+                }];
+            }else{
+                self.markBtn.hidden = NO;
+                [self.markBtn setTitle:@"查看备注>" forState:UIControlStateNormal];
+                [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(KSIphonScreenW(20));
+                    make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
+                }];
+            }
+            [self.markBtn addTarget:self action:@selector(nomalLookMark:) forControlEvents:UIControlEventTouchUpInside];
+            
 //            self.applyCardBtn.tag = 500;
 //            [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
 //            [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -723,9 +761,7 @@
             addressImageV.hidden = YES;
             testView.hidden = YES;
             testImageV.hidden= YES;
-            //隐藏备注
-            self.markBtn.hidden = YES;
-            
+           
             //外勤已通过
             self.workStatuBtn.hidden = NO;
             self.workStatuBtn.tag =  601;
@@ -738,6 +774,27 @@
             
             //补卡已通过
             self.applyCardBtn.hidden = YES;
+                
+            // 显示备注
+            self.markBtn.hidden = NO;
+            NSArray *photoArr = (NSArray *)dict[@"photo"];
+            if ([dict[@"remark"] isEqualToString:@""] && photoArr.count == 0) {
+                self.markBtn.hidden = NO;
+                [self.markBtn setTitle:@"添加备注>" forState:UIControlStateNormal];
+                [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(KSIphonScreenW(20));
+                    make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
+                }];
+            }else{
+                self.markBtn.hidden = NO;
+                [self.markBtn setTitle:@"查看备注>" forState:UIControlStateNormal];
+                [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(weakSelf.workStatuBtn.mas_right).offset(KSIphonScreenW(20));
+                    make.centerY.equalTo(weakSelf.workStatuBtn.mas_centerY);
+                }];
+            }
+            [self.markBtn addTarget:self action:@selector(nomalLookMark:) forControlEvents:UIControlEventTouchUpInside];
+
 //            self.applyCardBtn.tag = 501;
 //            [self.applyCardBtn setTitle:@"补卡 已通过>" forState:UIControlStateNormal];
 //            [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -808,13 +865,33 @@
         testView.hidden = YES;
         addressImageV.hidden = YES;
         testImageV.hidden =  YES;
-        /// 隐藏备注
-        self.markBtn.hidden = YES;
         //外勤已通过
         self.workStatuBtn.hidden = YES;
         
 //        /// 补卡
         self.applyCardBtn.hidden = YES;
+        
+        // 显示备注
+        self.markBtn.hidden = NO;
+        NSArray *photoArr = (NSArray *)dict[@"photo"];
+        if ([dict[@"remark"] isEqualToString:@""] && photoArr.count == 0) {
+            self.markBtn.hidden = NO;
+            [self.markBtn setTitle:@"添加备注>" forState:UIControlStateNormal];
+            [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(weakSelf.unusualBtn.mas_left);
+                make.top.equalTo(weakSelf.unusualBtn.mas_bottom).offset(KSIphonScreenH(25));
+            }];
+        }else{
+            self.markBtn.hidden = NO;
+            [self.markBtn setTitle:@"查看备注>" forState:UIControlStateNormal];
+            [self.markBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(weakSelf.unusualBtn.mas_left);
+                make.top.equalTo(weakSelf.unusualBtn.mas_bottom).offset(KSIphonScreenH(25));
+            }];
+        }
+        [self.markBtn addTarget:self action:@selector(nomalLookMark:) forControlEvents:UIControlEventTouchUpInside];
+        
+        
 //        self.applyCardBtn.tag = 500;
 //        [self.applyCardBtn setTitle:@"申请补卡>" forState:UIControlStateNormal];
 //        [self.applyCardBtn mas_remakeConstraints:^(MASConstraintMaker *make) {

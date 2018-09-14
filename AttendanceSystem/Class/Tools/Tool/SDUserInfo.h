@@ -68,7 +68,7 @@
 +(NSString *) obtainWithAppListCount;
 //获取msgCount 未读消息数量
 +(NSString *) obtainWithMsgCount;
-//获取plaformId
+//获取platformId
 +(NSString *) obtainWithPlafrmId;
 //获取unitId
 +(NSString *) obtainWithUniId;

@@ -81,7 +81,11 @@
     for (int i=0; i<self.imageArr.count; i++) {
         UIImageView *imageV = [[UIImageView alloc]init];
         [markView addSubview:imageV];
-        imageV.image = self.imageArr[i];
+        if ([self.imageArr[i] isKindOfClass:[UIImage class]]) {
+           imageV.image = self.imageArr[i];
+        }else{
+            [imageV sd_setImageWithURL:self.imageArr[i]];
+        }
         imageV.tag =  200+i;
         [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(markView).offset(12+i*54+i*10);

@@ -10,6 +10,7 @@
 
 
 #import "ShowMarkView.h"
+#import "ShowUnAttendaceMarkView.h"
 
 #import "SupplementCardController.h"
 #import "RecordApproveDetaController.h"
@@ -29,14 +30,16 @@
 
 #define HEADERBGVIEWHIGHT 408
 @interface AttendRecordController ()
-<JTCalendarDelegate,UITableViewDelegate,UITableViewDataSource>
+<JTCalendarDelegate,UITableViewDelegate,UITableViewDataSource,UINavigationControllerDelegate,
+UIImagePickerControllerDelegate>
 {
     NSMutableDictionary *_eventsByDate;
     NSDate *_dateSelected;
 }
 //备注view
 @property (nonatomic,strong) ShowMarkView *showMarkView;
-
+//不需要打开的备注view
+@property (nonatomic,strong) ShowUnAttendaceMarkView *showUnAttendMarkView;
 @property (nonatomic,strong) UITableView *recordTableView;
 //日历
 @property (strong, nonatomic) JTCalendarManager *calendarManager;
@@ -65,11 +68,18 @@
     self.dataDict = nil;
     [self.dayArr removeAllObjects];
     if (self.selectDate == nil) {
-        _dateSelected =[NSDate date];
-        //获取当月的数据
-        [self requestCalendarMondData:[[self requestDateFormatter]stringFromDate:[NSDate date]]];
-        //获取当天的数据
-        [self requestCalendarDayData:[[self requestDateFormatter]stringFromDate:[NSDate date]]];
+        if (_dateSelected == nil) {
+            _dateSelected =[NSDate date];
+            //获取当月的数据
+            [self requestCalendarMondData:[[self requestDateFormatter]stringFromDate:[NSDate date]]];
+            //获取当天的数据
+            [self requestCalendarDayData:[[self requestDateFormatter]stringFromDate:[NSDate date]]];
+        }else{
+            //获取当月的数据
+            [self requestCalendarMondData:[[self requestDateFormatter]stringFromDate:_dateSelected]];
+            //获取当天的数据
+            [self requestCalendarDayData:[[self requestDateFormatter]stringFromDate:_dateSelected]];
+        }
     }else{
         _dateSelected = [[self requestDateFormatter]dateFromString:self.selectDate];
         //获取当月的数据
@@ -197,18 +207,56 @@
         ShowPunchCardCell *cell = [tableView dequeueReusableCellWithIdentifier:SHOWPUNCHCARD_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.dict = dict;
+        //是否打卡
+        NSString *timeClockinHiStr =[NSString stringWithFormat:@"%@",dict[@"timeClockinHi"]];
         //备注
         cell.markBlock = ^{
             __weak typeof(weakSelf) stongSelf = weakSelf;
-            [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showMarkView];
-            weakSelf.showMarkView.dict = dict;
-            weakSelf.showMarkView.addMarkBlock = ^(NSString *markStr) {
-                NSMutableDictionary *mutableDict =  [NSMutableDictionary dictionaryWithDictionary:dict];
-                mutableDict[@"remark"]= markStr;
-                //贴换元素
-                [stongSelf.dayArr replaceObjectAtIndex:indexPath.row withObject:mutableDict.copy];
-                [stongSelf.recordTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
-            };
+            if (![timeClockinHiStr isEqualToString:@""]) {
+                
+                [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showMarkView];
+                weakSelf.showMarkView.dict = dict;
+                weakSelf.showMarkView.addMarkBlock = ^(NSString *markStr) {
+                    NSMutableDictionary *mutableDict =  [NSMutableDictionary dictionaryWithDictionary:dict];
+                    mutableDict[@"remark"]= markStr;
+                    //贴换元素
+                    [stongSelf.dayArr replaceObjectAtIndex:indexPath.row withObject:mutableDict.copy];
+                    [stongSelf.recordTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
+                };
+            }else{
+                __weak typeof(weakSelf) stongSelf = weakSelf;
+                weakSelf.showUnAttendMarkView = [[ ShowUnAttendaceMarkView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
+                [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showUnAttendMarkView];
+                NSString *markStr = dict[@"remark"];
+                NSArray *photoArr = dict[@"photo"];
+                weakSelf.showUnAttendMarkView.isLookMark = NO;
+                if (![markStr isEqualToString:@""] || photoArr.count > 0) {
+                    weakSelf.showUnAttendMarkView.dict = dict;
+                    weakSelf.showUnAttendMarkView.isLookMark = YES;
+                }
+                weakSelf.showUnAttendMarkView.selectPhotoBlock = ^{
+                    //隐藏
+                    stongSelf.showUnAttendMarkView.hidden = YES;
+                   
+                    UIImagePickerController* picker = [[UIImagePickerController alloc] init];
+                    picker.delegate = weakSelf;
+                    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                    //设定图像缩放比例
+                    picker.cameraViewTransform = CGAffineTransformScale(picker.cameraViewTransform, 1.0, 1.0);
+                    
+                    //打开摄像画面作为背景
+                    [stongSelf presentViewController:picker animated:YES completion:nil];
+                };
+                
+                weakSelf.showUnAttendMarkView.addMarkBlock = ^(NSDictionary *markDict) {
+                    NSMutableDictionary *mutableDict =  [NSMutableDictionary dictionaryWithDictionary:dict];
+                    mutableDict[@"remark"]= markDict[@"remark"];
+                    mutableDict[@"photo"] = markDict[@"photo"];
+                    //贴换元素
+                    [stongSelf.dayArr replaceObjectAtIndex:indexPath.row withObject:mutableDict];
+                    [stongSelf.recordTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
+                };
+            }
         };
         //请假
         cell.askForLeaveBlock = ^{
@@ -275,6 +323,27 @@
     }else   {
         return KSIphonScreenH(165);
     }
+}
+#pragma mark -----拍照照片处理----
+// 选择了图片或者拍照了
+- (void)imagePickerController:(UIImagePickerController *)aPicker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    [aPicker dismissViewControllerAnimated:YES completion:nil];
+    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+    //显示
+    _showUnAttendMarkView.hidden = NO;
+    [self.showUnAttendMarkView.imageArr insertObject:image atIndex:0];
+    //更新UI
+    [self.showUnAttendMarkView updateUI];
+  
+    return;
+}
+//相机或相册的取消代理方法
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    //显示不用打卡备注view
+    self.showUnAttendMarkView.hidden = NO;
+    
 }
 #pragma mark - CalendarManager delegate------
 //改变日历的代理方法

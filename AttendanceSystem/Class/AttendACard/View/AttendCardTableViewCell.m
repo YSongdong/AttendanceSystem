@@ -230,9 +230,9 @@ AMapSearchDelegate
     ChildcoordinateDict[@"lng"] = [NSString stringWithFormat:@"%f",self.userLocation.coordinate.longitude];
     coordinateDict[@"coordinate"] = ChildcoordinateDict;
     coordinateDict[@"abnormalCoordinateIs"] =  [NSString stringWithFormat:@"%ld",(long)self.cardAddressStatu];
-    coordinateDict[@"title"] = self.addressLab.text.length == 0 ? @"": self.addressLab.text ;
+    coordinateDict[@"title"] = self.addressLab.text ;
     coordinateDict[@"deviation"] =deviationStr;
-    self.selectCardBlcok(coordinateDict.copy);
+    self.selectCardBlcok(coordinateDict);
 }
 -(void)setDataDict:(NSDictionary *)dataDict{
     _dataDict = dataDict;

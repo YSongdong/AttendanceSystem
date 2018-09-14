@@ -135,6 +135,44 @@
         make.right.equalTo(rightImageV.mas_right);
         make.centerY.equalTo(clearView.mas_centerY);
     }];
+    
+    UIView *speechRemindView = [[UIView alloc]init];
+    [self.view addSubview:speechRemindView];
+    speechRemindView.backgroundColor =  [UIColor colorTextWhiteColor];
+    [speechRemindView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(clearView.mas_bottom).offset(1);
+        make.width.height.equalTo(clearView);
+        make.centerX.equalTo(clearView.mas_centerX);
+    }];
+    
+    UILabel *remdinLab  =[[UILabel alloc]init];
+    [speechRemindView addSubview:remdinLab];
+    remdinLab.text = @"语音提醒";
+    remdinLab.textColor =[UIColor colorTextBg28BlackColor];
+    remdinLab.font = Font(16);
+    [remdinLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(showVersiLab.mas_left);
+        make.centerY.equalTo(speechRemindView.mas_centerY);
+    }];
+    
+    UISwitch *remdinSwitch = [[UISwitch alloc]init];
+    [speechRemindView addSubview:remdinSwitch];
+    NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.cqlanhui.AttendanceSystem"];;
+    remdinSwitch.on = [sharedDefaults boolForKey:@"SpeechRemdin"];
+    remdinSwitch.onTintColor = [UIColor colorCommonGreenColor];
+    [remdinSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(rightImageV.mas_right);
+        make.centerY.equalTo(speechRemindView.mas_centerY);
+    }];
+    [remdinSwitch addTarget:self action:@selector(selectRemdinChang:) forControlEvents:UIControlEventValueChanged];
+    
+}
+-(void)selectRemdinChang:(UISwitch *) sender{
+    //判断是否开启提示语音
+    NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.cqlanhui.AttendanceSystem"];
+    [sharedDefaults setBool:sender.isOn forKey:@"SpeechRemdin"];
+    //3.强制让数据立刻保存
+    [sharedDefaults synchronize];
 }
 //版本跟新
 -(void)selectVersiTap{

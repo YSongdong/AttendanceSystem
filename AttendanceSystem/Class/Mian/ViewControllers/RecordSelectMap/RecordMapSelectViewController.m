@@ -236,8 +236,13 @@ AMapSearchDelegate
 #pragma mark  -----点击事件------
 -(void)tap:(UITapGestureRecognizer *) sender{
     //回滚到表的最顶端
-    NSIndexPath* indexPat = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.searchTableView scrollToRowAtIndexPath:indexPat atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //刷新完成
+        if (self.dataArr.count > 0) {
+            NSIndexPath* indexPat = [NSIndexPath indexPathForRow:0 inSection:0];
+            [self.searchTableView scrollToRowAtIndexPath:indexPat atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        }
+    });
     //默认是搜索选择
     self.isSearchSelect = YES;
     

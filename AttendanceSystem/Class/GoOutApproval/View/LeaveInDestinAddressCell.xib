@@ -100,8 +100,8 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
-                <outlet property="againSelectAddressBtn" destination="GfK-Ov-QN0" id="8iO-g1-PNa"/>
-                <outlet property="selectSettingAddressBtn" destination="OFH-Ur-iet" id="bx6-Lz-aeQ"/>
+                <outlet property="againSelectAddressBtn" destination="GfK-Ov-QN0" id="oCO-Nr-x4e"/>
+                <outlet property="selectSettingAddressBtn" destination="OFH-Ur-iet" id="qn2-BQ-uBu"/>
                 <outlet property="showAddressBtn" destination="Rtg-Ef-wiQ" id="2Vz-zc-P1Q"/>
                 <outlet property="showAddressLab" destination="AtM-ee-PdB" id="fcv-Md-ANv"/>
                 <outlet property="showAttandRadiusLab" destination="q2R-Dn-IDC" id="TDv-D8-Gdu"/>

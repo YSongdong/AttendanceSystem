@@ -10,9 +10,14 @@
 
 @interface RecordSuessRevokeView : UIView
 
-@property (nonatomic,strong)UIButton *revokeBtn;
+@property (nonatomic,strong) UIButton *revokeBtn;
+
+@property (nonatomic,strong) UIButton *alterBtn;
 
 //撤销
 @property (nonatomic,copy) void(^suessRevokeBlock)(void);
+
+//修改
+@property (nonatomic,copy) void(^sueccAlterBlcok)(void);
 
 @end

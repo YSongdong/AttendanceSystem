@@ -79,7 +79,6 @@ UIImagePickerControllerDelegate
     [self requestApprovalMemberData];
     //监听当键将要退出时
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)  name:UIKeyboardWillHideNotification object:nil];
-   
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 6;
@@ -89,6 +88,19 @@ UIImagePickerControllerDelegate
     if (indexPath.row == 0) {
         SelectLeaveInTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:SELECTLEAVEINTIME_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //判断修改
+        if (self.isAlter) {
+            // 开始时间
+            cell.showSelectBeginTimeLab.text = self.alterDataDict[@"startTime"];
+            cell.showSelectBeginTimeLab.textColor = [UIColor colorTextBg65BlackColor];
+            self.beginTimeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"startTime"]];
+            //结束时间
+            cell.showSelectEndTimeLab.text = self.alterDataDict[@"endTime"];
+            cell.showSelectEndTimeLab.textColor = [UIColor colorTextBg65BlackColor];
+            self.endTimeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"endTime"]];
+            //时长
+            cell.showTimeLongLab.text = [NSString stringWithFormat:@"%@",self.alterDataDict[@"numbers"]];
+        }
         //开始时间
         cell.beginTimeBlock = ^{
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
@@ -115,6 +127,12 @@ UIImagePickerControllerDelegate
     }else if (indexPath.row ==1){
         ApprovarReasonCell *cell = [tableView dequeueReusableCellWithIdentifier:APPROVALREASON_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //判断修改
+        if (self.isAlter) {
+           cell.showReasonLab.hidden= NO;
+           cell.showPropentReasonLab.text = [NSString stringWithFormat:@"%@",self.alterDataDict[@"outGo"]];
+           self.leaveReasonStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"outGo"]];
+        }
         cell.reasonBlock = ^(NSString *reasonStr) {
             weakSelf.leaveReasonStr = reasonStr;
         };
@@ -122,6 +140,20 @@ UIImagePickerControllerDelegate
     }else if (indexPath.row ==2){
         LeaveInDestinAddressCell *cell = [tableView dequeueReusableCellWithIdentifier:LEAVEINDESTIONADDRESS_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //判断修改
+        if (self.isAlter) {
+            cell.showAddressLab.hidden = NO;
+            cell.showAddressLab.text = [NSString stringWithFormat:@"%@",self.alterDataDict[@"address"]];
+            
+            cell.showAddressBtn.hidden = NO;
+            cell.againSelectAddressBtn.hidden = NO;
+            
+            cell.selectSettingAddressBtn.hidden = YES;
+            
+            self.addressDict[@"title"] = [NSString stringWithFormat:@"%@",self.alterDataDict[@"address"]];
+            self.addressDict[@"location"] =  [[CLLocation alloc]initWithLatitude:[self.alterDataDict[@"lat"]doubleValue] longitude:[self.alterDataDict[@"lng"]doubleValue]];
+            self.rangeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"radius"]];
+        }
         cell.selectAddressBlock = ^{
             __weak typeof(weakSelf) stongSelf = weakSelf;
             RecordMapSelectViewController *mapSelectVC = [[RecordMapSelectViewController alloc]init];
@@ -133,6 +165,17 @@ UIImagePickerControllerDelegate
     }else if(indexPath.row ==3){
         ApprovalSelectPhotoCell *cell = [tableView dequeueReusableCellWithIdentifier:APPROVALSELECTPHOTO_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //判断修改
+        if (self.isAlter) {
+           NSArray *imageArr = self.alterDataDict[@"images"];
+            if (imageArr.count > 0) {
+                for (int i=0; i<imageArr.count; i++) {
+                    [cell.imageArr insertObject:imageArr[i] atIndex:0];
+                }
+                //更新UI
+                [cell updateUI];
+            }
+        }
         //选择相机
         cell.selectPhotoBlock = ^{
            [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showSelectCameraView];
@@ -154,9 +197,15 @@ UIImagePickerControllerDelegate
     }else{
         ApprovalSubintCell *cell  = [tableView dequeueReusableCellWithIdentifier:APPROVALSUBINT_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //判断修改
+        if (self.isAlter) {
+            [cell.subimtBtn setTitle:@"确定修改" forState:UIControlStateNormal];
+            [cell.subimtBtn setTitleColor:[UIColor colorTextWhiteColor] forState:UIControlStateNormal];
+        }
         cell.subimtBlock = ^{
             //提交
             [weakSelf getSubmitData];
+           
         };
         return cell;
     }
@@ -212,15 +261,20 @@ UIImagePickerControllerDelegate
     CLLocation *location = weaSelf.addressDict[@"location"];
     weaSelf.dataDcit[@"lat"] = [NSString stringWithFormat:@"%f",location.coordinate.latitude];
     weaSelf.dataDcit[@"lng"] = [NSString stringWithFormat:@"%f",location.coordinate.longitude];
-    weaSelf.dataDcit[@"radius"] = @"1000";
+    weaSelf.dataDcit[@"radius"] = self.rangeStr;
     
     weaSelf.dataDcit[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
     weaSelf.dataDcit[@"token"] = [SDTool getNewToken];
     weaSelf.dataDcit[@"unitId"] = [SDUserInfo obtainWithUniId];
     weaSelf.dataDcit[@"userId"] = [SDUserInfo obtainWithUserId];
     
-    //申请外出
-    [weaSelf requestSubimtData];
+    //判断修改
+    if (self.isAlter) {
+        
+    }else{
+        //申请外出
+        [weaSelf requestSubimtData];
+    }
 }
 #pragma mark ---选取照片------
 -(void) selectphotoType:(NSString *)type{
@@ -365,6 +419,12 @@ UIImagePickerControllerDelegate
         _dataDcit = [NSMutableDictionary dictionary];
     }
     return _dataDcit;
+}
+-(void)setIsAlter:(BOOL)isAlter{
+    _isAlter = isAlter;
+}
+-(void)setAlterDataDict:(NSDictionary *)alterDataDict{
+    _alterDataDict = alterDataDict;
 }
 -(NSMutableDictionary *)addressDict{
     if (!_addressDict) {

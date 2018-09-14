@@ -76,7 +76,7 @@ FVAppSdkControllerDelegate
     NSString *version= [UIDevice currentDevice].systemVersion;
     NSArray *arr =[version componentsSeparatedByString:@"."];
     NSString *verStr = arr[0];
-    if([verStr integerValue] >= 9.0 ) {
+    if([verStr integerValue] >= 11.0 ) {
          self.photoView = [[PhotoCollectView alloc]initWithFrame:CGRectMake(0, -20, KScreenW, 760)];
     }else{
          self.photoView = [[PhotoCollectView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, 760)];
