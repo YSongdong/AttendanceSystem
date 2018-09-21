@@ -70,6 +70,8 @@ UIImagePickerControllerDelegate
     [self createTableView];
     //判断修改
     if (self.isAlter) {
+        //修改数据源
+        [self alterCellData];
         //当年假时，请求
         NSString *leaveTypeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"leaveType"]];
         if ([leaveTypeStr isEqualToString:@"1"]) {
@@ -92,43 +94,7 @@ UIImagePickerControllerDelegate
     if (indexPath.row == 0) {
         SelectTimeTypeCell *cell = [tableView dequeueReusableCellWithIdentifier:SELECTTIMETYPE_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        //判断修改
-        if (self.isAlter) {
-            //当年假时，请求
-            NSString *leaveTypeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"leaveType"]];
-            NSString *typeStr;
-            if ([leaveTypeStr isEqualToString:@"1"]) {
-                typeStr = @"年假";
-            }else if ([leaveTypeStr isEqualToString:@"2"]){
-                typeStr = @"事假";
-            }else if ([leaveTypeStr isEqualToString:@"3"]){
-                typeStr = @"调休";
-            }else if ([leaveTypeStr isEqualToString:@"4"]){
-                typeStr = @"产假";
-            }else if ([leaveTypeStr isEqualToString:@"5"]){
-                typeStr = @"婚假";
-            }else if ([leaveTypeStr isEqualToString:@"6"]){
-                typeStr = @"丧假";
-            } else if ([leaveTypeStr isEqualToString:@"7"]){
-                typeStr = @"护理假";
-            }else if ([leaveTypeStr isEqualToString:@"8"]){
-                typeStr = @"病假";
-            }else if ([leaveTypeStr isEqualToString:@"9"]){
-                typeStr = @"轮休";
-            }
-            cell.showLeaveTypeLab.text =typeStr;
-            // 开始时间
-            cell.showBeginTimeLab.text = self.alterDataDict[@"startTime"];
-            cell.showBeginTimeLab.textColor = [UIColor colorTextBg65BlackColor];
-            self.beginTimeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"startTime"]];
-            //结束时间
-            cell.showEndTimeLab.text = self.alterDataDict[@"endTime"];
-            cell.showEndTimeLab.textColor = [UIColor colorTextBg65BlackColor];
-            self.endTimeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"endTime"]];
-            //时长
-            cell.showTimeLongLab.text = [NSString stringWithFormat:@"%@",self.alterDataDict[@"numbers"]];
-        }
-    
+   
         //请假类型
         cell.leaveTypeBlock = ^{
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
@@ -165,12 +131,7 @@ UIImagePickerControllerDelegate
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.showReasonLab.text = @"请假事由";
         cell.showPropentReasonLab.text = @"请输入请假事由";
-        //判断修改
-        if (self.isAlter) {
-            cell.showReasonLab.hidden= NO;
-            cell.showPropentReasonLab.text = [NSString stringWithFormat:@"%@",self.alterDataDict[@"leaveInfo"]];
-            self.leaveReasonStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"leaveInfo"]];
-        }
+        
         cell.reasonBlock = ^(NSString *reasonStr) {
             weakSelf.leaveReasonStr = reasonStr;
         };
@@ -178,17 +139,7 @@ UIImagePickerControllerDelegate
     }else if (indexPath.row ==2){
         ApprovalSelectPhotoCell *cell = [tableView dequeueReusableCellWithIdentifier:APPROVALSELECTPHONE_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        //判断修改
-        if (self.isAlter) {
-            NSArray *imageArr = self.alterDataDict[@"images"];
-            if (imageArr.count > 0) {
-                for (int i=0; i<imageArr.count; i++) {
-                    [cell.imageArr insertObject:imageArr[i] atIndex:0];
-                }
-                //更新UI
-                [cell updateUI];
-            }
-        }
+       
         //选择相机
         cell.selectPhotoBlock = ^{
             [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showSelectCameraView];
@@ -260,7 +211,7 @@ UIImagePickerControllerDelegate
     weaSelf.dataDcit[@"numbers"] = [NSString stringWithFormat:@"%.2f",timeLong];
     //请假类型
     NSString *typeStr;
-    if ([self.leaveTypeStr isEqualToString:@"请选择"]) {
+    if ([self.leaveTypeStr isEqualToString:@"请选择"] || self.leaveTypeStr == nil) {
         [SDShowSystemPrompView showSystemPrompStr:@"请假类型是必选类型"];
         return;
     }else if ([self.leaveTypeStr isEqualToString:@"年假"]) {
@@ -293,9 +244,73 @@ UIImagePickerControllerDelegate
     weaSelf.dataDcit[@"token"] = [SDTool getNewToken];
     weaSelf.dataDcit[@"unitId"] = [SDUserInfo obtainWithUniId];
     weaSelf.dataDcit[@"userId"] = [SDUserInfo obtainWithUserId];
-    
+    //修改
+    if (weaSelf.isAlter) {
+        weaSelf.dataDcit[@"recordId"] = weaSelf.alterDataDict[@"id"];
+    }
     //提交请假
     [weaSelf requestSubimtData];
+}
+//修改外出
+-(void) alterCellData{
+    //修改选择时间cell
+    NSIndexPath *timeIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    SelectTimeTypeCell *timeCell  = [self.leaveTableView cellForRowAtIndexPath:timeIndexPath];
+    // 开始时间
+    timeCell.showBeginTimeLab.text = self.alterDataDict[@"startTime"];
+    timeCell.showBeginTimeLab.textColor = [UIColor colorTextBg65BlackColor];
+    self.beginTimeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"startTime"]];
+    //结束时间
+    timeCell.showEndTimeLab.text = self.alterDataDict[@"endTime"];
+    timeCell.showEndTimeLab.textColor = [UIColor colorTextBg65BlackColor];
+    self.endTimeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"endTime"]];
+    //时长
+    timeCell.showTimeLongLab.text = [NSString stringWithFormat:@"%@",self.alterDataDict[@"numbers"]];
+    //当年假时，请求
+    NSString *leaveTypeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"leaveType"]];
+    NSString *typeStr;
+    if ([leaveTypeStr isEqualToString:@"1"]) {
+        typeStr = @"年假";
+    }else if ([leaveTypeStr isEqualToString:@"2"]){
+        typeStr = @"事假";
+    }else if ([leaveTypeStr isEqualToString:@"3"]){
+        typeStr = @"调休";
+    }else if ([leaveTypeStr isEqualToString:@"4"]){
+        typeStr = @"产假";
+    }else if ([leaveTypeStr isEqualToString:@"5"]){
+        typeStr = @"婚假";
+    }else if ([leaveTypeStr isEqualToString:@"6"]){
+        typeStr = @"丧假";
+    } else if ([leaveTypeStr isEqualToString:@"7"]){
+        typeStr = @"护理假";
+    }else if ([leaveTypeStr isEqualToString:@"8"]){
+        typeStr = @"病假";
+    }else if ([leaveTypeStr isEqualToString:@"9"]){
+        typeStr = @"轮休";
+    }
+    timeCell.showLeaveTypeLab.text =typeStr;
+    self.leaveTypeStr =typeStr;
+    
+    //修改外出原因
+    NSIndexPath *outGoIndexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+    ApprovarReasonCell *outGocell =[self.leaveTableView cellForRowAtIndexPath:outGoIndexPath];
+    outGocell.showReasonLab.hidden= NO;
+    outGocell.showPropentReasonLab.hidden = YES;
+    outGocell.cellTextView.text = [NSString stringWithFormat:@"%@",self.alterDataDict[@"leaveInfo"]];
+    //获取外出原因
+    self.leaveReasonStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"leaveInfo"]];
+    
+    //图片
+    NSIndexPath *photoIndexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+    ApprovalSelectPhotoCell *photoCell = [self.leaveTableView cellForRowAtIndexPath:photoIndexPath];
+    NSArray *imageArr = self.alterDataDict[@"images"];
+    if (imageArr.count > 0) {
+        for (int i=0; i<imageArr.count; i++) {
+            [photoCell.imageArr insertObject:imageArr[i] atIndex:0];
+        }
+        //更新UI
+        [photoCell updateUI];
+    }
 }
 #pragma mark ---选取照片------
 -(void) selectphotoType:(NSString *)type{
@@ -512,7 +527,25 @@ UIImagePickerControllerDelegate
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
     ApprovalSelectPhotoCell *cell = [self.leaveTableView cellForRowAtIndexPath:indexPath];
     [cell.imageArr removeLastObject];
-    [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_ATTAPPLEAVEADDLEAVE_URL params:self.dataDcit.copy andData:cell.imageArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
+    NSMutableArray *mutabeArr = [NSMutableArray array];
+    for (int i=0; i< cell.imageArr.count; i++) {
+        id imageName = cell.imageArr[i];
+        if ([imageName isKindOfClass:[NSString class]]) {
+            UIImageView *imageV = [[UIImageView alloc]init];
+            [imageV sd_setImageWithURL:imageName];
+            [mutabeArr addObject:imageV.image];
+        }else{
+            [mutabeArr addObject:imageName];
+        }
+    }
+    NSString *url ;
+    if (self.isAlter) {
+        //修改
+        url = HTTP_ATTAPPMODIFYLEAVE_URL ;
+    }else{
+        url = HTTP_ATTAPPLEAVEADDLEAVE_URL ;
+    }
+    [[KRMainNetTool sharedKRMainNetTool]upLoadData:url params:self.dataDcit.copy andData:mutabeArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
             [cell.imageArr addObject:[UIImage imageNamed:@"att_attendance_dialogmsg_add"]];
             [SDShowSystemPrompView showSystemPrompStr:error];

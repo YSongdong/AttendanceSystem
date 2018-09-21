@@ -57,16 +57,14 @@
     [self.dataArr removeAllObjects];
     [self requestLoadMsgData];
 }
-
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.dataArr.count;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     NSDictionary *dict = self.dataArr[indexPath.row];
     NSString *allTypeStr = [NSString stringWithFormat:@"%@",dict[@"allType"]];
-    if ([allTypeStr isEqualToString:@"2"]) {
-        //照片审核
+    if ([allTypeStr isEqualToString:@"2"] || [allTypeStr isEqualToString:@"5"]) {
+        //2 照片审核   5违规通知
         MessageChankPhotoStatuCell *cell = [tableView dequeueReusableCellWithIdentifier:MESSAGECHANKPHOTOSTATU_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.dict = dict;
@@ -77,34 +75,30 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.dict = dict;
         return cell;
-    }else{
+    }else if ([allTypeStr isEqualToString:@"1"]){
        //  1：考勤打卡
         MessageAttendaceRemindCell *cell  = [tableView dequeueReusableCellWithIdentifier:MESSAGEATTENDACEREMIND_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.dict = dict;
         return cell;
     }
+    return nil ;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSDictionary *dict = self.dataArr[indexPath.row];
     NSString *allTypeStr = [NSString stringWithFormat:@"%@",dict[@"allType"]];
-    if ([allTypeStr isEqualToString:@"2"]) {
-         //照片审核
+    if ([allTypeStr isEqualToString:@"2"] || [allTypeStr isEqualToString:@"5"]) {
+         //2照片审核  5 违规通知
         return [MessageChankPhotoStatuCell getWithCellHeight:dict];
     }else  if ([allTypeStr isEqualToString:@"3"]){
          //申请提交'
         return [MessageAttendaceGoOutCell getWithCellHeight:dict];
-    }else{
+    }else  if ([allTypeStr isEqualToString:@"1"]) {
          //1：考勤打卡
          return KSIphonScreenH(168);
     }
+    return  0.01f;
 }
-//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-//    if (tableView.contentSize.height < tableView.frame.size.height)
-//    {
-//        tableView.contentInset = UIEdgeInsetsMake(tableView.frame.size.height - tableView.contentSize.height , 0, 0, 0);
-//    }
-//}
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSDictionary *dict = self.dataArr[indexPath.row];
     NSString *allTypeStr = [NSString stringWithFormat:@"%@",dict[@"allType"]];
@@ -264,7 +258,6 @@
     }
     return _dataArr;
 }
-
 #pragma mark --------数据相关-------
 -(void)requestLoadMsgData{
     NSMutableDictionary *param =[NSMutableDictionary dictionary];

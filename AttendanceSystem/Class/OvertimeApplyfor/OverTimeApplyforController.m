@@ -68,6 +68,10 @@ UIImagePickerControllerDelegate
     self.leaveReasonStr = @"";
     [self createNavi];
     [self createTableView];
+    if (self.isAlter) {
+        //修改数据源
+        [self alterCellData];
+    }
     [self requestApprovalMemberData];
     //监听当键将要退出时
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)  name:UIKeyboardWillHideNotification object:nil];
@@ -122,12 +126,7 @@ UIImagePickerControllerDelegate
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.showReasonLab.text = @"加班事由";
         cell.showPropentReasonLab.text = @"请输入加班事由";
-        //判断修改
-        if (self.isAlter) {
-            cell.showReasonLab.hidden= NO;
-            cell.showPropentReasonLab.text = [NSString stringWithFormat:@"%@",self.alterDataDict[@"overTimeInfo"]];
-            self.leaveReasonStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"overTimeInfo"]];
-        }
+
         cell.reasonBlock = ^(NSString *reasonStr) {
             weakSelf.leaveReasonStr = reasonStr;
         };
@@ -135,17 +134,7 @@ UIImagePickerControllerDelegate
     }else if(indexPath.row ==2){
         ApprovalSelectPhotoCell *cell = [tableView dequeueReusableCellWithIdentifier:APPROVALSELECTPHOTO_CELL forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        //判断修改
-        if (self.isAlter) {
-            NSArray *imageArr = self.alterDataDict[@"images"];
-            if (imageArr.count > 0) {
-                for (int i=0; i<imageArr.count; i++) {
-                    [cell.imageArr insertObject:imageArr[i] atIndex:0];
-                }
-                //更新UI
-                [cell updateUI];
-            }
-        }
+       
         //选择相机
         cell.selectPhotoBlock = ^{
             [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showSelectCameraView];
@@ -222,9 +211,49 @@ UIImagePickerControllerDelegate
     weaSelf.dataDcit[@"token"] = [SDTool getNewToken];
     weaSelf.dataDcit[@"unitId"] = [SDUserInfo obtainWithUniId];
     weaSelf.dataDcit[@"userId"] = [SDUserInfo obtainWithUserId];
-    
+    //修改
+    if (weaSelf.isAlter) {
+        weaSelf.dataDcit[@"recordId"] = weaSelf.alterDataDict[@"id"];
+    }
     //申请外出
     [weaSelf requestSubimtData];
+}
+//修改外出
+-(void) alterCellData{
+    //修改选择时间cell
+    NSIndexPath *timeIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    SelectLeaveInTimeCell *timeCell  = [self.overTimeTableView cellForRowAtIndexPath:timeIndexPath];
+    // 开始时间
+    timeCell.showSelectBeginTimeLab.text = self.alterDataDict[@"startTime"];
+    timeCell.showSelectBeginTimeLab.textColor = [UIColor colorTextBg65BlackColor];
+    self.beginTimeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"startTime"]];
+    //结束时间
+    timeCell.showSelectEndTimeLab.text = self.alterDataDict[@"endTime"];
+    timeCell.showSelectEndTimeLab.textColor = [UIColor colorTextBg65BlackColor];
+    self.endTimeStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"endTime"]];
+    //时长
+    timeCell.showTimeLongLab.text = [NSString stringWithFormat:@"%@",self.alterDataDict[@"numbers"]];
+    
+    //修改外出原因
+    NSIndexPath *outGoIndexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+    ApprovarReasonCell *outGocell =[self.overTimeTableView cellForRowAtIndexPath:outGoIndexPath];
+    outGocell.showReasonLab.hidden= NO;
+    outGocell.showPropentReasonLab.hidden = YES;
+    outGocell.cellTextView.text = [NSString stringWithFormat:@"%@",self.alterDataDict[@"overTimeInfo"]];
+    //获取外出原因
+    self.leaveReasonStr = [NSString stringWithFormat:@"%@",self.alterDataDict[@"overTimeInfo"]];
+    
+    //图片
+    NSIndexPath *photoIndexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+    ApprovalSelectPhotoCell *photoCell = [self.overTimeTableView cellForRowAtIndexPath:photoIndexPath];
+    NSArray *imageArr = self.alterDataDict[@"images"];
+    if (imageArr.count > 0) {
+        for (int i=0; i<imageArr.count; i++) {
+            [photoCell.imageArr insertObject:imageArr[i] atIndex:0];
+        }
+        //更新UI
+        [photoCell updateUI];
+    }
 }
 #pragma mark ---选取照片------
 -(void) selectphotoType:(NSString *)type{
@@ -409,7 +438,25 @@ UIImagePickerControllerDelegate
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
     ApprovalSelectPhotoCell *cell = [self.overTimeTableView cellForRowAtIndexPath:indexPath];
     [cell.imageArr removeLastObject];
-    [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_ATTAPPOVERTIMEADDOVERTIME_URL params:self.dataDcit.copy andData:cell.imageArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
+    NSMutableArray *mutabeArr = [NSMutableArray array];
+    for (int i=0; i< cell.imageArr.count; i++) {
+        id imageName = cell.imageArr[i];
+        if ([imageName isKindOfClass:[NSString class]]) {
+            UIImageView *imageV = [[UIImageView alloc]init];
+            [imageV sd_setImageWithURL:imageName];
+            [mutabeArr addObject:imageV.image];
+        }else{
+            [mutabeArr addObject:imageName];
+        }
+    }
+    NSString *url ;
+    if (self.isAlter) {
+        //修改
+        url = HTTP_ATTAPPMODIFYOVER_URL ;
+    }else{
+        url = HTTP_ATTAPPOVERTIMEADDOVERTIME_URL ;
+    }
+    [[KRMainNetTool sharedKRMainNetTool]upLoadData:url params:self.dataDcit.copy andData:mutabeArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
         
         if (error) {
             [cell.imageArr addObject:[UIImage imageNamed:@"att_attendance_dialogmsg_add"]];

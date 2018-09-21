@@ -15,9 +15,10 @@
 @property (nonatomic,strong) UIImageView *leftImageV;
 
 @property (nonatomic,strong) UILabel *showAttendLab;
+
+@property (nonatomic,strong) UILabel *showPhotoLab;
 //显示contentType
 @property (nonatomic,strong) UILabel *showChankPhotoRulstLab;
-
 
 @end
 
@@ -79,12 +80,12 @@
     [self addSubview:contentView];
     contentView.backgroundColor = [UIColor colorTextWhiteColor];
     
-    UILabel *showPhotoLab = [[UILabel alloc]init];
-    [contentView addSubview:showPhotoLab];
-    showPhotoLab.text = @"照片审核结果";
-    showPhotoLab.font = Font(16);
-    showPhotoLab.textColor = [UIColor colorCommonGreenColor];
-    [showPhotoLab mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.showPhotoLab = [[UILabel alloc]init];
+    [contentView addSubview:self.showPhotoLab];
+    self.showPhotoLab.text = @"照片审核结果";
+    self.showPhotoLab.font = Font(16);
+    self.showPhotoLab.textColor = [UIColor colorCommonGreenColor];
+    [self.showPhotoLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(contentView).offset(KSIphonScreenH(10));
         make.left.equalTo(contentView).offset(KSIphonScreenW(10));
     }];
@@ -96,8 +97,8 @@
     self.showChankPhotoRulstLab.font = Font(14);
     self.showChankPhotoRulstLab.numberOfLines =0;
     [self.showChankPhotoRulstLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(showPhotoLab.mas_bottom).offset(KSIphonScreenH(10));
-        make.left.equalTo(showPhotoLab.mas_left);
+        make.top.equalTo(weakSelf.showPhotoLab.mas_bottom).offset(KSIphonScreenH(10));
+        make.left.equalTo(weakSelf.showPhotoLab.mas_left);
         make.right.equalTo(contentView).offset(-KSIphonScreenW(10));
         make.bottom.equalTo(contentView).offset(-KSIphonScreenH(13));
     }];
@@ -129,34 +130,77 @@
 }
 -(void)setDict:(NSDictionary *)dict{
     _dict = dict;
-    
+
+    NSString *allTypeStr = [NSString stringWithFormat:@"%@",dict[@"allType"]];
+    if ([allTypeStr isEqualToString:@"2"]) {
+         //2照片审核
+        self.leftImageV.image = [UIImage imageNamed:@"ico_zpsh"];
+        
+        self.showAttendLab.text = @"照片审核结果";
+        
+        self.showPhotoLab.text = @"照片审核结果";
+        
+    }else if ([allTypeStr isEqualToString:@"5"]){
+        // 5 违规通知
+        self.leftImageV.image = [UIImage imageNamed:@"ico_xttz"];
+        
+        self.showAttendLab.text = @"系统通知";
+        
+        self.showPhotoLab.text = @"系统通知";
+    }
     //时间
     self.remindTimeLab.text = dict[@"createTime"];
     //结果
     self.showChankPhotoRulstLab.attributedText = [self getReplacementStr:dict];
+   
 }
 -(NSMutableAttributedString * )getReplacementStr:(NSDictionary *)dict{
     NSString *titleStr = dict[@"title"];
     
     NSMutableAttributedString * attributedStr = [[NSMutableAttributedString alloc] initWithString:titleStr];
     
-    NSString *typeStr = [NSString stringWithFormat:@"%@",dict[@"type"]];
-    if ([typeStr  isEqualToString:@"1"]) {
-        NSRange range;
-        range = [titleStr rangeOfString:@"已通过"];
-        if (range.location != NSNotFound) {
-            // 设置颜色
-            [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorCommonGreenColor] range:range];
+    NSString *allTypeStr = [NSString stringWithFormat:@"%@",dict[@"allType"]];
+    if ([allTypeStr isEqualToString:@"2"]) {
+        // 2照片审核
+        NSString *typeStr = [NSString stringWithFormat:@"%@",dict[@"type"]];
+        if ([typeStr  isEqualToString:@"1"]) {
+            NSRange range;
+            range = [titleStr rangeOfString:@"已通过"];
+            if (range.location != NSNotFound) {
+                // 设置颜色
+                [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorCommonGreenColor] range:range];
+            }
+        }else{
+            NSRange range;
+            range = [titleStr rangeOfString:@"未通过"];
+            if (range.location != NSNotFound) {
+                // 设置颜色
+                [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#f75254"] range:range];
+            }
         }
-    }else{
-        NSRange range;
-        range = [titleStr rangeOfString:@"未通过"];
-        if (range.location != NSNotFound) {
-            // 设置颜色
-            [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#f75254"] range:range];
+        return attributedStr;
+    }else if ([allTypeStr isEqualToString:@"5"]){
+         //  5 违规通知
+        if ([titleStr rangeOfString:@"身份验证-未通过"].location != NSNotFound) {
+            NSRange range;
+            range = [titleStr rangeOfString:@"身份验证-未通过"];
+            if (range.location != NSNotFound) {
+                // 设置颜色
+                [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#f75254"] range:range];
+            }
+            return attributedStr;
+        }else if ([titleStr rangeOfString:@"身份验证-已通过"].location != NSNotFound){
+            NSRange range;
+            range = [titleStr rangeOfString:@"身份验证-已通过"];
+            if (range.location != NSNotFound) {
+                // 设置颜色
+                [attributedStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorCommonGreenColor] range:range];
+            }
+            return attributedStr;
         }
+         return attributedStr;
     }
-    return attributedStr;
+   return attributedStr;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

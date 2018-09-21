@@ -25,7 +25,7 @@
     self.bestAttemptContent = [request.content mutableCopy];
     
     // Modify the notification content here...
-    self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
+   //self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [modified]", self.bestAttemptContent.title];
     
     NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.cqlanhui.AttendanceSystem"];
     //判断是否开启提示语音

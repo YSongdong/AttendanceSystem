@@ -67,6 +67,10 @@ UIImagePickerControllerDelegate>
     [super viewWillAppear:animated];
     self.dataDict = nil;
     [self.dayArr removeAllObjects];
+    [self requestLoadData];
+}
+//请求数据
+-(void) requestLoadData{
     if (self.selectDate == nil) {
         if (_dateSelected == nil) {
             _dateSelected =[NSDate date];
@@ -229,6 +233,7 @@ UIImagePickerControllerDelegate>
                 [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showUnAttendMarkView];
                 NSString *markStr = dict[@"remark"];
                 NSArray *photoArr = dict[@"photo"];
+                weakSelf.showUnAttendMarkView.idStr = dict[@"Id"];
                 weakSelf.showUnAttendMarkView.isLookMark = NO;
                 if (![markStr isEqualToString:@""] || photoArr.count > 0) {
                     weakSelf.showUnAttendMarkView.dict = dict;
@@ -248,14 +253,14 @@ UIImagePickerControllerDelegate>
                     [stongSelf presentViewController:picker animated:YES completion:nil];
                 };
                 
-                weakSelf.showUnAttendMarkView.addMarkBlock = ^(NSDictionary *markDict) {
-                    NSMutableDictionary *mutableDict =  [NSMutableDictionary dictionaryWithDictionary:dict];
-                    mutableDict[@"remark"]= markDict[@"remark"];
-                    mutableDict[@"photo"] = markDict[@"photo"];
-                    //贴换元素
-                    [stongSelf.dayArr replaceObjectAtIndex:indexPath.row withObject:mutableDict];
-                    [stongSelf.recordTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
-                };
+                //添加备注
+                weakSelf.showUnAttendMarkView.addMarkBlock = ^{
+                    //移除数据源
+                    weakSelf.dataDict =  nil;
+                    [weakSelf.dayArr removeAllObjects];
+                    //重新请求数据
+                    [weakSelf requestLoadData];
+                };;
             }
         };
         //请假

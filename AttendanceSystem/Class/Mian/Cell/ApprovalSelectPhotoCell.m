@@ -84,7 +84,7 @@
         if ([self.imageArr[i] isKindOfClass:[UIImage class]]) {
            imageV.image = self.imageArr[i];
         }else{
-            [imageV sd_setImageWithURL:self.imageArr[i]];
+           [imageV sd_setImageWithURL:self.imageArr[i]];
         }
         imageV.tag =  200+i;
         [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -100,7 +100,6 @@
             if (i == self.imageArr.count-1) {
                 imageV.hidden = YES;
             }
-            
         }
         
         if ( i != self.imageArr.count-1) {

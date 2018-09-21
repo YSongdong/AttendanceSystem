@@ -130,8 +130,12 @@
     entity.types = JPAuthorizationOptionAlert|JPAuthorizationOptionBadge|JPAuthorizationOptionSound;
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
         // 可以添加自定义categories
-        // NSSet<UNNotificationCategory *> *categories for iOS10 or later
-        // NSSet<UIUserNotificationCategory *> *categories for iOS8 and iOS9
+        //可以添加自定义categories
+        [JPUSHService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge |
+                                                          UIUserNotificationTypeSound |
+                                                          UIUserNotificationTypeAlert)
+                                              categories:nil];
+        
     }
     [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
     
@@ -139,6 +143,7 @@
     // init Push
     // notice: 2.1.5版本的SDK新增的注册方法，改成可上报IDFA，如果没有使用IDFA直接传nil
     // 如需继续使用pushConfig.plist文件声明appKey等配置内容，请依旧使用[JPUSHService setupWithOption:launchOptions]方式初始化。
+    
     [JPUSHService setupWithOption:launchOptions appKey:@"7c73b76abb1ef04b7d11942a"
                           channel:@"Publish channel"
                  apsForProduction:1
@@ -160,36 +165,31 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     
     [JPUSHService handleRemoteNotification:userInfo];
-   //application.applicationState > 0
-//    if ([[UIDevice currentDevice].systemVersion floatValue]<10.0) {
-//
-//        if([UIApplication sharedApplication].applicationState == UIApplicationStateActive){
-//            //在通知栏发送本地通知
-//            //[AppDelegate registerLocalNotificationInOldWay:userInfo];
-//
-//        }
+    completionHandler(UIBackgroundFetchResultNewData);
+    //  iOS 10之前前台没有通知栏
+    if ([UIDevice currentDevice].systemVersion.floatValue < 10.0 && [UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
         //判断是否开启提示语音
         NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.cqlanhui.AttendanceSystem"];
         if ([sharedDefaults boolForKey:@"SpeechRemdin"]) {
             //语音播报
             [self playLocalMusic:userInfo];
         }
-//    }
-    completionHandler(UIBackgroundFetchResultNewData);
+   }
 }
 //  iOS 10之前前台没有通知栏
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // Required,For systems with less than or equal to iOS6
     [JPUSHService handleRemoteNotification:userInfo];
    
-//    if ([UIDevice currentDevice].systemVersion.floatValue < 10.0 && [UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+    //  iOS 10之前前台没有通知栏
+    if ([UIDevice currentDevice].systemVersion.floatValue < 10.0 && [UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
         //判断是否开启提示语音
         NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.cqlanhui.AttendanceSystem"];
         if ([sharedDefaults boolForKey:@"SpeechRemdin"]) {
             //语音播报
             [self playLocalMusic:userInfo];
         }
-//    }
+    }
 }
 // iOS 10 前台得到的的通知对象
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler  API_AVAILABLE(ios(10.0)) API_AVAILABLE(ios(10.0)){
@@ -201,12 +201,12 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     [JPUSHService setBadge:0];
     
     if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]){
-        //判断是否开启提示语音
-        NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.cqlanhui.AttendanceSystem"];
-        if ([sharedDefaults boolForKey:@"SpeechRemdin"]) {
-            //语音播报
-            [self playLocalMusic:userInfo];
-        }
+//        //判断是否开启提示语音
+//        NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.cqlanhui.AttendanceSystem"];
+//        if ([sharedDefaults boolForKey:@"SpeechRemdin"]) {
+//            //语音播报
+//            [self playLocalMusic:userInfo];
+//        }
         
         NSString *allTypeStr = [NSString stringWithFormat:@"%@",userInfo[@"allType"]];
         if([allTypeStr isEqualToString:@"1"]){
@@ -224,7 +224,6 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
         }
     }else{
         //应用处于前台的本地接受通知
-        
     }
     
     if (@available(iOS 10.0, *)) {
@@ -381,11 +380,21 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 }
 // 后台，
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [application setApplicationIconBadgeNumber:0];
-    [application cancelAllLocalNotifications];
-    //清除角标
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    [JPUSHService setBadge:0];
+
+    if (@available(iOS 10.0, *)) {
+        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+        content.badge = @(-1);
+        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"clearBadge" content:content trigger:nil];
+        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+        }];
+    } else {
+        
+        [application setApplicationIconBadgeNumber:0];
+        [application cancelAllLocalNotifications];
+        //清除角标
+        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+        [JPUSHService setBadge:0];
+    }
 }
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     [application setApplicationIconBadgeNumber:0];
@@ -397,7 +406,6 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 - (void)applicationDidBecomeActive:(UIApplication *)application {
   
 }
-
 
 - (void)applicationWillTerminate:(UIApplication *)application {
   

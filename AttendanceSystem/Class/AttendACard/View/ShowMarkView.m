@@ -266,6 +266,9 @@ UITextViewDelegate
             self.placeStrLab.hidden = NO;
         }
     }
+    if (self.markTeView.text.length > 60) {
+        return NO;
+    }
     return YES;
 }
 

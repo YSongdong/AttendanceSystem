@@ -170,6 +170,9 @@ UITextViewDelegate
             self.placeStrLab.hidden = NO;
         }
     }
+    if (self.markTeView.text.length > 60) {
+        return NO;
+    }
     return YES;
 }
 
@@ -182,14 +185,22 @@ UITextViewDelegate
 -(void)setIsLookMark:(BOOL)isLookMark{
     _isLookMark = isLookMark;
 }
+-(void)setIdStr:(NSString *)idStr{
+    _idStr = idStr;
+}
 -(void)addImageAciton:(UITapGestureRecognizer *) tap{
     if (self.imageArr.count <5) {
-        NSInteger index = tap.view.tag - 200;
-        if (index != self.imageArr.count-1) {
+        if (self.dict != nil) {
             UIImageView *imageV = (UIImageView *)tap.view;
             [XWScanImage scanBigImageWithImageView:imageV];
         }else{
-            self.selectPhotoBlock();
+            NSInteger index = tap.view.tag - 200;
+            if (index != self.imageArr.count-1) {
+                UIImageView *imageV = (UIImageView *)tap.view;
+                [XWScanImage scanBigImageWithImageView:imageV];
+            }else{
+                self.selectPhotoBlock();
+            }
         }
     }
 }
@@ -201,7 +212,7 @@ UITextViewDelegate
         return;
     }else{
         //添加备注
-        if (self.markTeView.text.length == 0 && _imageArr.count > 0) {
+        if (self.markTeView.text.length == 0 && _imageArr.count -1 == 0) {
             [SDShowSystemPrompView showSystemPrompStr:@"请补充备注信息"];
             return;
         }
@@ -267,13 +278,28 @@ UITextViewDelegate
     _dict = dict;
     UIView *markView = [self viewWithTag:300];
     //照片
+    NSArray *photoArr = dict[@"photo"];
+    if (photoArr.count != 0) {
+        for (int i=1; i<photoArr.count; i++) {
+            UIImageView *imageV = [[UIImageView alloc]init];
+            [markView addSubview:imageV];
+            imageV.tag =  200+i;
+            [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(markView).offset(KSIphonScreenW(15)+i*KSIphonScreenH(54)+i*KSIphonScreenW(10));
+                make.bottom.equalTo(markView.mas_bottom).offset(-KSIphonScreenW(10));
+                make.width.height.equalTo(@(KSIphonScreenH(54)));
+            }];
+            imageV.userInteractionEnabled = YES;
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addImageAciton:)];
+            [imageV addGestureRecognizer:tap];
+        }
+    }
     //移除imageV 的内容
     for (int i=0; i<3; i++) {
         UIImageView *imageV = [self viewWithTag:(200+i)];
         imageV.image = nil;
     }
     
-    NSArray *photoArr = dict[@"photo"];
     if (photoArr.count != 0) {
         for (int i=0; i<photoArr.count; i++) {
             NSString *photoUrl = photoArr[i];
@@ -314,14 +340,22 @@ UITextViewDelegate
         self.markTeView.text = dict[@"remark"];
         self.markTeView.editable = NO;
    
+//        if (photoArr.count > 0) {
+//            for (int i=0; i < photoArr.count; i++) {
+//                UIImageView *imageV = [self viewWithTag:(200+i)];
+//                imageV.userInteractionEnabled = YES;
+//                NSString *photoUrl = photoArr[i];
+//                [SDTool sd_setImageView:imageV WithURL:photoUrl];
+//                imageV.hidden = YES;
+//            }
+//        }
         for (int i=0; i<3; i++) {
             UIImageView *imageV = [self viewWithTag:(200+i)];
             if (photoArr.count > 0) {
                 imageV.userInteractionEnabled = YES;
-                imageV.hidden = YES;
             }else{
-                imageV.hidden = NO;
                 imageV.userInteractionEnabled = NO;
+                
             }
         }
         [self.trueSubmitBtn setTitle:@"关闭" forState:UIControlStateNormal];
@@ -338,7 +372,7 @@ UITextViewDelegate
 #pragma mark ----数据相关-----
 -(void) requestAddMarkData{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    param[@"id"] = self.dict[@"Id"];
+    param[@"id"] = self.idStr;
     param[@"remark"] = self.markTeView.text;
     param[@"token"] = [SDTool getNewToken];
     param[@"userId"] = [SDUserInfo obtainWithUserId];
@@ -351,10 +385,10 @@ UITextViewDelegate
             [SDShowSystemPrompView showSystemPrompStr:error];
             return ;
         }
-        NSMutableDictionary *mutableDict = [NSMutableDictionary dictionary];
-        mutableDict[@"remark"] =self.markTeView.text;
+//        NSMutableDictionary *mutableDict = [NSMutableDictionary dictionary];
+//        mutableDict[@"remark"] =self.markTeView.text;
         
-        self.addMarkBlock(mutableDict.copy);
+        self.addMarkBlock();
         [self removeFromSuperview];
     }];
     

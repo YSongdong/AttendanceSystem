@@ -126,7 +126,7 @@ AMapSearchDelegate
     [showRadiusLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(weakSelf.nameLab.mas_right).offset(7);
         make.centerY.equalTo(weakSelf.nameLab.mas_centerY);
-        make.width.equalTo(@140);
+        make.width.equalTo(@180);
     }];
     
     self.addressLab = [[UILabel alloc]init];
@@ -187,6 +187,7 @@ AMapSearchDelegate
     [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)];
     
     self.nameLab.text = self.dict[@"address"];
+    showRadiusLab.text =[NSString stringWithFormat:@"(打卡翻盖半径： %.2fKm内)",[self.dict[@"radius"]doubleValue]/1000];
     CGFloat w = [SDTool calStrWith:self.nameLab.text andFontSize:18].width;
     if (w+24+140 > KScreenW) {
         [showRadiusLab mas_remakeConstraints:^(MASConstraintMaker *make) {

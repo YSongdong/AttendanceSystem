@@ -120,16 +120,7 @@ AMapLocationManagerDelegate
     [super viewWillAppear:animated];
     //开启定位
   //  [self mobilePhonePositioning];
-    
-    if ([self.selectCalendarStr isEqualToString:@""]) {
-        //请求当天的日期
-        NSString *dateStr = [[self requestDateFormatter]stringFromDate:[NSDate date]];
-        [self.headerView.selectBtn setTitle:dateStr forState:UIControlStateNormal];
-        [self requestAttendInfo:dateStr];
-    }else{
-        [self.headerView.selectBtn setTitle:self.selectCalendarStr forState:UIControlStateNormal];
-        [self requestAttendInfo:self.selectCalendarStr];
-    }
+    [self requestLoadData];
 }
 //视图已经消失
 - (void)viewDidDisappear:(BOOL)animated {
@@ -144,6 +135,17 @@ AMapLocationManagerDelegate
     }
     //关闭定位
     [[GDLocationManager shareManager] stopUpdateLocation];
+}
+-(void) requestLoadData{
+    if ([self.selectCalendarStr isEqualToString:@""]) {
+        //请求当天的日期
+        NSString *dateStr = [[self requestDateFormatter]stringFromDate:[NSDate date]];
+        [self.headerView.selectBtn setTitle:dateStr forState:UIControlStateNormal];
+        [self requestAttendInfo:dateStr];
+    }else{
+        [self.headerView.selectBtn setTitle:self.selectCalendarStr forState:UIControlStateNormal];
+        [self requestAttendInfo:self.selectCalendarStr];
+    }
 }
 //设置navi
 -(void) createNavi{
@@ -266,6 +268,7 @@ AMapLocationManagerDelegate
                 [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.showUnAttendMarkView];
                 NSString *markStr = dict[@"remark"];
                 NSArray *photoArr = dict[@"photo"];
+                weakSelf.showUnAttendMarkView.idStr = dict[@"Id"];
                 weakSelf.showUnAttendMarkView.isLookMark = NO;
                 if (![markStr isEqualToString:@""] || photoArr.count > 0) {
                     weakSelf.showUnAttendMarkView.dict = dict;
@@ -287,14 +290,14 @@ AMapLocationManagerDelegate
                     [stongSelf presentViewController:picker animated:YES completion:nil];
                 };
                
-                weakSelf.showUnAttendMarkView.addMarkBlock = ^(NSDictionary *markDict) {
-                    NSMutableDictionary *mutableDict =  [NSMutableDictionary dictionaryWithDictionary:dict];
-                    mutableDict[@"remark"]= markDict[@"remark"];
-                    mutableDict[@"photo"] = markDict[@"photo"];
-                    //贴换元素
-                    [stongSelf.cardArr replaceObjectAtIndex:indexPath.row withObject:mutableDict];
-                    [stongSelf.cardTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
-                };
+                //添加备注
+                weakSelf.showUnAttendMarkView.addMarkBlock = ^{
+                     //移除数据源
+                     weakSelf.dataDict = nil;
+                     [weakSelf.cardArr removeAllObjects];
+                     // 重新请求数据
+                     [weakSelf requestLoadData];
+                };;
             }
 
         };
@@ -367,7 +370,6 @@ AMapLocationManagerDelegate
             cell.dataDict = self.dataDict;
             cell.dict = dict;
            
-
             //重新定位
             cell.againLocationBlcok = ^(NSDictionary *dict) {
                 SDAgainLocatController *againVC = [[SDAgainLocatController alloc]init];
@@ -501,14 +503,14 @@ AMapLocationManagerDelegate
                         [stongSelf presentViewController:picker animated:YES completion:nil];
                     };
                     
-                    weakSelf.showUnAttendMarkView.addMarkBlock = ^(NSDictionary *markDict) {
-                        NSMutableDictionary *mutableDict =  [NSMutableDictionary dictionaryWithDictionary:dict];
-                        mutableDict[@"remark"]= markDict[@"remark"];
-                        mutableDict[@"photo"] = markDict[@"photo"];
-                        //贴换元素
-                        [stongSelf.cardArr replaceObjectAtIndex:indexPath.row withObject:mutableDict];
-                        [stongSelf.cardTableView reloadRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
-                    };
+                    //添加备注
+                    weakSelf.showUnAttendMarkView.addMarkBlock = ^{
+                        //移除数据源
+                        weakSelf.dataDict = nil;
+                        [weakSelf.cardArr removeAllObjects];
+                        // 重新请求数据
+                        [weakSelf requestLoadData];
+                    };;
                 }
             };
             //请假

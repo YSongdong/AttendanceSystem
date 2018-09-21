@@ -77,7 +77,6 @@
         make.left.equalTo(weakSelf.leftImageV.mas_right).offset(8);
     }];
     
-    
     UIView *contentView = [[UIView alloc]init];
     [self addSubview:contentView];
     contentView.backgroundColor = [UIColor colorTextWhiteColor];

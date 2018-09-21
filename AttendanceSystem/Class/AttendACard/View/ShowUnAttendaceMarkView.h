@@ -14,10 +14,12 @@
 
 @property (nonatomic,strong) NSMutableArray *imageArr;
 
+@property (nonatomic,strong) NSString *idStr;
+
 //是添加备注还是查看备注  YES 查看备注  NO 添加备注
 @property (nonatomic,assign) BOOL isLookMark;
 //添加mark
-@property (nonatomic,copy) void(^addMarkBlock)(NSDictionary *markDict);
+@property (nonatomic,copy) void(^addMarkBlock)(void);
 //选择相机
 @property (nonatomic,copy) void(^selectPhotoBlock)(void);
 

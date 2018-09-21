@@ -13,9 +13,8 @@
 FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 
 //测试域名
-#define PUBLISH_DIMAIN_URL @"http://192.168.3.201:1088/"
-//#define PUBLISH_DIMAIN_URL @"http://192.168.2.56/"
-//#define PUBLISH_DIMAIN_URL @"http://kq.api.cqlanhui.com/"
+//#define PUBLISH_DIMAIN_URL @"http://192.168.3.201:1088/"
+#define PUBLISH_DIMAIN_URL @"http://kq.api.cqlanhui.com/"
 //#define PUBLISH_DIMAIN_URL @"http://kq.cloud.api.cqlanhui.com/"
 
 
@@ -76,6 +75,9 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 #define  HTTP_ATTAPPOUTGOREVOKE_URL   getRequestPath(@"attendance/Att_app_outgo/outgoRevoke")
 /*********外出催办***********/
 #define  HTTP_ATTAPPOUTGOURGE_URL   getRequestPath(@"attendance/Att_app_outgo/outgoUrge")
+/*********修改外出***********/
+#define  HTTP_ATTAPPMODIFYOUTGO_URL   getRequestPath(@"attendance/Att_app_outgo/modifyOutgo")
+
 
 /*********新增请假***********/
 #define  HTTP_ATTAPPLEAVEADDLEAVE_URL   getRequestPath(@"attendance/Att_app_leave/addLeave")
@@ -89,6 +91,8 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 #define  HTTP_ATTAPPLEAVEURGE_URL   getRequestPath(@"attendance/Att_app_leave/leaveUrge")
 /*********年假请假特殊审批流程***********/
 #define  HTTP_ATTAPPLEAVEGETLEAVEAPPROVAl_URL   getRequestPath(@"attendance/Att_app_leave/getLeaveApproval")
+/*********修改请假***********/
+#define  HTTP_ATTAPPMODIFYLEAVE_URL   getRequestPath(@"attendance/Att_app_leave/modifyLeave")
 
 
 /*********补卡申请信息***********/
@@ -115,6 +119,8 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 #define  HTTP_ATTOVERTIMEREVOKE_URL   getRequestPath(@"attendance/Att_app_over_time/overTimeRevoke")
 /*********加班详情***********/
 #define  HTTP_ATTAPPOVERTIMEINFO_URL   getRequestPath(@"attendance/Att_app_over_time/overTimeInfo")
+/*********修改加班***********/
+#define  HTTP_ATTAPPMODIFYOVER_URL   getRequestPath(@"attendance/Att_app_over_time/modifyOver")
 
 /*********我的申请***********/
 #define  HTTP_ATTAPPAPPLYLIST_URL   getRequestPath(@"attendance/Att_app_approval/applyList")
