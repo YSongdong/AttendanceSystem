@@ -15,6 +15,12 @@
 @property (nonatomic,strong) NSDictionary *dict;
 
 @property (nonatomic,strong) NSDictionary *dataDict;
+
+
+
+//判断是否回到前台
+-(void)getWillEnter;
+
 //更新地点 和显示状态
 -(void)updateAddress:(NSString *)addressStr location:(CLLocation *)location;
 

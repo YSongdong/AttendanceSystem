@@ -10,6 +10,9 @@
 
 @interface UpdateVersionView : UIView
 
+//判断是否是强制更新  YES  是强制更新  NO 非强制
+@property (nonatomic,assign) BOOL isForceUpdate;
+
 @property (nonatomic,copy) void(^updateBlock)(void);
 
 

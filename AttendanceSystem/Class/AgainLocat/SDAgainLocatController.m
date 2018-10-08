@@ -713,7 +713,7 @@ UIImagePickerControllerDelegate
     // 添加地址信息
     [self addAddressInfo];
     
-    [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_APPATTENDANCEAPPDOSIGNIN_URL params:self.cardDataDict andData:imageArr.copy waitView:self.view complateHandle:^(id showdata, NSString *error) {
+    [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_APPATTENDANCEAPPDOSIGNIN_URL params:self.cardDataDict andData:imageArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
             if ([error isEqualToString:@"打卡失败，请重新打卡！"]) {
                 [self.showTureSingInView removeFromSuperview];

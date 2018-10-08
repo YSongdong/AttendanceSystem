@@ -10,6 +10,7 @@
 
 #import "SGAdvertScrollView.h"
 #import "AppDelegate.h"
+#import "UpdateVersionView.h"
 
 #import "SDPhotoCollectController.h"
 #import "SDAttendPunchCardController.h"
@@ -88,6 +89,9 @@ SGAdvertScrollViewDelegate
 @property (weak, nonatomic) IBOutlet UIImageView *meExamImageV;
 @property (weak, nonatomic) IBOutlet UILabel *meExamLab;
 
+//升级版本view
+@property (nonatomic,strong) UpdateVersionView *updateVersionView;
+
 //公告数据源
 @property (nonatomic,strong) NSMutableArray *titlsArr;
 
@@ -97,6 +101,8 @@ SGAdvertScrollViewDelegate
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //检查系统更新
+    [self requestDataIsShowUpdateView];
     //更新ui
     [self updateView];
 
@@ -104,6 +110,7 @@ SGAdvertScrollViewDelegate
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
+   
     //隐藏Tabbar
     self.tabBarController.tabBar.hidden = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -116,6 +123,7 @@ SGAdvertScrollViewDelegate
         [weakSelf requestBulletinDataList];
     });
 }
+
 //更新ui
 -(void) updateView{
     //计算高度
@@ -317,6 +325,36 @@ SGAdvertScrollViewDelegate
         self.advertView.delegate = self;
     }];
 }
-
+//判断是否显示更新View
+-(void) requestDataIsShowUpdateView{
+    //获取本地软件的版本号
+    NSString *localVersion =  [[[NSBundle mainBundle]infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"system"] =  @"1";
+    param[@"version"] = localVersion;
+    [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTENDANCESYSTEMUPGRADE_URL params:param withModel:nil waitView:nil complateHandle:^(id showdata, NSString *error) {
+        if (error) {
+            return ;
+        }
+        NSString *updateStr = [NSString stringWithFormat:@"%@",showdata[@"update"]];
+        //判断是否需要更新  false 不需要更新  true  需要更新
+        if ([updateStr isEqualToString:@"false"]) {
+            return;
+        }
+        
+        //判断是否强制更新  1 强制更新 2 非强制更新
+        NSString *forceStr = [NSString stringWithFormat:@"%@",showdata[@"force"]];
+        self.updateVersionView  =[[UpdateVersionView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
+        if ([forceStr isEqualToString:@"1"]) {
+            self.updateVersionView.isForceUpdate = YES;
+        }
+        [[UIApplication sharedApplication].keyWindow addSubview:self.updateVersionView];
+        self.updateVersionView.updateBlock = ^{
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/%E4%BA%91%E6%97%B6%E9%99%85/id1422609325?mt=8"]];
+        };
+        
+    }];
+}
 
 @end

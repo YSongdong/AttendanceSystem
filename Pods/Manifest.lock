@@ -21,6 +21,7 @@ PODS:
     - AMapFoundation (~> 1.4)
   - AMapSearch (6.1.1):
     - AMapFoundation (~> 1.4)
+  - Bugly (2.5.0)
   - JCore (1.2.0)
   - JPush (3.0.9):
     - JCore (~> 1.2.0)
@@ -42,6 +43,7 @@ DEPENDENCIES:
   - AMap3DMap
   - AMapLocation
   - AMapSearch
+  - Bugly
   - JPush
   - JTCalendar (~> 2.0)
   - Masonry
@@ -59,6 +61,7 @@ SPEC REPOS:
     - AMapFoundation
     - AMapLocation
     - AMapSearch
+    - Bugly
     - JCore
     - JPush
     - JTCalendar
@@ -76,6 +79,7 @@ SPEC CHECKSUMS:
   AMapFoundation: 58f883c80754c659cf626deb3150936bfe8f1772
   AMapLocation: 55116a2c8956eab7550cbb56e989aa5cdcc424e3
   AMapSearch: 3dcbf85c403a2a0fe0eda5318caabc272b31f5e1
+  Bugly: 3ca9f255c01025582df26f9222893b383c7e4b4e
   JCore: b52e3dd73625eec70afd1244bb9c41038aa06087
   JPush: 48041e8c5ad2ef9b48709eb0888af9640b36e9b0
   JTCalendar: f54975f1426facc38d112f372f0d3d955aae8d86
@@ -87,6 +91,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: e55c661d974f633fb71678be5b22d78bfda6c728
+PODFILE CHECKSUM: dc5a587a2c18121a26184fea5b96e521f022b7b1
 
 COCOAPODS: 1.5.3

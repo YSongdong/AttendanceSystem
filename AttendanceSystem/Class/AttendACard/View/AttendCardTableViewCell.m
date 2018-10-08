@@ -39,6 +39,7 @@ AMapSearchDelegate
 
 @property (nonatomic,assign) NSTimeInterval interval;
 
+
 //---------返回信息----------//
 //打卡地点状态
 @property (nonatomic,assign) NSInteger cardAddressStatu;
@@ -114,6 +115,7 @@ AMapSearchDelegate
 
     //开启时间
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateTime) userInfo:nil repeats:YES];
+    
     
     //显示时间
     self.showTimeLab = [[UILabel alloc]init];
@@ -238,6 +240,10 @@ AMapSearchDelegate
     _dataDict = dataDict;
     //服务器时间作对
     self.interval = [dataDict[@"time"] doubleValue];
+}
+//判断是否回到前台
+-(void)getWillEnter{
+    self.interval = [[NSDate date] timeIntervalSince1970];
 }
 -(void)setDict:(NSDictionary *)dict{
     

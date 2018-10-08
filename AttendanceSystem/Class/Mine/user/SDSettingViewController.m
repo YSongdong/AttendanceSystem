@@ -16,6 +16,8 @@
 //
 @property (nonatomic,strong) UILabel *updateLab;
 
+//更新Dict数据源
+@property (nonatomic,strong) NSMutableDictionary *versionDict;
 
 @end
 
@@ -28,7 +30,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self checkVersion];
+    [self requestDataIsShowUpdateView];
 }
 //创建Navi
 -(void) createNavi{
@@ -180,10 +182,15 @@
         [SDShowSystemPrompView showSystemPrompStr:@"已最新版本"];
         return ;
     }
+    //判断是否强制更新  1 强制更新 2 非强制更新
+    NSString *forceStr = [NSString stringWithFormat:@"%@",self.versionDict[@"force"]];
+    
     [[UIApplication sharedApplication].keyWindow addSubview:self.updateVersionView];
-   
+    if ([forceStr isEqualToString:@"1"]) {
+        self.updateVersionView.isForceUpdate = YES;
+    }
     self.updateVersionView.updateBlock = ^{
-       [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/%E4%BA%91%E6%97%B6%E9%99%85/id1422609325?mt=8"]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/%E4%BA%91%E6%97%B6%E9%99%85/id1422609325?mt=8"]];
     };
 }
 //清除缓存
@@ -191,57 +198,45 @@
      [[SDImageCache sharedImageCache]clearDiskOnCompletion:nil];
      [SDShowSystemPrompView showSystemPrompStr:@"清除成功"];
 }
-//检查更新
--(void)checkVersion
-{
-    NSString *newVersion;
-    NSURL *url = [NSURL URLWithString:@"http://itunes.apple.com/cn/lookup?id=1422609325"];//这个URL地址是该app在iTunes connect里面的相关配置信息。其中id是该app在app store唯一的ID编号。
-    NSString *jsonResponseString = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:nil];
-    // NSLog(@"通过appStore获取的数据信息：%@",jsonResponseString);
-    
-    NSData *data = [jsonResponseString dataUsingEncoding:NSUTF8StringEncoding];
-    
+//判断是否显示更新View
+-(void) requestDataIsShowUpdateView{
     //获取本地软件的版本号
     NSString *localVersion =  [[[NSBundle mainBundle]infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     
-    if (data) {
-        id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        
-        NSArray *array = json[@"results"];
-        
-        for (NSDictionary *dic in array) {
-            
-            newVersion = [dic valueForKey:@"version"];
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"system"] =  @"1";
+    param[@"version"] = localVersion;
+    [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTENDANCESYSTEMUPGRADE_URL params:param withModel:nil waitView:nil complateHandle:^(id showdata, NSString *error) {
+        if (error) {
+            return ;
         }
-        //对比发现的新版本和本地的版本
-        NSArray *newVersionArr = [newVersion componentsSeparatedByString:@"."];
-        NSArray *localVersionArr = [localVersion componentsSeparatedByString:@"."];
-        
-        BOOL isNewVersion = NO;
-        for (int i=0; i<newVersionArr.count; i++) {
-            NSString *newStr = newVersionArr[i];
-            NSString *localStr = localVersionArr[i];
-            if ([newStr integerValue] > [localStr integerValue]) {
-                isNewVersion = YES;
-            }
-        }
-        if (isNewVersion){
-             self.updateLab.hidden = NO;
-             self.updateLab.text = [NSString stringWithFormat:@"V%@版",newVersion];
-        }else{
+        NSString *updateStr = [NSString stringWithFormat:@"%@",showdata[@"update"]];
+        //判断是否需要更新  false 不需要更新  true  需要更新
+        if ([updateStr isEqualToString:@"false"]) {
             self.updateLab.hidden = YES;
             self.updateLab.text = @"";
+            return;
         }
-    }
-}
+        
+        self.updateLab.hidden = NO;
+        self.updateLab.text = [NSString stringWithFormat:@"V%@版",showdata[@"version"]];
+        
+        self.versionDict = [NSMutableDictionary dictionaryWithDictionary:showdata];
 
+    }];
+}
 -(UpdateVersionView *)updateVersionView{
     if (!_updateVersionView) {
         _updateVersionView  =[[UpdateVersionView alloc]initWithFrame:CGRectMake(0, 0, KScreenW, KScreenH)];
     }
     return _updateVersionView;
 }
-
+-(NSMutableDictionary *)versionDict{
+    if (!_versionDict) {
+        _versionDict = [NSMutableDictionary dictionary];
+    }
+    return _versionDict;
+}
 
 
 

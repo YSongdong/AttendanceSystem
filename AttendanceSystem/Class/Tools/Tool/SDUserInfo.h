@@ -19,6 +19,12 @@
 //判断是否登录
 +(BOOL) passLoginData;
 
+//保存系统版本数据
++(void) saveSystemVersionData:(NSDictionary *)data;
+
+// 取出保存本地系统版本数据
++(NSDictionary *) takeSystemVersionData;
+
 // ----------------修改数据----------
 //修改UserID和identity_id
 +(void) alterUserID:(NSDictionary *)dict;

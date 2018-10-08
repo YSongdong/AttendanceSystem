@@ -13,6 +13,7 @@ target 'AttendanceSystem' do
    pod 'JTCalendar', '~> 2.0'
    pod 'MJRefresh'
    pod 'JPush'
+   pod 'Bugly'
 end
 
 

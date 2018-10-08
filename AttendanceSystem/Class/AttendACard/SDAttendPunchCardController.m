@@ -114,7 +114,8 @@ AMapLocationManagerDelegate
     [self createNavi];
     [self createTableView];
     self.isTureAgainFace = NO;
-   
+    //注册通知
+    [self addNotifition];
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -156,6 +157,12 @@ AMapLocationManagerDelegate
         [weakSelf.navigationController popViewControllerAnimated:YES];
     };
 }
+//添加通知
+-(void) addNotifition{
+    //app从后台推到前台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground)name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
 #pragma mark -----
 -(void) createTableView{
     //加载headerView
@@ -809,7 +816,6 @@ AMapLocationManagerDelegate
     //请求数据
     [self requestAttendInfo:date];
 }
-
 //通过地址和经纬度 返回是否在正常考勤范围内
 -(BOOL)updateAddress:(NSString *)addressStr location:(CLLocation *)location{
     NSString *nowStr =[NSString stringWithFormat:@"%@",self.dataDict[@"now"]];
@@ -885,6 +891,24 @@ AMapLocationManagerDelegate
         [weakSelf.showTureSingInView removeFromSuperview];
         
     };
+}
+#pragma mark ----通知 ------
+//app从后台推到前台
+-(void)applicationWillEnterForeground
+{
+    for (int i=0; i<self.cardArr.count; i++) {
+        NSDictionary *dict =  self.cardArr[i];
+        NSString *titleStr = [NSString stringWithFormat:@"%@",dict[@"title"]];
+        if ([titleStr isEqualToString:@"1"]) {
+            //获取地址信息
+            [[GDLocationManager shareManager] startUpdateLocation];
+            [[GDLocationManager shareManager] startReportLocation];
+            
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+            AttendCardTableViewCell  *cell = [self.cardTableView cellForRowAtIndexPath:indexPath];
+            [cell getWillEnter];
+        }
+    }
 }
 #pragma mark ---懒加载-----
 -(AttendCardHeaderView *)headerView{
@@ -1086,7 +1110,7 @@ AMapLocationManagerDelegate
     //移除最后一个
     [imageArr removeLastObject];
     
-    [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_APPATTENDANCEAPPDOSIGNIN_URL params:self.cardDataDict.copy andData:imageArr.copy waitView:self.view complateHandle:^(id showdata, NSString *error) {
+    [[KRMainNetTool sharedKRMainNetTool]upLoadData:HTTP_APPATTENDANCEAPPDOSIGNIN_URL params:self.cardDataDict.copy andData:imageArr waitView:self.view complateHandle:^(id showdata, NSString *error) {
         if (error) {
             if ([error isEqualToString:@"打卡失败，请重新打卡！"]) {
                  [self.showTureSingInView removeFromSuperview];

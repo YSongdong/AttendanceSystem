@@ -77,10 +77,10 @@ UIImagePickerControllerDelegate
         if ([leaveTypeStr isEqualToString:@"1"]) {
             [self requestGetLeaveApproval];
         }else{
-            [self requestApprovalMemberData];
+            [self requestApprovalMemberData:leaveTypeStr];
         }
     }else{
-        [self requestApprovalMemberData];
+        [self requestApprovalMemberData:nil];
     }
     //监听当键将要退出时
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)  name:UIKeyboardWillHideNotification object:nil];
@@ -201,11 +201,7 @@ UIImagePickerControllerDelegate
         [SDShowSystemPrompView showSystemPrompStr:@"结束时间小于开始时间"];
         return;
     }
-    if (timeLong > 168) {
-        [SDShowSystemPrompView showSystemPrompStr:@"请假时间不能大于7天"];
-        return;
-    }
-    
+   
     weaSelf.dataDcit[@"startTime"] = [weaSelf.beginTimeStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     weaSelf.dataDcit[@"endTime"] =[weaSelf.endTimeStr stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     weaSelf.dataDcit[@"numbers"] = [NSString stringWithFormat:@"%.2f",timeLong];
@@ -377,10 +373,30 @@ UIImagePickerControllerDelegate
 }
 - (void)pickerView:(UIPickerView *)pickerView didSelectText:(NSString *)text{
     [self.approvalArr removeAllObjects];
+    NSString *typeStr;
+    if ([text isEqualToString:@"年假"]) {
+        typeStr = @"1";
+    }else if ([text isEqualToString:@"事假"]){
+        typeStr = @"2";
+    }else if ([text isEqualToString:@"调休"]){
+        typeStr = @"3";
+    }else if ([text isEqualToString:@"产假"]){
+        typeStr = @"4";
+    }else if ([text isEqualToString:@"婚假"]){
+        typeStr = @"5";
+    }else if ([text isEqualToString:@"丧假"]){
+        typeStr = @"6";
+    } else if ([text isEqualToString:@"护理假"]){
+        typeStr = @"7";
+    }else if ([text isEqualToString:@"病假"]){
+        typeStr = @"8";
+    }else if ([text isEqualToString:@"轮休"]){
+        typeStr = @"9";
+    }
     if ([text isEqualToString:@"年假"]) {
         [self requestGetLeaveApproval];
     }else{
-        [self requestApprovalMemberData];
+        [self requestApprovalMemberData:typeStr];
     }
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     SelectTimeTypeCell *cell  = [self.leaveTableView cellForRowAtIndexPath:indexPath];
@@ -472,13 +488,14 @@ UIImagePickerControllerDelegate
 }
 #pragma mark ----数据相关-----
 //申请页审批流程
--(void)requestApprovalMemberData{
+-(void)requestApprovalMemberData:(NSString *)smallType{
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     param[@"platformId"] = [SDUserInfo obtainWithPlafrmId];
     param[@"token"] = [SDTool getNewToken];
     param[@"type"] = @"1";
     param[@"unitId"] = [SDUserInfo obtainWithUniId];
     param[@"userId"] = [SDUserInfo obtainWithUserId];
+    param[@"smallType"] = smallType ;
     [[KRMainNetTool sharedKRMainNetTool]postRequstWith:HTTP_ATTAPPAPPROVALMEMBER_URL params:param.copy withModel:nil waitView:self.view complateHandle:^(id showdata, NSString *error) {
         
         if (error) {

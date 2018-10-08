@@ -31,18 +31,20 @@
     _dict =  dict;
     self.statuImageV.hidden = NO;
     self.leftImageV.hidden = NO;
-    __weak typeof(self) weakSelf = self;
-
+   
     if ([dict[@"isScope"] isEqualToString:@"1"]) {
         self.leftImageV.hidden = NO;
         self.scopeLab.text = @"在范围内";
     }else{
         self.leftImageV.hidden = YES;
         
-        if ([dict[@"distance"]doubleValue]> 1000) {
-            self.scopeLab.text = [NSString stringWithFormat:@"不范围内(%.2fkm)",[dict[@"distance"]doubleValue]/1000];
+        double  distance  = [dict[@"distance"]doubleValue];
+   //     double  deviation = [dict[@"deviation"]doubleValue];
+  //      double  page = distance - deviation;
+        if (distance> 1000) {
+            self.scopeLab.text = [NSString stringWithFormat:@"不范围内(%.2fkm)",distance/1000];
         }else{
-            self.scopeLab.text = [NSString stringWithFormat:@"不范围内(%.2fm)",[dict[@"distance"]doubleValue]];
+            self.scopeLab.text = [NSString stringWithFormat:@"不范围内(%.2fm)",distance];
         }
 
     }

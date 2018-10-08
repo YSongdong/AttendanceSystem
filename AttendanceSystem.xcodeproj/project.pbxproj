@@ -1850,7 +1850,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NotificationExtension/NotificationExtension.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				INFOPLIST_FILE = NotificationExtension/Info.plist;
@@ -1862,8 +1862,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem.NotificationExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8e8e7902-ea28-49a0-9cbe-e9375ec8a007";
-				PROVISIONING_PROFILE_SPECIFIER = AttendanceSyetem_sd_NotifiExtension;
+				PROVISIONING_PROFILE = "4e87a4fd-a248-449c-b02b-5de350593655";
+				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest_NotifiEetension;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1873,7 +1873,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NotificationExtension/NotificationExtension.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				INFOPLIST_FILE = NotificationExtension/Info.plist;
@@ -1885,8 +1885,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem.NotificationExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8e8e7902-ea28-49a0-9cbe-e9375ec8a007";
-				PROVISIONING_PROFILE_SPECIFIER = AttendanceSyetem_sd_NotifiExtension;
+				PROVISIONING_PROFILE = "4b7c13ea-3894-4b31-a05e-c8a75b995c7f";
+				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest_NotifiEetension;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2009,7 +2009,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = AttendanceSystem/Class/AttendanceSystem.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				ENABLE_BITCODE = NO;
@@ -2056,8 +2056,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e0e15d3b-3f29-4f2b-8ccd-3418feb32e02";
-				PROVISIONING_PROFILE_SPECIFIER = AttendanceSyetem_sd;
+				PROVISIONING_PROFILE = "f488ed1b-749d-4143-a2a5-b3355e606670";
+				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -2069,7 +2069,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = AttendanceSystem/Class/AttendanceSystem.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = N3Z6Z3MX8V;
 				ENABLE_BITCODE = NO;
@@ -2116,8 +2116,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cqlanhui.AttendanceSystem;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e0e15d3b-3f29-4f2b-8ccd-3418feb32e02";
-				PROVISIONING_PROFILE_SPECIFIER = AttendanceSyetem_sd;
+				PROVISIONING_PROFILE = "f488ed1b-749d-4143-a2a5-b3355e606670";
+				PROVISIONING_PROFILE_SPECIFIER = attendSystemTest;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

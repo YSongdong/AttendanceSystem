@@ -21,6 +21,9 @@ FT_INLINE  NSString  *getRequestPath(NSString *act) ;
 /*********公告***********/
 #define  HTTP_ATTADMINBULLETINAPPLIST_URL   getRequestPath(@"attendance/Att_Admin_Bulletin/appList")
 
+/*********检测更新***********/
+#define  HTTP_ATTENDANCESYSTEMUPGRADE_URL   getRequestPath(@"attendance/system/upgrade")
+
 /*********消息列表***********/
 #define  HTTP_ATTAPPMSGLIST_URL   getRequestPath(@"attendance/Att_app_msg/msgList")
 /*********添加推送消息***********/

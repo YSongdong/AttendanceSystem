@@ -99,7 +99,7 @@
 }
 - (void)reportLocation
 {
-   // NSLog(@"%s---%d---",__func__,__LINE__);
+    NSLog(@"%s---%d---",__func__,__LINE__);
     if (self.locationBlock)
     {
         NSMutableDictionary *param = [NSMutableDictionary dictionary];

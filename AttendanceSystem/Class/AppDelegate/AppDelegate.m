@@ -26,9 +26,12 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 
+#import <Bugly/Bugly.h>
+
 @interface AppDelegate ()<REFrostedViewControllerDelegate,JPUSHRegisterDelegate,AVAudioPlayerDelegate>
 // 播放器palyer
 @property(nonatomic,strong)AVAudioPlayer *avAudioPlayer ;
+
 @end
 
 @implementation AppDelegate
@@ -59,6 +62,9 @@
     
     //开启崩溃收集
     [JPUSHService crashLogON];
+    
+    [Bugly startWithAppId:@"9756cf346d"];
+    
     //自定义消息
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(networkDidReceiveMessage:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
@@ -73,6 +79,7 @@
             [self playLocalMusic:dicUserInfo];
         }
     }
+   
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -118,6 +125,7 @@
         rostedViewController.menuViewSize=CGSizeMake(leftSideMeunWidth, ScreenHeight);
         
         self.window.rootViewController=rostedViewController;
+        
     }else{
          SDRootNavigationController *loginVC = [[SDRootNavigationController alloc]initWithRootViewController:[SDLoginController new]];
         self.window.rootViewController=loginVC;

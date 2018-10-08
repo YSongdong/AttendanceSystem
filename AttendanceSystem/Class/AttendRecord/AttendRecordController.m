@@ -78,6 +78,7 @@ UIImagePickerControllerDelegate>
             [self requestCalendarMondData:[[self requestDateFormatter]stringFromDate:[NSDate date]]];
             //获取当天的数据
             [self requestCalendarDayData:[[self requestDateFormatter]stringFromDate:[NSDate date]]];
+            
         }else{
             //获取当月的数据
             [self requestCalendarMondData:[[self requestDateFormatter]stringFromDate:_dateSelected]];
@@ -176,8 +177,14 @@ UIImagePickerControllerDelegate>
     //设置需要显示日历的View
     [self.calendarManager setContentView:self.calenderView];
     //在日历显示初始化的时候就需要
-    [self.calendarManager setDate:[NSDate date]];
-
+    if (self.selectDate == nil) {
+         [self.calendarManager setDate:[NSDate date]];
+    }else{
+        //显示日期
+        self.showNowCalendarLab.text =[[self showDateFormatter]stringFromDate:[self stringWithDate:self.selectDate]];
+        [self.calendarManager setDate:[self stringWithDate:self.selectDate]];
+    }
+   
     self.recordTableView  = [[UITableView alloc]initWithFrame:CGRectMake(0, KSNaviTopHeight, KScreenW, KScreenH-KSNaviTopHeight-KSTabbarH)];
     [self.view addSubview:self.recordTableView];
     

@@ -40,6 +40,7 @@
     
     UIView *samilView = [[UIView alloc]init];
     [self addSubview:samilView];
+    samilView.tag = 400;
     samilView.backgroundColor = [UIColor colorWithHexString:@"#e9e9e9"];
     
     [samilView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -72,6 +73,7 @@
     
     UIView *contentView = [[UIView alloc]init];
     [samilView addSubview:contentView];
+    contentView.tag = 300;
     contentView.backgroundColor = [UIColor colorTextWhiteColor];
     
     self.contentLab = [[UILabel alloc]init];
@@ -93,6 +95,7 @@
     
     UIButton *updateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [samilView addSubview:updateBtn];
+    updateBtn.tag = 100;
     [updateBtn setTitle:@"立即升级" forState:UIControlStateNormal];
     [updateBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
     updateBtn.titleLabel.font = Font(16);
@@ -106,6 +109,7 @@
     
     UIButton *nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [samilView addSubview:nextBtn];
+    nextBtn.tag = 200;
     [nextBtn setTitle:@"下次再说" forState:UIControlStateNormal];
     [nextBtn setTitleColor:[UIColor colorCommonGreenColor] forState:UIControlStateNormal];
     nextBtn.titleLabel.font = Font(16);
@@ -120,11 +124,38 @@
    [nextBtn addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 -(void) selectdTap{
-    [self removeFromSuperview];
+    if (!self.isForceUpdate) {
+       [self removeFromSuperview];
+    }
 }
 -(void)cancelAction:(UIButton *) sender{
-    [self selectdTap];
+    
+    [self removeFromSuperview];
 }
+
+-(void)setIsForceUpdate:(BOOL)isForceUpdate{
+    _isForceUpdate = isForceUpdate;
+
+    if (isForceUpdate) {
+        //下次再说
+        UIButton *nextBtn = [self viewWithTag:200];
+        nextBtn.hidden =  YES;
+        
+        UIView *samilView = [self viewWithTag:400];
+        
+        UIView *contentView = [self viewWithTag:300];
+        //立即升级
+        UIButton *updateBtn = [self viewWithTag:100];
+        
+        [updateBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(contentView.mas_bottom).offset(1);
+            make.height.equalTo(@(KSIphonScreenH(40)));
+            make.left.bottom.right.equalTo(samilView);
+        }];
+    }
+    
+}
+
 -(void)updateAction:(UIButton *) sender{
     self.updateBlock();
     [self selectdTap];

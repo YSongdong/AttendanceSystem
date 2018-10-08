@@ -35,6 +35,22 @@
         return NO;
     }
 }
+
+//保存系统版本数据
++(void) saveSystemVersionData:(NSDictionary *)data{
+    NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
+    [userD setObject:data forKey:@"system"];
+    //3.强制让数据立刻保存
+    [userD synchronize];
+}
+
+// 取出保存本地系统版本数据
++(NSDictionary *) takeSystemVersionData{
+    NSUserDefaults *userD = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict1 = [userD objectForKey:@"system"];
+    return dict1;
+}
+
 // ----------------修改数据----------
 //修改UserID和identity_id
 +(void) alterUserID:(NSDictionary *)dict{
